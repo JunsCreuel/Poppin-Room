@@ -1246,3 +1246,18 @@ button {
   55% { opacity: 1; }
   100% { opacity: 0.95; transform: translate(calc(-50% + var(--ooze-x)), calc(-50% + var(--ooze-y))) scale(1); }
 }
+
+/* ===== 왁뿌볼 깨지는 중 — 금 틈으로 미리 비치는 왁스 (다 깨지기 전) ===== */
+.wakpu-wax-glow {
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #ffffff 0%, #fffdf6 35%, #f3ecd9 70%, transparent 100%);
+  mix-blend-mode: lighten;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.wakpu-wax-drop {
+  fill: #fffdf6;
+  filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, .25));
+}

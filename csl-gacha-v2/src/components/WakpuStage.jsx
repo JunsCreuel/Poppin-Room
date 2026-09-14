@@ -4,6 +4,7 @@ import CrackOverlay from './CrackOverlay';
 
 const SQUISH_LINGER_MS = 1500; // 다 깨진 뒤 찌그러진 채로 머무는 기본 시간
 const SQUISH_EXTEND_MS = 550; // 찌그러진 상태에서 한 번 더 누르면 늘어나는 시간
+const HIT_COOLDOWN_MS = 260; // 이보다 빨리 연속으로 눌러도 무시 — "탁탁탁탁" 연타가 아니라 "탁 탁 탁" 한 번씩 눌리는 느낌
 
 // 왁뿌볼 인터랙션 본체 — 일반/히든 왁뿌볼 룸이 공유한다. 그냥 때리다가
 // 다 깨지면 끝나는 게 아니라, 깨진 뒤에도 안에 든 내용물(칩 색깔 = 그
@@ -22,6 +23,7 @@ export default function WakpuStage({
   const squishPulseTimeoutRef = useRef(null);
   const squishResetTimeoutRef = useRef(null);
   const breakTimeoutRef = useRef(null);
+  const lastHitAtRef = useRef(0);
 
   const scheduleSquishReset = (ms) => {
     clearTimeout(squishResetTimeoutRef.current);
@@ -33,6 +35,10 @@ export default function WakpuStage({
 
   const handlePress = useCallback(() => {
     if (disabled) return;
+
+    const now = Date.now();
+    if (now - lastHitAtRef.current < HIT_COOLDOWN_MS) return;
+    lastHitAtRef.current = now;
 
     if (phase === 'squish') {
       // 다 깨진 뒤에도 계속 만지작 — 진행은 더 안 늘고 찌그러지는 손맛만 반복
