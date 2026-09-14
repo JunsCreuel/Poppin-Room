@@ -7,16 +7,21 @@ import RewardEffects from '../components/RewardEffects';
 import DesignPicker from '../components/DesignPicker';
 import { resizeImageFile } from '../utils/resizeImage';
 
+const PRESS_HOLD_MS = 90; // 실제 키보드처럼 눌렸다가 짧게 있다 자동으로 올라옴
+
 export default function Keycap() {
   const { equipped, getToy, pressReward, coins, customSticker, setCustomSticker, clearCustomSticker } = useGame();
   const toy = getToy('keycap', equipped.keycap);
-  // 꾹 누르고 있어도 연타되지 않는 토글 방식 — 한 번 누르면 눌린 채로 있다가
-  // 다시 누르면 원상태로 돌아온다. 코인/히든카드 굴림은 클릭할 때마다 한 번.
+  // 클릭 한 번 = 눌렸다가 자동으로 올라오는 것까지 한 번의 이벤트(실제
+  // 키보드 키와 동일). 다시 눌러야 올라오는 토글이 아니라, 누르면 바로
+  // 눌린 상태가 됐다가 일정 시간 뒤 스스로 원상태로 복귀한다. 코인/히든카드
+  // 굴림은 클릭할 때마다 한 번.
   const [pressed, setPressed] = useState(false);
   const [uploading, setUploading] = useState(false);
   const { toast, hiddenCard, trigger, closeHidden } = useRewardEffects();
 
   const fileInputRef = useRef(null);
+  const releaseTimeoutRef = useRef(null);
 
   const sticker = customSticker?.keycap || null;
 
@@ -24,15 +29,19 @@ export default function Keycap() {
     if (!toy) return;
     playKeyClick(toy.sound);
     trigger(pressReward('keycap'));
-    setPressed((p) => !p);
+    setPressed(true);
+    clearTimeout(releaseTimeoutRef.current);
+    releaseTimeoutRef.current = setTimeout(() => setPressed(false), PRESS_HOLD_MS);
   }, [toy, pressReward, trigger]);
+
+  useEffect(() => () => clearTimeout(releaseTimeoutRef.current), []);
 
   const handleClick = () => pressOnce();
 
   useEffect(() => {
     // 실제 키보드의 ESC를 눌러도 같은 반응 — CLICK LAB과 동일하게 지원.
     // OS 키 반복(계속 누르고 있을 때 연속 발생하는 keydown)은 무시해서
-    // 꾹 누르고 있어도 한 번만 토글되게 한다.
+    // 꾹 누르고 있어도 한 번만 눌림-복귀가 발생하게 한다.
     const handleKeyDown = (e) => {
       if (e.code !== 'Escape' || e.repeat) return;
       e.preventDefault();
@@ -61,7 +70,7 @@ export default function Keycap() {
     <div className="case-page">
       <div className="case-eyebrow">03 // 키캡 룸</div>
       <h1 className="case-title">{toy.name}</h1>
-      <p className="case-sub">클릭할 때마다 눌림 상태가 토글돼. 실제 키보드 ESC를 눌러도 돼. 누를 때마다 코인을 얻을 수도 있어.</p>
+      <p className="case-sub">클릭할 때마다 눌렸다가 바로 올라와. 실제 키보드 ESC를 눌러도 돼. 누를 때마다 코인을 얻을 수도 있어.</p>
 
       <DesignPicker category="keycap" />
 
