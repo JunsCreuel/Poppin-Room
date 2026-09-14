@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import { playKeyClick } from '../utils/sound';
 import { useRewardEffects } from '../utils/useRewardEffects';
@@ -108,6 +109,10 @@ export default function Keycap() {
       </div>
 
       <div className="coin-inline">🪙 {coins} 코인</div>
+
+      <Link to="/hidden/keycap" className="hidden-room-cta">
+        히든카드가 궁금해? 히든 키캡 룸으로 →
+      </Link>
 
       <RewardEffects toast={toast} hiddenCard={hiddenCard} onCloseHidden={closeHidden} />
     </div>

@@ -10,7 +10,7 @@ export default function MyAccount() {
   );
 
   const handleReset = () => {
-    const ok = window.confirm('코인·보유 디자인·히든카드·랭킹 기록이 전부 지워지고 처음 상태로 돌아가. 계속할까?');
+    const ok = window.confirm('코인·보유 디자인·히든카드·랭킹 기록이 전부 지워지고 처음 상태로 돌아가. 되돌릴 수 없어.');
     if (ok) resetProgress();
   };
 
@@ -18,21 +18,21 @@ export default function MyAccount() {
     return (
       <div className="case-page">
         <div className="case-eyebrow">07 // 내 계정</div>
-        <h1 className="case-title">로그인해서 계정 연결하고 이용하기</h1>
+        <h1 className="case-title">계정 연결</h1>
         <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정을 연결해야 볼 수 있어. 카카오나 Google 계정으로 로그인해봐.</p>
 
         <div className="login-box">
           <button type="button" className="login-btn is-kakao" onClick={() => login('kakao')}>
-            카카오로 로그인
+            카카오 계정 로그인
           </button>
           <button type="button" className="login-btn is-google" onClick={() => login('google')}>
-            Google로 로그인
+            Google 계정 로그인
           </button>
         </div>
 
         <section className="account-section account-danger">
           <h3 className="collection-section-title">데이터 초기화</h3>
-          <p className="account-empty">테스트하면서 쌓인 코인·보유 디자인 기록을 지우고 처음 상태로 되돌릴 수 있어.</p>
+          <p className="account-empty">지금까지 쌓은 코인·보유 디자인 기록을 지우고 처음 상태로 되돌릴 수 있어.</p>
           <button type="button" className="reset-btn" onClick={handleReset}>진행 상황 초기화</button>
         </section>
       </div>
@@ -94,7 +94,7 @@ export default function MyAccount() {
 
       <section className="account-section account-danger">
         <h3 className="collection-section-title">데이터 초기화</h3>
-        <p className="account-empty">테스트하면서 쌓인 코인·보유 디자인·히든카드·랭킹 기록을 지우고 처음 상태로 되돌릴 수 있어.</p>
+        <p className="account-empty">지금까지 쌓은 코인·보유 디자인·히든카드·랭킹 기록을 지우고 처음 상태로 되돌릴 수 있어.</p>
         <button type="button" className="reset-btn" onClick={handleReset}>진행 상황 초기화</button>
       </section>
     </div>

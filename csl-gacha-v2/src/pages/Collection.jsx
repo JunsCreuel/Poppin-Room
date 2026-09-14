@@ -17,7 +17,7 @@ export default function Collection() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">05 // 컬렉션</div>
+      <div className="case-eyebrow">05 // 도감</div>
       <h1 className="case-title">도감</h1>
       <p className="case-sub">획득한 토이를 클릭하면 장착돼. 잠긴 프리미엄 카드를 누르면 스토어로 이동해. {ownedCount} / {totalCount} 수집 완료.</p>
 

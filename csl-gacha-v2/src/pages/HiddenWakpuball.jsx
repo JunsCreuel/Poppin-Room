@@ -1,30 +1,38 @@
 import { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import { playCrackHit, playCrackBreak } from '../utils/sound';
 import { useRewardEffects } from '../utils/useRewardEffects';
 import RewardEffects from '../components/RewardEffects';
-import DesignPicker from '../components/DesignPicker';
+import HiddenGauge from '../components/HiddenGauge';
 
-export default function Wakpuball() {
-  const { equipped, getToy, pressReward, coins, recordBreak, dailyBreaks } = useGame();
-  const toy = getToy('wakpuball', equipped.wakpuball);
+// 히든 왁뿌볼 전용 아트 — 내가 장착한 왁뿌볼 디자인과 무관하게, 이 룸만의
+// 고유한 외형(어둠 속에 떠 있는 보석)으로 항상 고정돼 보인다.
+const HIDDEN_WB_IMAGE = 'images/hidden_wakpuball.png';
+const HIDDEN_WB_ACCENT = '#e0357f';
+const HIDDEN_WB_HITS = 14;
+
+// 히든 왁뿌볼 룸 — 일반 왁뿌볼 룸과 달리 코인은 전혀 안 나오고, 오직
+// 히든카드(0.6%)만 노리는 곳. 대신 하루에 부실 수 있는 횟수가 정해져 있다.
+export default function HiddenWakpuball() {
+  const { pressHidden, isHiddenMaxed, recordBreak } = useGame();
   const [hits, setHits] = useState(0);
   const [isBreaking, setIsBreaking] = useState(false);
   const [shake, setShake] = useState(false);
   const { toast, hiddenCard, trigger, closeHidden } = useRewardEffects();
 
+  const maxedOut = isHiddenMaxed('wakpuball');
+
   const handleHit = useCallback(() => {
-    if (isBreaking || !toy) return;
+    if (isBreaking || maxedOut) return;
 
     const next = hits + 1;
-    const progress = next / toy.hitsToBreak;
+    const progress = next / HIDDEN_WB_HITS;
     setShake(true);
     setTimeout(() => setShake(false), 90);
 
-    trigger(pressReward('wakpuball'));
+    trigger(pressHidden('wakpuball'));
 
-    if (next >= toy.hitsToBreak) {
+    if (next >= HIDDEN_WB_HITS) {
       playCrackBreak();
       setIsBreaking(true);
       recordBreak();
@@ -36,34 +44,28 @@ export default function Wakpuball() {
       playCrackHit(progress);
       setHits(next);
     }
-  }, [hits, isBreaking, toy, pressReward, trigger, recordBreak]);
+  }, [hits, isBreaking, maxedOut, pressHidden, trigger, recordBreak]);
 
-  if (!toy) return null;
-
-  const crackProgress = hits / toy.hitsToBreak;
+  const crackProgress = hits / HIDDEN_WB_HITS;
   const crackLineCount = Math.round(crackProgress * 10);
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">02 // 왁뿌볼 룸</div>
-      <h1 className="case-title">{toy.name}</h1>
-      <p className="case-sub">연타해서 깨뜨려. 칠 때마다 코인을 얻을 수도 있어 (아주 가끔 히든카드도).</p>
+      <div className="case-eyebrow">09 // 히든 왁뿌볼 룸</div>
+      <h1 className="case-title">히든 왁뿌볼</h1>
+      <p className="case-sub">코인은 안 나와 — 대신 칠 때마다 0.6% 확률로 히든카드를 노려볼 수 있어.</p>
 
-      <DesignPicker category="wakpuball" />
+      <HiddenGauge category="wakpuball" />
 
       <div className="wakpu-stage">
         <button
           type="button"
-          className={`wakpu-ball ${shake ? 'is-shaking' : ''} ${isBreaking ? 'is-breaking' : ''}`}
+          className={`wakpu-ball is-hidden-toy ${shake ? 'is-shaking' : ''} ${isBreaking ? 'is-breaking' : ''} ${maxedOut ? 'is-maxed' : ''}`}
           onClick={handleHit}
-          aria-label="왁뿌볼 터뜨리기"
+          disabled={maxedOut}
+          aria-label="히든 왁뿌볼 터뜨리기"
         >
-          <img
-            src={toy.image}
-            alt={toy.name}
-            className={`wakpu-ball-img ${toy.isHolo ? 'is-holo' : ''}`}
-            style={{ filter: toy.filter }}
-          />
+          <img src={HIDDEN_WB_IMAGE} alt="히든 왁뿌볼" className="wakpu-ball-img is-holo" />
           <svg className="wakpu-cracks" viewBox="0 0 200 200">
             {Array.from({ length: crackLineCount }).map((_, i) => {
               const angle = (i / 10) * Math.PI * 2;
@@ -83,23 +85,14 @@ export default function Wakpuball() {
               {Array.from({ length: 12 }).map((_, i) => (
                 <span key={i} className="shard" style={{
                   '--angle': `${(i / 12) * 360}deg`,
-                  background: toy.accent,
+                  background: HIDDEN_WB_ACCENT,
                 }} />
               ))}
             </div>
           )}
         </button>
-        <div className="wakpu-progress">{hits} / {toy.hitsToBreak} 회</div>
+        <div className="wakpu-progress">{hits} / {HIDDEN_WB_HITS} 회</div>
       </div>
-
-      <div className="coin-inline">🪙 {coins} 코인</div>
-
-      <Link to="/ranking" className="ranking-cta">
-        오늘 {dailyBreaks}번 깼어 · 랭킹 보기 →
-      </Link>
-      <Link to="/hidden/wakpuball" className="hidden-room-cta">
-        히든카드가 궁금해? 히든 왁뿌볼 룸으로 →
-      </Link>
 
       <RewardEffects toast={toast} hiddenCard={hiddenCard} onCloseHidden={closeHidden} />
     </div>

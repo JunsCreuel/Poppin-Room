@@ -5,9 +5,18 @@ const STORAGE_KEY = 'csl-gacha-state';
 const PULL_COST = 10; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
 
-// 누를 때마다(왁뿌볼 한 대 / 키캡 한 번) 굴리는 보상 확률.
-// 코인1(30~40%) · 코인5(5%) · 히든카드(0.6%) · 그 외는 꽝.
-const PRESS_REWARD = { hidden: 0.006, coin5: 0.05, coin1: 0.35 };
+// 일반 왁뿌볼/키캡 룸에서 누를 때마다 굴리는 보상 확률 — 코인만 나온다.
+// 히든카드는 히든 룸(HiddenWakpuball/HiddenKeycap) 전용.
+const PRESS_REWARD = { coin5: 0.05, coin1: 0.35 };
+
+// 히든 룸: 누를 때마다 0.6% 확률로 히든카드. 하루 40번까지 무료로 시도할
+// 수 있고, 광고 1편(30초)당 20번씩 최대 60번까지 늘릴 수 있다. 그 날의
+// 시도가 다 떨어지면 첫 시도로부터 24시간이 지나야 다시 40번으로 풀린다.
+const HIDDEN_CHANCE = 0.006;
+const HIDDEN_DAILY_BASE = 40;
+const HIDDEN_DAILY_MAX = 60;
+const HIDDEN_AD_BONUS = 20;
+const HIDDEN_CYCLE_MS = 24 * 60 * 60 * 1000;
 
 function freeOwnedIds() {
   const ids = [];
@@ -35,6 +44,9 @@ function defaultState() {
     totalBreaks: 0,
     customSticker: { keycap: null }, // 사용자가 올린 이미지(data URL) — 키캡 위 스티커
     lastVisit: todayStr(),
+    hiddenAttempts: { wakpuball: 0, keycap: 0 }, // 히든 룸에서 오늘 시도한 횟수
+    hiddenCap: { wakpuball: HIDDEN_DAILY_BASE, keycap: HIDDEN_DAILY_BASE }, // 광고로 최대 60까지 늘어남
+    hiddenCycleStart: { wakpuball: null, keycap: null }, // 이번 24시간 주기가 시작된 시각(ms)
   };
 }
 
@@ -57,9 +69,8 @@ function loadState() {
 
 function rollPressReward() {
   const r = Math.random();
-  if (r < PRESS_REWARD.hidden) return 'hidden';
-  if (r < PRESS_REWARD.hidden + PRESS_REWARD.coin5) return 'coin5';
-  if (r < PRESS_REWARD.hidden + PRESS_REWARD.coin5 + PRESS_REWARD.coin1) return 'coin1';
+  if (r < PRESS_REWARD.coin5) return 'coin5';
+  if (r < PRESS_REWARD.coin5 + PRESS_REWARD.coin1) return 'coin1';
   return null;
 }
 
@@ -87,9 +98,10 @@ export function GameProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
-  // 왁뿌볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 코인/히든카드 보상을
-  // 굴리고 그 결과를 그대로 반환한다(화면에서 토스트/모달 연출용).
-  const pressReward = useCallback((category) => {
+  // 왁뿌볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 코인 보상만 굴리고
+  // 그 결과를 그대로 반환한다(화면에서 토스트 연출용). 히든카드는 여기서
+  // 안 나온다 — 히든 룸(pressHidden) 전용.
+  const pressReward = useCallback(() => {
     const roll = rollPressReward();
     if (!roll) return null;
 
@@ -99,17 +111,85 @@ export function GameProvider({ children }) {
         payload = { type: 'coin', amount: 1 };
         return { ...prev, coins: prev.coins + 1 };
       }
-      if (roll === 'coin5') {
-        payload = { type: 'coin', amount: 5 };
-        return { ...prev, coins: prev.coins + 5 };
-      }
-      // hidden
-      const code = makeHiddenCode(category);
-      const card = { code, category, wonAt: new Date().toISOString() };
-      payload = { type: 'hidden', card };
-      return { ...prev, hiddenCards: [...prev.hiddenCards, card] };
+      payload = { type: 'coin', amount: 5 };
+      return { ...prev, coins: prev.coins + 5 };
     });
     return payload;
+  }, []);
+
+  // 히든 왁뿌볼/키캡 룸 전용 — 코인은 전혀 안 나오고, 누를 때마다 0.6%
+  // 확률로만 히든카드가 나온다. 하루 시도 횟수가 정해져 있어서(기본 40,
+  // 광고로 최대 60) 다 쓰면 24시간이 지나야 다시 리셋된다.
+  const pressHidden = useCallback((category) => {
+    let payload = null;
+    setState((prev) => {
+      let attempts = prev.hiddenAttempts[category];
+      let cap = prev.hiddenCap[category];
+      let cycleStart = prev.hiddenCycleStart[category];
+
+      // 마지막 주기가 시작된 지 24시간이 지났으면 그 카테고리만 리셋.
+      if (cycleStart && Date.now() - cycleStart >= HIDDEN_CYCLE_MS) {
+        attempts = 0;
+        cap = HIDDEN_DAILY_BASE;
+        cycleStart = null;
+      }
+
+      if (attempts >= cap) {
+        // 오늘 시도 다 씀 — 롤오버 결과만 반영하고 시도 자체는 늘리지 않는다.
+        return {
+          ...prev,
+          hiddenAttempts: { ...prev.hiddenAttempts, [category]: attempts },
+          hiddenCap: { ...prev.hiddenCap, [category]: cap },
+          hiddenCycleStart: { ...prev.hiddenCycleStart, [category]: cycleStart },
+        };
+      }
+
+      const nextCycleStart = cycleStart ?? Date.now();
+      let nextHiddenCards = prev.hiddenCards;
+      if (Math.random() < HIDDEN_CHANCE) {
+        const code = makeHiddenCode(category);
+        const card = { code, category, wonAt: new Date().toISOString() };
+        payload = { type: 'hidden', card };
+        nextHiddenCards = [...prev.hiddenCards, card];
+      }
+
+      return {
+        ...prev,
+        hiddenAttempts: { ...prev.hiddenAttempts, [category]: attempts + 1 },
+        hiddenCap: { ...prev.hiddenCap, [category]: cap },
+        hiddenCycleStart: { ...prev.hiddenCycleStart, [category]: nextCycleStart },
+        hiddenCards: nextHiddenCards,
+      };
+    });
+    return payload;
+  }, []);
+
+  // 오늘 시도를 다 썼는지 판정 — 저장된 attempts/cap만 보면 24시간이 지나도
+  // 계속 "다 썼음"으로 보이는 문제가 있어서, 마지막 주기 시작 시각 기준으로
+  // 24시간이 지났으면(=다음 누름에서 실제로 리셋될 상태) 아직 안 막힌 걸로
+  // 본다. HiddenGauge와 히든 룸 페이지(HiddenWakpuball/HiddenKeycap)가 공유.
+  const isHiddenMaxed = useCallback(
+    (category) => {
+      const cap = state.hiddenCap[category];
+      const attempts = state.hiddenAttempts[category];
+      const cycleStart = state.hiddenCycleStart[category];
+      const expired = cycleStart && Date.now() - cycleStart >= HIDDEN_CYCLE_MS;
+      return !expired && attempts >= cap;
+    },
+    [state.hiddenAttempts, state.hiddenCap, state.hiddenCycleStart]
+  );
+
+  // 히든 룸에서 오늘 시도가 다 떨어졌을 때 광고 한 편(30초)을 보면 그
+  // 카테고리의 오늘 한도를 20 늘려준다 (최대 60). 실제 광고 SDK가 없어서
+  // UI 쪽(HiddenGauge.jsx)에서 재생되는 흉내만 낸 뒤 이 함수를 호출한다.
+  const claimHiddenAdBoost = useCallback((category) => {
+    let newCap = null;
+    setState((prev) => {
+      const cap = Math.min(HIDDEN_DAILY_MAX, prev.hiddenCap[category] + HIDDEN_AD_BONUS);
+      newCap = cap;
+      return { ...prev, hiddenCap: { ...prev.hiddenCap, [category]: cap } };
+    });
+    return newCap;
   }, []);
 
   // 광고 시청 보상 — 실제 광고 SDK가 없어서 지금은 즉시 지급하는 mock.
@@ -229,9 +309,17 @@ export function GameProvider({ children }) {
     dailyBreaks: state.dailyBreaks,
     totalBreaks: state.totalBreaks,
     customSticker: state.customSticker,
+    hiddenAttempts: state.hiddenAttempts,
+    hiddenCap: state.hiddenCap,
+    hiddenCycleStart: state.hiddenCycleStart,
     toys: toysData,
     pullCost: PULL_COST,
+    hiddenDailyMax: HIDDEN_DAILY_MAX,
+    hiddenCycleMs: HIDDEN_CYCLE_MS,
     pressReward,
+    pressHidden,
+    isHiddenMaxed,
+    claimHiddenAdBoost,
     claimAdCoins,
     canPull,
     pull,

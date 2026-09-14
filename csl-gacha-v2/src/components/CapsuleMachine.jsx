@@ -1,12 +1,12 @@
 export default function CapsuleMachine({ stage, result }) {
   return (
     <div className={`capsule-machine stage-${stage} ${result ? `reveal-${result.toy.grade}` : ''}`}>
-      {stage === 'idle' && (
-        <div className="capsule-orb idle" />
-      )}
-
-      {stage === 'shaking' && (
-        <div className="capsule-orb shaking" />
+      {(stage === 'idle' || stage === 'shaking') && (
+        <img
+          src="images/gacha_machine.png"
+          alt="캡슐 뽑기 기계"
+          className={`capsule-machine-img ${stage === 'shaking' ? 'shaking' : ''}`}
+        />
       )}
 
       {stage === 'result' && result && (

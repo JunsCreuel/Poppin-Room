@@ -3,6 +3,8 @@ import { GameProvider, useGame } from './store/useGame';
 import Lab from './pages/Lab';
 import Wakpuball from './pages/Wakpuball';
 import Keycap from './pages/Keycap';
+import HiddenWakpuball from './pages/HiddenWakpuball';
+import HiddenKeycap from './pages/HiddenKeycap';
 import Gacha from './pages/Gacha';
 import Collection from './pages/Collection';
 import Store from './pages/Store';
@@ -21,9 +23,11 @@ function NavBar() {
       <nav>
         <NavLink to="/" className={linkClass} end>LAB</NavLink>
         <NavLink to="/wakpuball" className={linkClass}>왁뿌볼</NavLink>
+        <NavLink to="/hidden/wakpuball" className={linkClass}>히든 왁뿌볼</NavLink>
         <NavLink to="/keycap" className={linkClass}>키캡</NavLink>
+        <NavLink to="/hidden/keycap" className={linkClass}>히든 키캡</NavLink>
         <NavLink to="/gacha" className={linkClass}>뽑기</NavLink>
-        <NavLink to="/collection" className={linkClass}>컬렉션</NavLink>
+        <NavLink to="/collection" className={linkClass}>도감</NavLink>
         <NavLink to="/store" className={linkClass}>스토어</NavLink>
         <NavLink to="/ranking" className={linkClass}>랭킹</NavLink>
         <span className="nav-coin-badge">🪙 {coins}</span>
@@ -44,7 +48,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Lab />} />
             <Route path="/wakpuball" element={<Wakpuball />} />
+            <Route path="/hidden/wakpuball" element={<HiddenWakpuball />} />
             <Route path="/keycap" element={<Keycap />} />
+            <Route path="/hidden/keycap" element={<HiddenKeycap />} />
             <Route path="/gacha" element={<Gacha />} />
             <Route path="/collection" element={<Collection />} />
             <Route path="/store" element={<Store />} />
