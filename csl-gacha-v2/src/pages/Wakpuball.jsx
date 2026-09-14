@@ -16,7 +16,7 @@ export default function Wakpuball() {
     <div className="case-page">
       <div className="case-eyebrow">02 // 왁뿌볼 룸</div>
       <h1 className="case-title">{toy.name}</h1>
-      <p className="case-sub">연타해서 깨뜨려. 다 깨진 뒤에도 계속 눌러서 내용물을 조몰락거릴 수 있어. 칠 때마다 코인을 얻을 수도 있어.</p>
+      <p className="case-sub">연타해서 깨뜨려. 칠 때마다 코인을 얻을 수도 있어.</p>
 
       <DesignPicker category="wakpuball" />
 

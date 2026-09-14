@@ -66,69 +66,9 @@ export function playCrackBreak() {
   }
 }
 
-// 왁뿌볼 — 다 깨진 직후 안에 든 내용물이 찌그러지며 삐져나오는 순간 한 번
-// 나는 "찌익" 스퀴시음. CRACK LAB(crack-app/src/crunch.js)의 playSquish를
-// 그대로 가져왔다.
-export function playOoze() {
-  const audioCtx = getCtx();
-  const osc = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  osc.type = 'sine';
-  const now = audioCtx.currentTime;
-  osc.frequency.setValueAtTime(320, now);
-  osc.frequency.exponentialRampToValueAtTime(140, now + 0.35);
-  const vol = 0.22 * getVolume();
-  g.gain.setValueAtTime(0.0001, now);
-  g.gain.exponentialRampToValueAtTime(vol, now + 0.05);
-  g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-  osc.connect(g).connect(audioCtx.destination);
-  osc.start(now);
-  osc.stop(now + 0.42);
-}
-
-// 왁뿌볼 — 다 깨진 뒤에도 계속 눌러서 내용물을 조몰락거릴 때마다 나는
-// 가벼운 "뽀드득" 소리. 매번 주파수를 살짝씩 흔들어서 연타해도 질리지
-// 않게 한다.
-export function playSquishTouch() {
-  const audioCtx = getCtx();
-  const now = audioCtx.currentTime;
-  const vol = (0.16 + Math.random() * 0.08) * getVolume();
-
-  const size = Math.max(1, Math.floor(audioCtx.sampleRate * 0.11));
-  const buffer = audioCtx.createBuffer(1, size, audioCtx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < size; i++) {
-    data[i] = (Math.random() * 2 - 1) * (1 - i / size) ** 1.3;
-  }
-  const src = audioCtx.createBufferSource();
-  src.buffer = buffer;
-  const filter = audioCtx.createBiquadFilter();
-  filter.type = 'bandpass';
-  filter.frequency.value = 450 + Math.random() * 550;
-  filter.Q.value = 0.7;
-  const g = audioCtx.createGain();
-  g.gain.setValueAtTime(vol, now);
-  g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-  src.connect(filter).connect(g).connect(audioCtx.destination);
-  src.start(now);
-  src.stop(now + 0.11);
-
-  const osc = audioCtx.createOscillator();
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(170 + Math.random() * 70, now);
-  osc.frequency.exponentialRampToValueAtTime(90, now + 0.09);
-  const g2 = audioCtx.createGain();
-  g2.gain.setValueAtTime(vol * 0.5, now);
-  g2.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-  osc.connect(g2).connect(audioCtx.destination);
-  osc.start(now);
-  osc.stop(now + 0.11);
-}
-
-// 키캡 — 실제 녹음 파일이 배정된 키캡(베이직 핑크/펄 화이트/선더 크리스탈/
-// 쥬얼 블룸/히든 키캡)은 그 파일을 그대로 재생하고, 나머지(스모크 클리어/
-// 라이트닝 실버/핑크 플라워/블랙 오브)는 합성음(저가 멤브레인 키보드 느낌)
-// 으로 구분한다. 파일마다 Audio 객체를 하나씩만 만들어 재사용한다.
+// 키캡 — toys.json에 sound 필드(실제 녹음 파일 경로)가 있는 키캡은 그
+// 파일을 재생하고, 없으면 합성음(저가 멤브레인 키보드 느낌)으로 대체한다.
+// 파일마다 Audio 객체를 하나씩만 만들어 재사용한다.
 const keySoundCache = new Map();
 function getKeySound(file) {
   let audio = keySoundCache.get(file);
