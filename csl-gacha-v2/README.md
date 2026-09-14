@@ -30,7 +30,7 @@ CRACK LAB(`crack-app`, 참고용으로 팀에서 공유한 wakbuball-game.pages.
 |---|---|---|
 | `free` | COMMON | 처음부터 자동 보유 (왁뿌볼·키캡 각 3종) |
 | `paid` | RARE | 뽑기 전용 — 코인 10개 소비, 유료 등급 중 랜덤 1개 (각 3종) |
-| `premium` | LIMITED | 스토어에서 실제 결제로 구매 (각 2종, ₩2,900~3,900) — **실제 녹음 사운드 적용** |
+| `premium` | LIMITED | 스토어에서 실제 결제로 구매 (각 2종, ₩2,900~3,900) |
 
 ## 코인 경제
 
@@ -111,7 +111,7 @@ CRACK LAB(`crack-app`, 참고용으로 팀에서 공유한 wakbuball-game.pages.
   | 키캡 | kc_18 | 라벤더 조개 | RARE | paid |
 
 - **키캡 스티커 정렬**: 키캡 베이스 사진(1254×1254)에서 실측한 윗면(누르는 면) 사각형 좌표를 `clip-path`로 그대로 적용해서, 사용자가 올린 이미지가 키캡 윗면 기울기에 맞게 잘리고 회전돼서 얹힌다 (`index.css`의 `.keycap-sticker-overlay*`). 원래 8종 기준으로 잡은 좌표라 과일 키캡 10종은 모양이 달라서 약간 어긋날 수 있음
-- **키캡 타건 사운드**: 팀에서 받은 실제 녹음 5종을 각 키캡의 `sound` 필드에 매핑 — 베이직 핑크(`keyboard-basic-pink.mp3`), 펄 화이트(`keyboard-basic-white.mp3`), 선더 크리스탈(`keyboard-thunder-crystal.mp3`), 쥬얼 블룸(`keyboard-jewel-bloom.mp3`), 히든 키캡(`keyboard-hidden.mp3`). `sound` 필드가 없는 나머지 키캡(스모크 클리어/라이트닝 실버/핑크 플라워/블랙 오브/과일 10종)은 합성음(저가 키보드 느낌)으로 대체 — `sound.js`의 `playKeyClick(soundFile)`이 파일이 있으면 재생하고 없으면 합성음으로 폴백
+- **키캡 타건 사운드**: 원래 모든 키캡이 쓰던 합성음(저가 키보드 느낌)으로 통일 — `sound.js`의 `playKeyClick(soundFile)`이 파일이 있으면 재생하고 없으면 합성음으로 폴백하는 구조. 팀에서 받은 실제 녹음 5종(`sounds/keyboard-basic-pink.mp3`, `keyboard-basic-white.mp3`, `keyboard-thunder-crystal.mp3`, `keyboard-jewel-bloom.mp3`, `keyboard-hidden.mp3`)을 한때 각 키캡의 `sound` 필드에 매핑했었지만, 녹음 파일이 클릭 한 번 분량으로 잘려있지 않아서(원본 길이 그대로) 한 번만 눌러도 그 길이만큼 계속 소리가 이어지는 문제가 있어 다시 뺐음 — 파일 자체는 `public/sounds/`에 그대로 남아있으니, 팀에서 클릭 한 번 분량으로 트리밍해서 다시 주면 각 키캡 항목에 `"sound": "sounds/파일명.mp3"`만 다시 넣으면 됨
 - **왁뿌볼 크런치/파괴 사운드**: `crack-app/src/crunch.js`의 Web Audio 합성 로직을 포팅. 왁뿌볼은 아직 실제 녹음 자체가 팀에 없어서, 프리미엄 등급은 레이어를 한 겹 더 얹은 합성음으로만 차등을 뒀음 — 실제 녹음이 생기면 `sound.js`의 `playCrackHit(progress, isPremium)` 안쪽을 `<audio>` 재생으로 교체
 - **뽑기 성공 사운드**만 아직 아무 에셋도 없어서 임시 합성음으로 대체
 - 음량 설정은 메인 사이트와 같은 `csl-volume` localStorage 키 공유
@@ -132,7 +132,8 @@ CRACK LAB(`crack-app`, 참고용으로 팀에서 공유한 wakbuball-game.pages.
 
 ## 아직 없는 것
 
-- **왁뿌볼 프리미엄용 실제 녹음 사운드** (키캡은 이미 있는 걸 재사용했지만 왁뿌볼은 원본 녹음 자체가 없음 — 가장 먼저 채워야 할 에셋 공백)
+- **왁뿌볼 프리미엄용 실제 녹음 사운드** (아직 원본 녹음 자체가 없음)
+- **키캡 실제 녹음 사운드 재적용** — 받은 5종은 클릭 한 번 분량으로 트리밍이 안 돼서 뺐음. 트리밍된 파일을 다시 받으면 `toys.json`의 해당 키캡에 `sound` 필드만 추가하면 바로 적용됨
 - **왁뿌볼 금가는 단계별 실제 사진** — 지금은 진행도에 따라 SVG 선이 늘어나는 방식. 팀에서 단계별(살짝 금감/많이 감/깨지기 직전) 사진을 받으면 `src/data/crackStages.js`의 `image` 값만 채우면 자동으로 그 사진이 대신 나오도록 구조만 미리 만들어둠 (`CrackOverlay.jsx`)
 - 실제 결제(IAP) 연동, 실제 광고 SDK 연동, 실제 OAuth(카카오/Google) 연동 — 전부 화면과 흐름만 만든 mock
 - 데일리 보너스, 한정판 기간제

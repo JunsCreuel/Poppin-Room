@@ -211,8 +211,7 @@
       "accent": "#ff2f8f",
       "image": "images/keycap_01.png",
       "filter": "none",
-      "profile": "cherry",
-      "sound": "sounds/keyboard-basic-pink.mp3"
+      "profile": "cherry"
     },
     {
       "id": "kc_02",
@@ -222,8 +221,7 @@
       "accent": "#f4f4f4",
       "image": "images/keycap_02.png",
       "filter": "none",
-      "profile": "cherry",
-      "sound": "sounds/keyboard-basic-white.mp3"
+      "profile": "cherry"
     },
     {
       "id": "kc_03",
@@ -275,8 +273,7 @@
       "image": "images/keycap_07.png",
       "filter": "none",
       "isHolo": true,
-      "profile": "sa",
-      "sound": "sounds/keyboard-thunder-crystal.mp3"
+      "profile": "sa"
     },
     {
       "id": "kc_08",
@@ -287,8 +284,7 @@
       "accent": "#c084fc",
       "image": "images/keycap_08.png",
       "filter": "none",
-      "profile": "cherry",
-      "sound": "sounds/keyboard-jewel-bloom.mp3"
+      "profile": "cherry"
     },
     {
       "id": "kc_09",

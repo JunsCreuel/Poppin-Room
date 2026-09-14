@@ -8,7 +8,6 @@ import HiddenGauge from '../components/HiddenGauge';
 // 히든 키캡 전용 아트 — 내가 장착한 키캡 디자인과 무관하게, 이 룸만의
 // 고유한 외형(어둠 속에 떠 있는 보석)으로 항상 고정돼 보인다.
 const HIDDEN_KC_IMAGE = 'images/hidden_keycap.png';
-const HIDDEN_KC_SOUND = 'sounds/keyboard-hidden.mp3';
 
 // 히든 키캡 룸 — 일반 키캡 룸과 달리 코인은 전혀 안 나오고, 오직
 // 히든카드(0.6%)만 노리는 곳. 대신 하루에 누를 수 있는 횟수가 정해져 있다.
@@ -21,7 +20,7 @@ export default function HiddenKeycap() {
 
   const pressOnce = useCallback(() => {
     if (maxedOut) return;
-    playKeyClick(HIDDEN_KC_SOUND);
+    playKeyClick();
     trigger(pressHidden('keycap'));
     setPressed((p) => !p);
   }, [maxedOut, pressHidden, trigger]);
