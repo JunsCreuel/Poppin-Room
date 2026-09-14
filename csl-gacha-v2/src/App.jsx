@@ -23,9 +23,7 @@ function NavBar() {
       <nav>
         <NavLink to="/" className={linkClass} end>LAB</NavLink>
         <NavLink to="/wakpuball" className={linkClass}>왁뿌볼</NavLink>
-        <NavLink to="/hidden/wakpuball" className={linkClass}>히든 왁뿌볼</NavLink>
         <NavLink to="/keycap" className={linkClass}>키캡</NavLink>
-        <NavLink to="/hidden/keycap" className={linkClass}>히든 키캡</NavLink>
         <NavLink to="/gacha" className={linkClass}>뽑기</NavLink>
         <NavLink to="/collection" className={linkClass}>도감</NavLink>
         <NavLink to="/store" className={linkClass}>스토어</NavLink>

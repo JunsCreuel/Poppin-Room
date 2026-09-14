@@ -4,6 +4,7 @@ import { playCrackHit, playCrackBreak } from '../utils/sound';
 import { useRewardEffects } from '../utils/useRewardEffects';
 import RewardEffects from '../components/RewardEffects';
 import HiddenGauge from '../components/HiddenGauge';
+import CrackOverlay from '../components/CrackOverlay';
 
 // 히든 왁뿌볼 전용 아트 — 내가 장착한 왁뿌볼 디자인과 무관하게, 이 룸만의
 // 고유한 외형(어둠 속에 떠 있는 보석)으로 항상 고정돼 보인다.
@@ -47,7 +48,6 @@ export default function HiddenWakpuball() {
   }, [hits, isBreaking, maxedOut, pressHidden, trigger, recordBreak]);
 
   const crackProgress = hits / HIDDEN_WB_HITS;
-  const crackLineCount = Math.round(crackProgress * 10);
 
   return (
     <div className="case-page">
@@ -65,21 +65,8 @@ export default function HiddenWakpuball() {
           disabled={maxedOut}
           aria-label="히든 왁뿌볼 터뜨리기"
         >
-          <img src={HIDDEN_WB_IMAGE} alt="히든 왁뿌볼" className="wakpu-ball-img is-holo" />
-          <svg className="wakpu-cracks" viewBox="0 0 200 200">
-            {Array.from({ length: crackLineCount }).map((_, i) => {
-              const angle = (i / 10) * Math.PI * 2;
-              const x2 = 100 + Math.cos(angle) * 90;
-              const y2 = 100 + Math.sin(angle) * 90;
-              return (
-                <line
-                  key={i}
-                  x1="100" y1="100" x2={x2} y2={y2}
-                  stroke="rgba(0,0,0,.4)" strokeWidth="2"
-                />
-              );
-            })}
-          </svg>
+          <img src={HIDDEN_WB_IMAGE} alt="히든 왁뿌볼" className="wakpu-ball-img is-holo-strong" />
+          <CrackOverlay progress={crackProgress} />
           {isBreaking && (
             <div className="wakpu-shatter">
               {Array.from({ length: 12 }).map((_, i) => (

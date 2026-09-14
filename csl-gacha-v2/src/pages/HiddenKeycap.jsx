@@ -53,7 +53,7 @@ export default function HiddenKeycap() {
           disabled={maxedOut}
           aria-label="히든 키캡"
         >
-          <img src={HIDDEN_KC_IMAGE} alt="히든 키캡" className="keycap-single-img is-holo" draggable="false" />
+          <img src={HIDDEN_KC_IMAGE} alt="히든 키캡" className="keycap-single-img is-holo-strong" draggable="false" />
         </button>
       </div>
 

@@ -5,6 +5,7 @@ import { playCrackHit, playCrackBreak } from '../utils/sound';
 import { useRewardEffects } from '../utils/useRewardEffects';
 import RewardEffects from '../components/RewardEffects';
 import DesignPicker from '../components/DesignPicker';
+import CrackOverlay from '../components/CrackOverlay';
 
 export default function Wakpuball() {
   const { equipped, getToy, pressReward, coins, recordBreak, dailyBreaks } = useGame();
@@ -41,7 +42,6 @@ export default function Wakpuball() {
   if (!toy) return null;
 
   const crackProgress = hits / toy.hitsToBreak;
-  const crackLineCount = Math.round(crackProgress * 10);
 
   return (
     <div className="case-page">
@@ -64,20 +64,7 @@ export default function Wakpuball() {
             className={`wakpu-ball-img ${toy.isHolo ? 'is-holo' : ''}`}
             style={{ filter: toy.filter }}
           />
-          <svg className="wakpu-cracks" viewBox="0 0 200 200">
-            {Array.from({ length: crackLineCount }).map((_, i) => {
-              const angle = (i / 10) * Math.PI * 2;
-              const x2 = 100 + Math.cos(angle) * 90;
-              const y2 = 100 + Math.sin(angle) * 90;
-              return (
-                <line
-                  key={i}
-                  x1="100" y1="100" x2={x2} y2={y2}
-                  stroke="rgba(0,0,0,.4)" strokeWidth="2"
-                />
-              );
-            })}
-          </svg>
+          <CrackOverlay progress={crackProgress} />
           {isBreaking && (
             <div className="wakpu-shatter">
               {Array.from({ length: 12 }).map((_, i) => (
