@@ -6,17 +6,15 @@ import RewardEffects from '../components/RewardEffects';
 import DesignPicker from '../components/DesignPicker';
 import { resizeImageFile } from '../utils/resizeImage';
 
-const HOLD_INTERVAL_MS = 90; // 꾹 누르고 있을 때 연속 타건 간격 — CLICK LAB과 동일
-
 export default function Keycap() {
   const { equipped, getToy, pressReward, coins, customSticker, setCustomSticker, clearCustomSticker } = useGame();
   const toy = getToy('keycap', equipped.keycap);
+  // 꾹 누르고 있어도 연타되지 않는 토글 방식 — 한 번 누르면 눌린 채로 있다가
+  // 다시 누르면 원상태로 돌아온다. 코인/히든카드 굴림은 클릭할 때마다 한 번.
   const [pressed, setPressed] = useState(false);
   const [uploading, setUploading] = useState(false);
   const { toast, hiddenCard, trigger, closeHidden } = useRewardEffects();
 
-  const holdIntervalRef = useRef(null);
-  const pressTimeoutRef = useRef(null);
   const fileInputRef = useRef(null);
 
   const sticker = customSticker?.keycap || null;
@@ -25,38 +23,22 @@ export default function Keycap() {
     if (!toy) return;
     playKeyClick(toy.tier === 'premium');
     trigger(pressReward('keycap'));
-    setPressed(false);
-    clearTimeout(pressTimeoutRef.current);
-    requestAnimationFrame(() => setPressed(true));
-    pressTimeoutRef.current = setTimeout(() => setPressed(false), 90);
+    setPressed((p) => !p);
   }, [toy, pressReward, trigger]);
 
-  const handlePointerDown = (e) => {
-    if (e.button !== 0) return;
-    pressOnce();
-    clearInterval(holdIntervalRef.current);
-    holdIntervalRef.current = setInterval(pressOnce, HOLD_INTERVAL_MS);
-  };
+  const handleClick = () => pressOnce();
 
   useEffect(() => {
-    const stopHolding = () => {
-      clearInterval(holdIntervalRef.current);
-      holdIntervalRef.current = null;
-    };
-    // 실제 키보드의 ESC를 눌러도 같은 반응 — CLICK LAB과 동일하게 지원
+    // 실제 키보드의 ESC를 눌러도 같은 반응 — CLICK LAB과 동일하게 지원.
+    // OS 키 반복(계속 누르고 있을 때 연속 발생하는 keydown)은 무시해서
+    // 꾹 누르고 있어도 한 번만 토글되게 한다.
     const handleKeyDown = (e) => {
-      if (e.code !== 'Escape') return;
+      if (e.code !== 'Escape' || e.repeat) return;
       e.preventDefault();
       pressOnce();
     };
-    window.addEventListener('pointerup', stopHolding);
     window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('pointerup', stopHolding);
-      window.removeEventListener('keydown', handleKeyDown);
-      clearInterval(holdIntervalRef.current);
-      clearTimeout(pressTimeoutRef.current);
-    };
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [pressOnce]);
 
   const handleStickerSelect = async (e) => {
@@ -78,7 +60,7 @@ export default function Keycap() {
     <div className="case-page">
       <div className="case-eyebrow">03 // 키캡 룸</div>
       <h1 className="case-title">{toy.name}</h1>
-      <p className="case-sub">클릭하거나 꾹 누르고 있어. 실제 키보드 ESC를 눌러도 돼. 누를 때마다 코인을 얻을 수도 있어.</p>
+      <p className="case-sub">클릭할 때마다 눌림 상태가 토글돼. 실제 키보드 ESC를 눌러도 돼. 누를 때마다 코인을 얻을 수도 있어.</p>
 
       <DesignPicker category="keycap" />
 
@@ -86,7 +68,7 @@ export default function Keycap() {
         <button
           type="button"
           className={`keycap-single ${pressed ? 'is-pressed' : ''}`}
-          onPointerDown={handlePointerDown}
+          onClick={handleClick}
           aria-label={toy.name}
         >
           <img
@@ -97,7 +79,9 @@ export default function Keycap() {
             draggable="false"
           />
           {sticker && (
-            <img src={sticker} alt="내 스티커" className="keycap-sticker-overlay" draggable="false" />
+            <div className="keycap-sticker-overlay" aria-hidden="true">
+              <img src={sticker} alt="" className="keycap-sticker-overlay-img" draggable="false" />
+            </div>
           )}
         </button>
       </div>

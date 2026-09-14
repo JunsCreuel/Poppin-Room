@@ -60,7 +60,7 @@ export default function Ranking() {
     <div className="case-page">
       <div className="case-eyebrow">08 // 랭킹</div>
       <h1 className="case-title">오늘의 기록</h1>
-      <p className="case-sub">다른 유저 데이터와 비교한 시뮬레이션 랭킹이야 — 실제 랭킹 서버가 붙으면 진짜 순위로 바뀔 예정이야.</p>
+      <p className="case-sub">오늘 왁뿌볼을 깬 횟수를 다른 유저들과 비교한 순위야.</p>
 
       <div className="rank-card">
         <div className="rank-card-label">오늘 왁뿌볼 깬 횟수 기준</div>

@@ -17,7 +17,7 @@ export default function RewardEffects({ toast, hiddenCard, onCloseHidden }) {
             <h2>히든카드를 뽑았어!</h2>
             <p className="hidden-modal-code">{hiddenCard.code}</p>
             <p className="hidden-modal-desc">
-              이 카드는 내 계정에 고유하게 저장돼. 실물 상품 수령은 계정 시스템이 붙으면 안내될 예정이야 — 지금은 「내 계정」 탭에서 계속 확인할 수 있어.
+              이 카드는 내 계정에 고유하게 저장돼. 실물 경품 수령 안내는 「내 계정」 탭에서 확인할 수 있어.
             </p>
             <button type="button" className="hidden-modal-close" onClick={onCloseHidden}>확인</button>
           </div>

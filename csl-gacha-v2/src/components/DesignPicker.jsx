@@ -1,36 +1,46 @@
+import { useState } from 'react';
 import { useGame } from '../store/useGame';
+import ToyCard from './ToyCard';
 
-// 왁뿌볼/키캡 룸에서 바로 디자인을 바꿔 낄 수 있는 가로 스와치 목록 —
-// 보유한 디자인만 보여주고, 클릭하면 즉시 장착돼서 페이지 이동 없이
-// 바로 반영된다.
+// 왁뿌볼/키캡 룸에서 바로 디자인을 바꿔 낄 수 있는 인벤토리 —
+// 기본은 접혀 있고 "내 디자인 열기"를 누르면 보유한 디자인만 도감 카드
+// 형식(기본/유료/프리미엄 등급 배지 포함)으로 펼쳐진다. 고르면 바로
+// 장착되고 패널은 닫힌다.
 export default function DesignPicker({ category }) {
   const { toys, owned, equipped, equip } = useGame();
+  const [open, setOpen] = useState(false);
 
   const ownedToys = toys[category].filter((t) => owned.includes(t.id));
   if (ownedToys.length <= 1) return null;
 
+  const handlePick = (id) => {
+    equip(category, id);
+    setOpen(false);
+  };
+
   return (
     <div className="design-picker">
-      <div className="design-picker-label">내 디자인</div>
-      <div className="design-picker-row">
-        {ownedToys.map((toy) => (
-          <button
-            key={toy.id}
-            type="button"
-            className={`design-picker-swatch ${equipped[category] === toy.id ? 'is-equipped' : ''}`}
-            onClick={() => equip(category, toy.id)}
-            aria-label={toy.name}
-            title={toy.name}
-          >
-            <img
-              src={toy.image}
-              alt={toy.name}
-              style={{ filter: toy.filter }}
-              className={toy.isHolo ? 'is-holo' : ''}
+      <button
+        type="button"
+        className="design-picker-toggle"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+      >
+        내 디자인 열기 ({ownedToys.length}) {open ? '▲' : '▼'}
+      </button>
+      {open && (
+        <div className="design-picker-panel collection-grid">
+          {ownedToys.map((toy) => (
+            <ToyCard
+              key={toy.id}
+              toy={toy}
+              owned
+              equipped={equipped[category] === toy.id}
+              onClick={() => handlePick(toy.id)}
             />
-          </button>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

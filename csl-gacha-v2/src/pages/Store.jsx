@@ -28,7 +28,7 @@ export default function Store() {
     <div className="case-page">
       <div className="case-eyebrow">06 // 프리미엄 스토어</div>
       <h1 className="case-title">프리미엄</h1>
-      <p className="case-sub">실제 결제는 아직 연동 전이라 버튼을 누르면 테스트 결제로 바로 지급돼. 프리미엄 키캡은 실제 녹음 사운드가 적용돼.</p>
+      <p className="case-sub">결제하면 바로 지급돼. 프리미엄 키캡은 실제 녹음 사운드가 적용돼.</p>
 
       <div className="store-grid">
         {premiumToys.map((toy) => {

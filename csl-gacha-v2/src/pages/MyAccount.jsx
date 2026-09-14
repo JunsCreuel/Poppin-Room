@@ -3,18 +3,23 @@ import { useGame } from '../store/useGame';
 const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 
 export default function MyAccount() {
-  const { loggedIn, loginProvider, login, logout, coins, hiddenCards, owned, toys } = useGame();
+  const { loggedIn, loginProvider, login, logout, coins, hiddenCards, owned, toys, resetProgress } = useGame();
 
   const premiumOwned = ['wakpuball', 'keycap'].flatMap((category) =>
     toys[category].filter((t) => t.tier === 'premium' && owned.includes(t.id)).map((t) => ({ ...t, category }))
   );
 
+  const handleReset = () => {
+    const ok = window.confirm('코인·보유 디자인·히든카드·랭킹 기록이 전부 지워지고 처음 상태로 돌아가. 계속할까?');
+    if (ok) resetProgress();
+  };
+
   if (!loggedIn) {
     return (
       <div className="case-page">
         <div className="case-eyebrow">07 // 내 계정</div>
-        <h1 className="case-title">로그인이 필요해</h1>
-        <p className="case-sub">히든카드 보관·실물 수령 안내는 계정에 연결돼야 볼 수 있어. 지금은 실제 로그인 연동 전이라 버튼을 누르면 바로 로그인된 것처럼 보여줘.</p>
+        <h1 className="case-title">로그인해서 계정 연결하고 이용하기</h1>
+        <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정을 연결해야 볼 수 있어. 카카오나 Google 계정으로 로그인해봐.</p>
 
         <div className="login-box">
           <button type="button" className="login-btn is-kakao" onClick={() => login('kakao')}>
@@ -24,6 +29,12 @@ export default function MyAccount() {
             Google로 로그인
           </button>
         </div>
+
+        <section className="account-section account-danger">
+          <h3 className="collection-section-title">데이터 초기화</h3>
+          <p className="account-empty">테스트하면서 쌓인 코인·보유 디자인 기록을 지우고 처음 상태로 되돌릴 수 있어.</p>
+          <button type="button" className="reset-btn" onClick={handleReset}>진행 상황 초기화</button>
+        </section>
       </div>
     );
   }
@@ -35,7 +46,7 @@ export default function MyAccount() {
         <h1 className="case-title">내 계정</h1>
         <button type="button" className="logout-btn" onClick={logout}>로그아웃</button>
       </div>
-      <p className="case-sub">{loginProvider === 'kakao' ? '카카오' : 'Google'} 계정으로 로그인됨 (mock)</p>
+      <p className="case-sub">{loginProvider === 'kakao' ? '카카오' : 'Google'} 계정으로 로그인됨</p>
 
       <section className="account-section">
         <h3 className="collection-section-title">보유 코인</h3>
@@ -58,7 +69,7 @@ export default function MyAccount() {
           </div>
         )}
         {hiddenCards.length > 0 && (
-          <p className="account-note">실물 상품 수령 절차는 계정 시스템이 실제로 연동되면 이 화면에서 안내될 예정이야.</p>
+          <p className="account-note">히든카드를 모으면 실물 경품 수령 절차가 이 화면에 순서대로 안내돼.</p>
         )}
       </section>
 
@@ -79,6 +90,12 @@ export default function MyAccount() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="account-section account-danger">
+        <h3 className="collection-section-title">데이터 초기화</h3>
+        <p className="account-empty">테스트하면서 쌓인 코인·보유 디자인·히든카드·랭킹 기록을 지우고 처음 상태로 되돌릴 수 있어.</p>
+        <button type="button" className="reset-btn" onClick={handleReset}>진행 상황 초기화</button>
       </section>
     </div>
   );

@@ -212,6 +212,13 @@ export function GameProvider({ children }) {
     setState((prev) => ({ ...prev, loggedIn: false, loginProvider: null }));
   }, []);
 
+  // 테스트하면서 쌓인 코인/보유 디자인/히든카드/랭킹 기록을 전부 지우고
+  // 처음 상태(무료 등급만 보유, 코인 0)로 되돌린다. 되돌릴 수 없으니 UI
+  // 쪽에서 반드시 확인을 받고 호출해야 한다.
+  const resetProgress = useCallback(() => {
+    setState(defaultState());
+  }, []);
+
   const value = {
     coins: state.coins,
     owned: state.owned,
@@ -236,6 +243,7 @@ export function GameProvider({ children }) {
     recordBreak,
     setCustomSticker,
     clearCustomSticker,
+    resetProgress,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
