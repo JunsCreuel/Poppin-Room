@@ -42,7 +42,6 @@ function defaultState() {
     loginProvider: null, // 'kakao' | 'google'
     dailyBreaks: 0, // 오늘 왁뿌볼을 완전히 깬 횟수 — 랭킹 계산에 사용
     totalBreaks: 0,
-    customSticker: { keycap: null }, // 사용자가 올린 이미지(data URL) — 키캡 위 스티커
     lastVisit: todayStr(),
     hiddenAttempts: { wakpuball: 0, keycap: 0 }, // 히든 룸에서 오늘 시도한 횟수
     hiddenCap: { wakpuball: HIDDEN_DAILY_BASE, keycap: HIDDEN_DAILY_BASE }, // 광고로 최대 60까지 늘어남
@@ -254,23 +253,6 @@ export function GameProvider({ children }) {
     }));
   }, []);
 
-  // 키캡 위에 올릴 사용자 업로드 스티커. 실제 서버가 없어서 data URL을
-  // localStorage에 그대로 저장한다 — 큰 이미지를 올리면 용량이 커질 수 있어
-  // UI 쪽(Keycap.jsx)에서 업로드 전에 적당한 크기로 리사이즈해서 넘겨준다.
-  const setCustomSticker = useCallback((category, dataUrl) => {
-    setState((prev) => ({
-      ...prev,
-      customSticker: { ...prev.customSticker, [category]: dataUrl },
-    }));
-  }, []);
-
-  const clearCustomSticker = useCallback((category) => {
-    setState((prev) => ({
-      ...prev,
-      customSticker: { ...prev.customSticker, [category]: null },
-    }));
-  }, []);
-
   const equip = useCallback((category, id) => {
     setState((prev) => ({
       ...prev,
@@ -308,7 +290,6 @@ export function GameProvider({ children }) {
     loginProvider: state.loginProvider,
     dailyBreaks: state.dailyBreaks,
     totalBreaks: state.totalBreaks,
-    customSticker: state.customSticker,
     hiddenAttempts: state.hiddenAttempts,
     hiddenCap: state.hiddenCap,
     hiddenCycleStart: state.hiddenCycleStart,
@@ -329,8 +310,6 @@ export function GameProvider({ children }) {
     login,
     logout,
     recordBreak,
-    setCustomSticker,
-    clearCustomSticker,
     resetProgress,
   };
 

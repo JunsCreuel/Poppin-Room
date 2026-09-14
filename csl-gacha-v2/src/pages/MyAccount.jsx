@@ -19,7 +19,7 @@ export default function MyAccount() {
       <div className="case-page">
         <div className="case-eyebrow">07 // 내 계정</div>
         <h1 className="case-title">계정 연결</h1>
-        <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정을 연결해야 볼 수 있어. 카카오나 Google 계정으로 로그인해봐.</p>
+        <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정을 연결해야 볼 수 있어. 카카오나 Google 계정으로 로그인.</p>
 
         <div className="login-box">
           <button type="button" className="login-btn is-kakao" onClick={() => login('kakao')}>
