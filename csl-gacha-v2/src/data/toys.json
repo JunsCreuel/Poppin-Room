@@ -1,22 +1,180 @@
 {
   "wakpuball": [
-    { "id": "wb_01", "name": "기본 핑크", "grade": "common", "tier": "free", "accent": "#ff4fa3", "image": "images/wax_ball.png", "filter": "none", "crackPattern": "radial", "hitsToBreak": 12 },
-    { "id": "wb_02", "name": "라임 그린", "grade": "common", "tier": "free", "accent": "#caff3d", "image": "images/wax_ball.png", "filter": "hue-rotate(120deg) saturate(1.3)", "crackPattern": "radial", "hitsToBreak": 10 },
-    { "id": "wb_03", "name": "스카이 블루", "grade": "common", "tier": "free", "accent": "#5ec8f0", "image": "images/wax_ball.png", "filter": "hue-rotate(200deg) saturate(1.2)", "crackPattern": "radial", "hitsToBreak": 12 },
-    { "id": "wb_04", "name": "선명 오렌지", "grade": "rare", "tier": "paid", "accent": "#ff8c42", "image": "images/wax_ball.png", "filter": "hue-rotate(45deg) saturate(1.4) brightness(1.05)", "crackPattern": "spiral", "hitsToBreak": 16 },
-    { "id": "wb_05", "name": "딥 퍼플", "grade": "rare", "tier": "paid", "accent": "#8b5cf6", "image": "images/wax_ball.png", "filter": "hue-rotate(260deg) saturate(1.3)", "crackPattern": "spiral", "hitsToBreak": 16 },
-    { "id": "wb_06", "name": "레드 크림슨", "grade": "rare", "tier": "paid", "accent": "#e11d48", "image": "images/wax_ball.png", "filter": "hue-rotate(320deg) saturate(1.5) brightness(0.95)", "crackPattern": "spiral", "hitsToBreak": 18 },
-    { "id": "wb_07", "name": "네온 블랙", "grade": "limited", "tier": "premium", "price": 2900, "accent": "#111111", "image": "images/wax_ball.png", "filter": "grayscale(0.6) brightness(0.35) contrast(1.4)", "crackPattern": "shatter", "hitsToBreak": 30 },
-    { "id": "wb_08", "name": "홀로그램", "grade": "limited", "tier": "premium", "price": 3900, "accent": "#caff3d", "image": "images/wax_ball.png", "filter": "hue-rotate(180deg) saturate(2) brightness(1.15) contrast(1.1)", "isHolo": true, "crackPattern": "shatter", "hitsToBreak": 32 }
+    {
+      "id": "wb_01",
+      "name": "기본 핑크",
+      "grade": "common",
+      "tier": "free",
+      "accent": "#ff4fa3",
+      "image": "images/wakpuball_base.png",
+      "filter": "none",
+      "crackPattern": "radial",
+      "hitsToBreak": 12
+    },
+    {
+      "id": "wb_02",
+      "name": "라임 그린",
+      "grade": "common",
+      "tier": "free",
+      "accent": "#caff3d",
+      "image": "images/wakpuball_base.png",
+      "filter": "hue-rotate(120deg) saturate(1.3)",
+      "crackPattern": "radial",
+      "hitsToBreak": 10
+    },
+    {
+      "id": "wb_03",
+      "name": "스카이 블루",
+      "grade": "common",
+      "tier": "free",
+      "accent": "#5ec8f0",
+      "image": "images/wakpuball_base.png",
+      "filter": "hue-rotate(200deg) saturate(1.2)",
+      "crackPattern": "radial",
+      "hitsToBreak": 12
+    },
+    {
+      "id": "wb_04",
+      "name": "선명 오렌지",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ff8c42",
+      "image": "images/wakpuball_base.png",
+      "filter": "hue-rotate(45deg) saturate(1.4) brightness(1.05)",
+      "crackPattern": "spiral",
+      "hitsToBreak": 16
+    },
+    {
+      "id": "wb_05",
+      "name": "딥 퍼플",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#8b5cf6",
+      "image": "images/wakpuball_base.png",
+      "filter": "hue-rotate(260deg) saturate(1.3)",
+      "crackPattern": "spiral",
+      "hitsToBreak": 16
+    },
+    {
+      "id": "wb_06",
+      "name": "레드 크림슨",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#e11d48",
+      "image": "images/wakpuball_base.png",
+      "filter": "hue-rotate(320deg) saturate(1.5) brightness(0.95)",
+      "crackPattern": "spiral",
+      "hitsToBreak": 18
+    },
+    {
+      "id": "wb_07",
+      "name": "네온 블랙",
+      "grade": "limited",
+      "tier": "premium",
+      "price": 2900,
+      "accent": "#111111",
+      "image": "images/wakpuball_base.png",
+      "filter": "grayscale(0.6) brightness(0.35) contrast(1.4)",
+      "crackPattern": "shatter",
+      "hitsToBreak": 30
+    },
+    {
+      "id": "wb_08",
+      "name": "홀로그램",
+      "grade": "limited",
+      "tier": "premium",
+      "price": 3900,
+      "accent": "#caff3d",
+      "image": "images/wakpuball_base.png",
+      "filter": "hue-rotate(180deg) saturate(2) brightness(1.15) contrast(1.1)",
+      "isHolo": true,
+      "crackPattern": "shatter",
+      "hitsToBreak": 32
+    }
   ],
   "keycap": [
-    { "id": "kc_01", "name": "화이트 체리", "grade": "common", "tier": "free", "accent": "#f4f4f4", "image": "images/esc_key.png", "filter": "none", "profile": "cherry" },
-    { "id": "kc_02", "name": "그레이 OEM", "grade": "common", "tier": "free", "accent": "#9aa0a6", "image": "images/esc_key.png", "filter": "brightness(0.75) saturate(0)", "profile": "oem" },
-    { "id": "kc_03", "name": "민트 SA", "grade": "common", "tier": "free", "accent": "#a8e6cf", "image": "images/esc_key.png", "filter": "hue-rotate(150deg) saturate(1.3) brightness(1.05)", "profile": "sa" },
-    { "id": "kc_04", "name": "핑크 체리", "grade": "rare", "tier": "paid", "accent": "#ff8fc7", "image": "images/esc_key.png", "filter": "hue-rotate(320deg) saturate(1.4)", "profile": "cherry" },
-    { "id": "kc_05", "name": "우드 크림", "grade": "rare", "tier": "paid", "accent": "#d8b384", "image": "images/esc_key.png", "filter": "hue-rotate(30deg) saturate(1.2) brightness(0.95) sepia(0.3)", "profile": "cherry" },
-    { "id": "kc_06", "name": "블루베리", "grade": "rare", "tier": "paid", "accent": "#5b6ee1", "image": "images/esc_key.png", "filter": "hue-rotate(220deg) saturate(1.5)", "profile": "oem" },
-    { "id": "kc_07", "name": "투명 한정", "grade": "limited", "tier": "premium", "price": 2900, "accent": "#eef7ff", "image": "images/esc_key.png", "filter": "opacity(0.6) brightness(1.3) contrast(0.9)", "profile": "sa" },
-    { "id": "kc_08", "name": "골드 한정", "grade": "limited", "tier": "premium", "price": 3900, "accent": "#e8c766", "image": "images/esc_key.png", "filter": "sepia(0.8) saturate(2) hue-rotate(-10deg) brightness(1.1)", "isHolo": true, "profile": "cherry" }
+    {
+      "id": "kc_01",
+      "name": "화이트 체리",
+      "grade": "common",
+      "tier": "free",
+      "accent": "#f4f4f4",
+      "image": "images/keycap_base.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_02",
+      "name": "그레이 OEM",
+      "grade": "common",
+      "tier": "free",
+      "accent": "#9aa0a6",
+      "image": "images/keycap_base.png",
+      "filter": "brightness(0.72) saturate(0)",
+      "profile": "oem"
+    },
+    {
+      "id": "kc_03",
+      "name": "민트 SA",
+      "grade": "common",
+      "tier": "free",
+      "accent": "#a8e6cf",
+      "image": "images/keycap_base.png",
+      "filter": "sepia(1) saturate(4) hue-rotate(70deg) brightness(0.9) contrast(1.05)",
+      "profile": "sa"
+    },
+    {
+      "id": "kc_04",
+      "name": "핑크 체리",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ff8fc7",
+      "image": "images/keycap_base.png",
+      "filter": "sepia(0.9) saturate(3) hue-rotate(280deg) brightness(0.97)",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_05",
+      "name": "우드 크림",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#d8b384",
+      "image": "images/keycap_base.png",
+      "filter": "sepia(0.55) saturate(1.3) brightness(1.05) hue-rotate(5deg)",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_06",
+      "name": "블루베리",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#5b6ee1",
+      "image": "images/keycap_base.png",
+      "filter": "sepia(1) saturate(4) hue-rotate(180deg) brightness(0.75) contrast(1.1)",
+      "profile": "oem"
+    },
+    {
+      "id": "kc_07",
+      "name": "투명 한정",
+      "grade": "limited",
+      "tier": "premium",
+      "price": 2900,
+      "accent": "#eef7ff",
+      "image": "images/keycap_base.png",
+      "filter": "opacity(0.55) brightness(1.3) contrast(0.85)",
+      "profile": "sa"
+    },
+    {
+      "id": "kc_08",
+      "name": "골드 한정",
+      "grade": "limited",
+      "tier": "premium",
+      "price": 3900,
+      "accent": "#e8c766",
+      "image": "images/keycap_base.png",
+      "filter": "sepia(1) saturate(2.8) hue-rotate(340deg) brightness(0.95)",
+      "isHolo": true,
+      "profile": "cherry"
+    }
   ]
 }

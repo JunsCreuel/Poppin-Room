@@ -186,6 +186,7 @@ button {
   height: 100%;
   object-fit: contain;
   pointer-events: none;
+  transition: filter 0.15s ease;
 }
 .wakpu-ball.is-shaking {
   transform: scale(0.94);
@@ -245,6 +246,7 @@ button {
   padding: 40px 0;
 }
 .keycap-single {
+  position: relative;
   border: none;
   background: transparent;
   padding: 0;
@@ -255,6 +257,7 @@ button {
   width: 100%;
   object-fit: contain;
   pointer-events: none;
+  transition: filter 0.15s ease;
 }
 .keycap-single.is-pressed {
   transform: translateY(6px) scale(0.97);
@@ -330,6 +333,7 @@ button {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: filter 0.15s ease;
 }
 .capsule-grade-tag {
   font-family: var(--mono);
@@ -434,6 +438,7 @@ button {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: filter 0.15s ease;
 }
 .toy-name {
   font-size: 15px;
@@ -485,6 +490,7 @@ button {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: filter 0.15s ease;
 }
 .lab-room-label {
   font-weight: 700;
@@ -736,6 +742,7 @@ button {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: filter 0.15s ease;
 }
 .store-card-cat {
   font-family: var(--mono);
@@ -868,4 +875,168 @@ button {
 }
 .hidden-card-date {
   color: var(--dim);
+}
+
+/* ===== design picker (왁뿌볼/키캡 룸 즉시 장착) ===== */
+.design-picker {
+  margin: 0 auto 4px;
+  max-width: 420px;
+}
+.design-picker-label {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-align: center;
+}
+.design-picker-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.design-picker-swatch {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.design-picker-swatch img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: filter 0.15s ease;
+}
+.design-picker-swatch.is-equipped {
+  border-color: var(--lime-text);
+  outline: 2px solid var(--lime-text);
+  outline-offset: 1px;
+}
+
+/* ===== keycap sticker upload ===== */
+.sticker-box {
+  max-width: 320px;
+  margin: 4px auto 0;
+  text-align: center;
+}
+.sticker-box-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.sticker-box-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.sticker-upload-btn {
+  padding: 9px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+.sticker-upload-btn:disabled {
+  color: var(--dim);
+  cursor: default;
+}
+.sticker-remove-btn {
+  padding: 9px 16px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+.sticker-file-input {
+  display: none;
+}
+.keycap-sticker-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42%;
+  height: 42%;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.35);
+  pointer-events: none;
+}
+
+/* ===== ranking cta (왁뿌볼 룸) ===== */
+.ranking-cta {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+.ranking-cta:hover {
+  border-color: var(--pink);
+  color: var(--pink);
+}
+
+/* ===== ranking page ===== */
+.rank-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 28px 22px;
+  text-align: center;
+  background: var(--panel);
+  margin-bottom: 20px;
+}
+.rank-card-label {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.rank-card-percentile {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--pink);
+  margin-bottom: 20px;
+}
+.rank-card-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+.rank-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.rank-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.rank-share-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--pink);
+  border-radius: 8px;
+  background: var(--pink);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
 }

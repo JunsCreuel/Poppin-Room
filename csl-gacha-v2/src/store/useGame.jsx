@@ -19,6 +19,10 @@ function freeOwnedIds() {
   return ids;
 }
 
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 function defaultState() {
   return {
     coins: 0,
@@ -27,7 +31,10 @@ function defaultState() {
     hiddenCards: [], // { code, category, wonAt }
     loggedIn: false,
     loginProvider: null, // 'kakao' | 'google'
-    lastVisit: new Date().toISOString().slice(0, 10),
+    dailyBreaks: 0, // 오늘 왁뿌볼을 완전히 깬 횟수 — 랭킹 계산에 사용
+    totalBreaks: 0,
+    customSticker: { keycap: null }, // 사용자가 올린 이미지(data URL) — 키캡 위 스티커
+    lastVisit: todayStr(),
   };
 }
 
@@ -36,7 +43,13 @@ function loadState() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultState();
     const parsed = JSON.parse(raw);
-    return { ...defaultState(), ...parsed };
+    const merged = { ...defaultState(), ...parsed };
+    // 날짜가 바뀌었으면 오늘 깬 횟수만 리셋(누적 총합은 유지).
+    if (merged.lastVisit !== todayStr()) {
+      merged.dailyBreaks = 0;
+      merged.lastVisit = todayStr();
+    }
+    return merged;
   } catch {
     return defaultState();
   }
@@ -48,6 +61,15 @@ function rollPressReward() {
   if (r < PRESS_REWARD.hidden + PRESS_REWARD.coin5) return 'coin5';
   if (r < PRESS_REWARD.hidden + PRESS_REWARD.coin5 + PRESS_REWARD.coin1) return 'coin1';
   return null;
+}
+
+// 실제 다른 유저 데이터가 없어서(백엔드 없음) 오늘 깬 횟수를 그럴듯한
+// 분포에 대입해 "상위 N%"를 계산하는 시뮬레이션 공식이다 — 진짜 랭킹
+// 서버가 붙으면 이 함수를 API 응답으로 바꿔치기하면 된다. 많이 깰수록
+// 지수적으로 상위(%가 작아짐)로 수렴.
+export function calcRankPercentile(dailyBreaks) {
+  const pct = 92 * Math.exp(-dailyBreaks / 14);
+  return Math.max(1, Math.round(pct));
 }
 
 function makeHiddenCode(category) {
@@ -143,6 +165,32 @@ export function GameProvider({ children }) {
     return ok;
   }, []);
 
+  // 왁뿌볼이 완전히 깨질 때마다 호출 — 오늘 깬 횟수를 쌓는다(랭킹 계산용).
+  const recordBreak = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      dailyBreaks: prev.dailyBreaks + 1,
+      totalBreaks: prev.totalBreaks + 1,
+    }));
+  }, []);
+
+  // 키캡 위에 올릴 사용자 업로드 스티커. 실제 서버가 없어서 data URL을
+  // localStorage에 그대로 저장한다 — 큰 이미지를 올리면 용량이 커질 수 있어
+  // UI 쪽(Keycap.jsx)에서 업로드 전에 적당한 크기로 리사이즈해서 넘겨준다.
+  const setCustomSticker = useCallback((category, dataUrl) => {
+    setState((prev) => ({
+      ...prev,
+      customSticker: { ...prev.customSticker, [category]: dataUrl },
+    }));
+  }, []);
+
+  const clearCustomSticker = useCallback((category) => {
+    setState((prev) => ({
+      ...prev,
+      customSticker: { ...prev.customSticker, [category]: null },
+    }));
+  }, []);
+
   const equip = useCallback((category, id) => {
     setState((prev) => ({
       ...prev,
@@ -171,6 +219,9 @@ export function GameProvider({ children }) {
     hiddenCards: state.hiddenCards,
     loggedIn: state.loggedIn,
     loginProvider: state.loginProvider,
+    dailyBreaks: state.dailyBreaks,
+    totalBreaks: state.totalBreaks,
+    customSticker: state.customSticker,
     toys: toysData,
     pullCost: PULL_COST,
     pressReward,
@@ -182,6 +233,9 @@ export function GameProvider({ children }) {
     getToy,
     login,
     logout,
+    recordBreak,
+    setCustomSticker,
+    clearCustomSticker,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

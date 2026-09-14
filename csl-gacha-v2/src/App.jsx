@@ -7,6 +7,7 @@ import Gacha from './pages/Gacha';
 import Collection from './pages/Collection';
 import Store from './pages/Store';
 import MyAccount from './pages/MyAccount';
+import Ranking from './pages/Ranking';
 
 function NavBar() {
   const linkClass = ({ isActive }) => (isActive ? 'is-active' : '');
@@ -24,6 +25,7 @@ function NavBar() {
         <NavLink to="/gacha" className={linkClass}>뽑기</NavLink>
         <NavLink to="/collection" className={linkClass}>컬렉션</NavLink>
         <NavLink to="/store" className={linkClass}>스토어</NavLink>
+        <NavLink to="/ranking" className={linkClass}>랭킹</NavLink>
         <span className="nav-coin-badge">🪙 {coins}</span>
         <NavLink to="/account" className={`nav-account-link ${linkClass({ isActive: false })}`}>
           {loggedIn ? '내 계정' : '로그인'}
@@ -46,6 +48,7 @@ function App() {
             <Route path="/gacha" element={<Gacha />} />
             <Route path="/collection" element={<Collection />} />
             <Route path="/store" element={<Store />} />
+            <Route path="/ranking" element={<Ranking />} />
             <Route path="/account" element={<MyAccount />} />
           </Routes>
         </div>
