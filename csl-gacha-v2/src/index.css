@@ -1,0 +1,527 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #0a0b0d;
+  --panel: #121417;
+  --panel-2: #191c20;
+  --text: #f2f4f1;
+  --muted: #8a938d;
+  --dim: #565f5a;
+  --pink: #ff4fa3;
+  --lime: #caff3d;
+  --line: #2a2f2c;
+  --red: #ff493d;
+  --sans: 'Space Grotesk', -apple-system, sans-serif;
+  --mono: 'Courier New', ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.case-shell {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.case-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 20px;
+  background: rgba(10, 11, 13, 0.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 15px;
+}
+
+.case-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.case-header .brand .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pink);
+  box-shadow: 0 0 8px var(--pink);
+}
+
+.case-header nav {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.case-header nav a {
+  text-decoration: none;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--muted);
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.case-header nav a:hover,
+.case-header nav a.is-active {
+  border-color: var(--pink);
+  color: var(--pink);
+  background: rgba(255, 79, 163, 0.08);
+}
+
+.case-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 20px 80px;
+}
+
+.case-eyebrow {
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  color: var(--lime);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.case-title {
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
+.case-sub {
+  color: var(--muted);
+  font-size: 16px;
+  margin: 0 0 28px;
+  max-width: 54ch;
+}
+
+/* ===== gauge ===== */
+.gauge {
+  margin-bottom: 20px;
+}
+.gauge-head {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.gauge-track {
+  height: 10px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.gauge-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink), #ff8fc7);
+  transition: width 0.25s ease;
+}
+
+/* ===== wakpuball room ===== */
+.wakpu-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 40px 0;
+}
+.wakpu-ball {
+  position: relative;
+  width: min(240px, 60vw);
+  height: min(240px, 60vw);
+  border: none;
+  background: transparent;
+  padding: 0;
+  transition: transform 0.06s ease;
+}
+.wakpu-ball-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.wakpu-ball.is-shaking {
+  transform: scale(0.94);
+}
+.wakpu-ball.is-breaking {
+  animation: wakpuFlash 0.5s ease;
+}
+@keyframes wakpuFlash {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.12) rotate(-4deg); filter: brightness(1.6); }
+  100% { transform: scale(0); opacity: 0; }
+}
+.wakpu-cracks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.is-holo {
+  animation: holoShift 3s linear infinite;
+}
+@keyframes holoShift {
+  0% { filter: hue-rotate(0deg) saturate(2) brightness(1.1); }
+  100% { filter: hue-rotate(360deg) saturate(2) brightness(1.1); }
+}
+.wakpu-shatter {
+  position: absolute;
+  inset: 0;
+}
+.shard {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  transform: rotate(var(--angle)) translate(0, 0);
+  animation: shardFly 0.6s ease forwards;
+}
+@keyframes shardFly {
+  to {
+    transform: rotate(var(--angle)) translate(120px, -40px);
+    opacity: 0;
+  }
+}
+.wakpu-progress {
+  font-family: var(--mono);
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ===== keycap room ===== */
+.keycap-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 420px;
+  margin: 36px auto;
+}
+.keycap-key {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  transition: transform 0.06s ease, background 0.06s ease;
+}
+.keycap-key-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.keycap-key-label {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.keycap-key.is-pressed {
+  transform: translateY(4px) scale(0.96);
+  background: var(--panel-2);
+}
+
+/* ===== gacha ===== */
+.gacha-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.gacha-tabs button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 15px;
+}
+.gacha-tabs button.is-active {
+  border-color: var(--pink);
+  color: var(--pink);
+  background: rgba(255,79,163,.08);
+}
+
+.capsule-machine {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: radial-gradient(circle at 50% 30%, var(--panel-2), var(--bg));
+  margin-bottom: 8px;
+}
+.capsule-orb {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink), #ff8fc7);
+  box-shadow: 0 0 30px rgba(255,79,163,.4);
+}
+.capsule-orb.shaking {
+  animation: capsuleShake 0.15s infinite;
+}
+@keyframes capsuleShake {
+  0% { transform: translateX(-6px) rotate(-4deg); }
+  50% { transform: translateX(6px) rotate(4deg); }
+  100% { transform: translateX(-6px) rotate(-4deg); }
+}
+.capsule-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: resultPop 0.35s ease;
+}
+@keyframes resultPop {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.capsule-toy-swatch {
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.capsule-toy-swatch img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.capsule-grade-tag {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--lime);
+}
+.reveal-limited .capsule-grade-tag { color: var(--pink); }
+.reveal-limited { animation: limitedShake 0.4s ease; }
+@keyframes limitedShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.capsule-toy-name {
+  font-size: 17px;
+  font-weight: 700;
+}
+.capsule-dup-note {
+  font-size: 15px;
+  color: var(--muted);
+}
+.gacha-btn {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--pink);
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255,79,163,.15), rgba(255,79,163,.03));
+  color: var(--text);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+}
+.gacha-btn:disabled {
+  border-color: var(--line);
+  color: var(--dim);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+/* ===== collection ===== */
+.collection-section-title {
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin: 28px 0 12px;
+}
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+.toy-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+}
+.toy-card.grade-rare { border-color: #8b5cf6; }
+.toy-card.grade-limited { border-color: var(--pink); box-shadow: 0 0 16px rgba(255,79,163,.2); }
+.toy-card.is-equipped { outline: 2px solid var(--lime); outline-offset: 2px; }
+.toy-card.is-locked { opacity: 0.45; cursor: default; }
+.toy-swatch {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  background: var(--panel-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.toy-swatch img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.toy-name {
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+}
+.toy-grade {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--muted);
+}
+.toy-equipped-tag {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--lime);
+}
+
+/* ===== lab home ===== */
+.lab-rooms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.lab-room-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  text-decoration: none;
+  color: var(--text);
+}
+.lab-room-card:hover {
+  border-color: var(--pink);
+}
+.lab-room-swatch {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: var(--panel-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lab-room-swatch img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.lab-room-label {
+  font-weight: 700;
+  font-size: 17px;
+}
+.lab-room-desc {
+  font-size: 15px;
+  color: var(--muted);
+}
+.lab-room-gauge {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--lime);
+}
+.gacha-cta {
+  display: block;
+  text-align: center;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.gacha-cta.is-ready {
+  border-color: var(--pink);
+  color: var(--pink);
+  background: rgba(255,79,163,.08);
+}
+.lab-footer-note {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--muted);
+}
+.lab-footer-note a {
+  color: var(--lime);
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .lab-rooms {
+    grid-template-columns: 1fr;
+  }
+}
