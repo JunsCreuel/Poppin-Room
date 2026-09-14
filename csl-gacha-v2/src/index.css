@@ -173,13 +173,13 @@ button {
   padding: 40px 0;
 }
 .wakpu-ball {
+  --hit-squash: 0.02;
   position: relative;
   width: min(240px, 60vw);
   height: min(240px, 60vw);
   border: none;
   background: transparent;
   padding: 0;
-  transition: transform 0.06s ease;
 }
 .wakpu-ball-img {
   width: 100%;
@@ -188,8 +188,16 @@ button {
   pointer-events: none;
   transition: filter 0.15s ease;
 }
+/* 칠 때마다 살짝 짓눌렸다 튕기는 반응 — --hit-squash가 진행도에 따라
+   커져서, 많이 깨질수록 더 크게 짓눌리고 더 세게 비틀린다(돌아가는 느낌) */
 .wakpu-ball.is-shaking {
-  transform: scale(0.94);
+  animation: wakpuHit 0.15s ease-out;
+}
+@keyframes wakpuHit {
+  0% { transform: scale(1) rotate(0deg); }
+  35% { transform: scale(calc(1 - var(--hit-squash) * 2), calc(1 + var(--hit-squash))) rotate(calc(-3deg - var(--hit-squash) * 40deg)); }
+  70% { transform: scale(calc(1 + var(--hit-squash) * 0.6)) rotate(calc(2deg + var(--hit-squash) * 20deg)); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 .wakpu-ball.is-breaking {
   animation: wakpuFlash 0.5s ease;
@@ -1173,4 +1181,56 @@ button {
   height: 100%;
   object-fit: contain;
   pointer-events: none;
+}
+
+/* ===== 왁뿌볼 다 깨진 뒤 "찌그러진 내용물" 단계 — 우리만의 색상 처리:
+   와스 색이 아니라 그 디자인의 accent 색으로 blob을 물들여서, 디자인마다
+   다른 색으로 내용물이 삐져나오는 것처럼 보이게 한다 ===== */
+.wakpu-ball-img.is-squished {
+  transform: scaleY(0.72) scaleX(1.14);
+  filter: saturate(0.65) brightness(0.9);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.4, 1), filter 0.35s ease;
+}
+.wakpu-ball.is-squish-pulse {
+  animation: squishJiggle 0.18s ease-out;
+}
+@keyframes squishJiggle {
+  0% { transform: scale(1) rotate(0deg); }
+  40% { transform: scale(0.97, 1.03) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.wakpu-ball.is-squish-pulse .wakpu-ball-img.is-squished {
+  animation: squishImgPulse 0.18s ease-out;
+}
+@keyframes squishImgPulse {
+  0% { transform: scaleY(0.72) scaleX(1.14); }
+  45% { transform: scaleY(0.62) scaleX(1.24); }
+  100% { transform: scaleY(0.72) scaleX(1.14); }
+}
+.wakpu-ooze {
+  position: absolute;
+  inset: -15%;
+  pointer-events: none;
+}
+.ooze-blob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30%;
+  aspect-ratio: 1;
+  border-radius: 45% 55% 60% 40% / 50% 45% 55% 50%;
+  opacity: 0;
+  filter: blur(0.5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .15);
+  transform: translate(-50%, -50%) scale(0);
+  animation: oozeOut 0.5s cubic-bezier(0.25, 1, 0.4, 1) forwards;
+}
+.blob-1 { --ooze-x: -38%; --ooze-y: -16%; animation-delay: 0.02s; }
+.blob-2 { --ooze-x: 34%; --ooze-y: -10%; animation-delay: 0.07s; }
+.blob-3 { --ooze-x: -22%; --ooze-y: 30%; animation-delay: 0.04s; }
+.blob-4 { --ooze-x: 26%; --ooze-y: 28%; animation-delay: 0.1s; }
+@keyframes oozeOut {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  55% { opacity: 0.85; }
+  100% { opacity: 0.75; transform: translate(calc(-50% + var(--ooze-x)), calc(-50% + var(--ooze-y))) scale(1); }
 }

@@ -66,6 +66,65 @@ export function playCrackBreak() {
   }
 }
 
+// 왁뿌볼 — 다 깨진 직후 안에 든 내용물이 찌그러지며 삐져나오는 순간 한 번
+// 나는 "찌익" 스퀴시음. CRACK LAB(crack-app/src/crunch.js)의 playSquish를
+// 그대로 가져왔다.
+export function playOoze() {
+  const audioCtx = getCtx();
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.type = 'sine';
+  const now = audioCtx.currentTime;
+  osc.frequency.setValueAtTime(320, now);
+  osc.frequency.exponentialRampToValueAtTime(140, now + 0.35);
+  const vol = 0.22 * getVolume();
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(vol, now + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+  osc.connect(g).connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + 0.42);
+}
+
+// 왁뿌볼 — 다 깨진 뒤에도 계속 눌러서 내용물을 조몰락거릴 때마다 나는
+// 가벼운 "뽀드득" 소리. 매번 주파수를 살짝씩 흔들어서 연타해도 질리지
+// 않게 한다.
+export function playSquishTouch() {
+  const audioCtx = getCtx();
+  const now = audioCtx.currentTime;
+  const vol = (0.16 + Math.random() * 0.08) * getVolume();
+
+  const size = Math.max(1, Math.floor(audioCtx.sampleRate * 0.11));
+  const buffer = audioCtx.createBuffer(1, size, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < size; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / size) ** 1.3;
+  }
+  const src = audioCtx.createBufferSource();
+  src.buffer = buffer;
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.value = 450 + Math.random() * 550;
+  filter.Q.value = 0.7;
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(vol, now);
+  g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+  src.connect(filter).connect(g).connect(audioCtx.destination);
+  src.start(now);
+  src.stop(now + 0.11);
+
+  const osc = audioCtx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(170 + Math.random() * 70, now);
+  osc.frequency.exponentialRampToValueAtTime(90, now + 0.09);
+  const g2 = audioCtx.createGain();
+  g2.gain.setValueAtTime(vol * 0.5, now);
+  g2.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+  osc.connect(g2).connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + 0.11);
+}
+
 // 키캡 — 프리미엄 등급만 CLICK LAB에 있는 실제 기계식 키보드 녹음(keyboard.mp3)을
 // 쓰고, 무료·유료 등급은 합성음(저가 멤브레인 키보드 느낌)으로 구분한다 —
 // "프리미엄은 진짜 녹음 소리"라는 요구사항을 지금 있는 에셋으로 구현한 것.
