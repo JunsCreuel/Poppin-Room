@@ -52,7 +52,7 @@ export default function Keycap() {
     <div className="case-page">
       <div className="case-eyebrow">03 // 키캡 룸</div>
       <h1 className="case-title">{toy.name}</h1>
-      <p className="case-sub">클릭할 때마다 눌렸다가 바로 올라와. 실제 키보드 ESC를 눌러도 돼. 누를 때마다 코인을 얻을 수도 있어.</p>
+      <p className="case-sub">클릭마다 눌림 후 자동 복귀, 실제 키보드 ESC 지원, 누를 때마다 코인 획득 가능</p>
 
       <DesignPicker category="keycap" />
 
@@ -76,7 +76,7 @@ export default function Keycap() {
       <div className="coin-inline">🪙 {coins} 코인</div>
 
       <Link to="/hidden/keycap" className="hidden-room-cta">
-        히든카드가 궁금해? 히든 키캡 룸으로 →
+        히든 키캡 룸 · 히든카드 도전 →
       </Link>
 
       <RewardEffects toast={toast} hiddenCard={hiddenCard} onCloseHidden={closeHidden} />

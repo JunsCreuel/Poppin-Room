@@ -51,7 +51,7 @@ export default function Gacha() {
     <div className="case-page">
       <div className="case-eyebrow">04 // 뽑기</div>
       <h1 className="case-title">캡슐 뽑기</h1>
-      <p className="case-sub">뽑기는 코인 {pullCost}개가 들어. 유료 등급 디자인만 나와 — 프리미엄은 스토어에서 직접 구매해야 해.</p>
+      <p className="case-sub">뽑기 비용 코인 {pullCost}개, 유료 등급 디자인 전용, 프리미엄은 스토어에서 구매</p>
 
       <div className="coin-bar">
         <span className="coin-bar-balance">🪙 {coins} 코인</span>
@@ -94,7 +94,7 @@ export default function Gacha() {
         <button type="button" className="gacha-btn" onClick={reset}>확인</button>
       ) : (
         <button type="button" className="gacha-btn" disabled={!ready} onClick={handlePull}>
-          {stage === 'shaking' ? '뽑는 중...' : ready ? `뽑기 (${pullCost}코인)` : '코인이 부족해'}
+          {stage === 'shaking' ? '뽑는 중...' : ready ? `뽑기 (${pullCost}코인)` : '코인 부족'}
         </button>
       )}
     </div>

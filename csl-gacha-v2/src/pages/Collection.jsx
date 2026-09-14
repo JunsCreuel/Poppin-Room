@@ -19,7 +19,7 @@ export default function Collection() {
     <div className="case-page">
       <div className="case-eyebrow">05 // 도감</div>
       <h1 className="case-title">도감</h1>
-      <p className="case-sub">획득한 토이를 클릭하면 장착돼. 잠긴 프리미엄 카드를 누르면 스토어로 이동해. {ownedCount} / {totalCount} 수집 완료.</p>
+      <p className="case-sub">클릭하면 장착, 잠긴 프리미엄 카드는 스토어로 이동, {ownedCount} / {totalCount} 수집 완료</p>
 
       <h3 className="collection-section-title">왁뿌볼</h3>
       <div className="collection-grid">

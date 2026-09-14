@@ -18,7 +18,7 @@ export default function Lab() {
     <div className="case-page">
       <div className="case-eyebrow">00 // CSL LAB</div>
       <h1 className="case-title">손이 근질거릴 때 들어오는<br />사이버 피젯 랩</h1>
-      <p className="case-sub">놀 때마다 코인을 얻을 수 있고, 코인으로 뽑기를 해. 뽑은 토이는 도감에 쌓인다.</p>
+      <p className="case-sub">놀 때마다 코인 획득, 코인으로 뽑기, 뽑은 토이는 도감에 저장</p>
 
       <div className="gacha-tabs lab-room-tabs">
         <button type="button" className={roomTab === 'normal' ? 'is-active' : ''} onClick={() => setRoomTab('normal')}>
@@ -37,7 +37,7 @@ export default function Lab() {
             </div>
             <div className="lab-room-body">
               <div className="lab-room-label">왁뿌볼 룸</div>
-              <div className="lab-room-desc">갑자기 치미는 화 — 연타로 깨뜨린다</div>
+              <div className="lab-room-desc">갑자기 치미는 화 — 연타로 파괴</div>
             </div>
           </Link>
 
@@ -47,7 +47,7 @@ export default function Lab() {
             </div>
             <div className="lab-room-body">
               <div className="lab-room-label">키캡 룸</div>
-              <div className="lab-room-desc">가라앉지 않는 초조함 — 꾹꾹 눌러 소리 낸다</div>
+              <div className="lab-room-desc">가라앉지 않는 초조함 — 꾹꾹 눌러 소리내기</div>
             </div>
           </Link>
         </div>
@@ -59,7 +59,7 @@ export default function Lab() {
             </div>
             <div className="lab-room-body">
               <div className="lab-room-label">히든 왁뿌볼 룸</div>
-              <div className="lab-room-desc">코인 없이 0.6% 히든카드만 노린다</div>
+              <div className="lab-room-desc">코인 없이 0.6% 히든카드 도전</div>
               <div className="lab-room-gauge">오늘 {wbLeft}번 남음</div>
             </div>
           </Link>
@@ -70,7 +70,7 @@ export default function Lab() {
             </div>
             <div className="lab-room-body">
               <div className="lab-room-label">히든 키캡 룸</div>
-              <div className="lab-room-desc">코인 없이 0.6% 히든카드만 노린다</div>
+              <div className="lab-room-desc">코인 없이 0.6% 히든카드 도전</div>
               <div className="lab-room-gauge">오늘 {kcLeft}번 남음</div>
             </div>
           </Link>

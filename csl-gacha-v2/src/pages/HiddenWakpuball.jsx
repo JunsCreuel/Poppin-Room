@@ -22,7 +22,7 @@ export default function HiddenWakpuball() {
     <div className="case-page">
       <div className="case-eyebrow">09 // 히든 왁뿌볼 룸</div>
       <h1 className="case-title">히든 왁뿌볼</h1>
-      <p className="case-sub">코인은 안 나와 — 대신 칠 때마다 0.6% 확률로 히든카드를 노려볼 수 있어.</p>
+      <p className="case-sub">코인 없음 — 칠 때마다 0.6% 확률로 히든카드 도전</p>
 
       <HiddenGauge category="wakpuball" />
 

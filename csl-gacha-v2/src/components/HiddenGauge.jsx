@@ -51,7 +51,7 @@ export default function HiddenGauge({ category }) {
       {isMaxedOut && (
         <div className="hidden-gauge-empty">
           <p className="hidden-gauge-empty-text">
-            오늘 시도를 다 썼어 — {formatRemaining(remainingMs)} 후 초기화돼.
+            오늘 시도 소진 — {formatRemaining(remainingMs)} 후 초기화
           </p>
           {cap < hiddenDailyMax && (
             <button type="button" className="hidden-gauge-ad-btn" onClick={handleWatchAd} disabled={watchingAd}>

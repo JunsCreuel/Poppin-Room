@@ -16,7 +16,7 @@ export default function Wakpuball() {
     <div className="case-page">
       <div className="case-eyebrow">02 // 왁뿌볼 룸</div>
       <h1 className="case-title">{toy.name}</h1>
-      <p className="case-sub">연타해서 깨뜨려. 칠 때마다 코인을 얻을 수도 있어.</p>
+      <p className="case-sub">연타로 파괴, 칠 때마다 코인 획득 가능</p>
 
       <DesignPicker category="wakpuball" />
 
@@ -33,10 +33,10 @@ export default function Wakpuball() {
       <div className="coin-inline">🪙 {coins} 코인</div>
 
       <Link to="/ranking" className="ranking-cta">
-        오늘 {dailyBreaks}번 깼어 · 랭킹 보기 →
+        오늘 {dailyBreaks}번 파괴 · 랭킹 보기 →
       </Link>
       <Link to="/hidden/wakpuball" className="hidden-room-cta">
-        히든카드가 궁금해? 히든 왁뿌볼 룸으로 →
+        히든 왁뿌볼 룸 · 히든카드 도전 →
       </Link>
 
       <RewardEffects toast={toast} hiddenCard={hiddenCard} onCloseHidden={closeHidden} />

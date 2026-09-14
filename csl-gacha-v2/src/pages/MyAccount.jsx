@@ -10,7 +10,7 @@ export default function MyAccount() {
   );
 
   const handleReset = () => {
-    const ok = window.confirm('코인·보유 디자인·히든카드·랭킹 기록이 전부 지워지고 처음 상태로 돌아가. 되돌릴 수 없어.');
+    const ok = window.confirm('코인·보유 디자인·히든카드·랭킹 기록 전체 삭제, 처음 상태로 초기화, 복구 불가');
     if (ok) resetProgress();
   };
 
@@ -19,7 +19,7 @@ export default function MyAccount() {
       <div className="case-page">
         <div className="case-eyebrow">07 // 내 계정</div>
         <h1 className="case-title">계정 연결</h1>
-        <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정을 연결해야 볼 수 있어. 카카오나 Google 계정으로 로그인.</p>
+        <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정 연결 후 확인 가능, 카카오 또는 Google에서 로그인</p>
 
         <div className="login-box">
           <button type="button" className="login-btn is-kakao" onClick={() => login('kakao')}>
@@ -32,7 +32,7 @@ export default function MyAccount() {
 
         <section className="account-section account-danger">
           <h3 className="collection-section-title">데이터 초기화</h3>
-          <p className="account-empty">지금까지 쌓은 코인·보유 디자인 기록을 지우고 처음 상태로 되돌릴 수 있어.</p>
+          <p className="account-empty">지금까지 쌓은 코인·보유 디자인 기록 삭제, 처음 상태로 초기화</p>
           <button type="button" className="reset-btn" onClick={handleReset}>진행 상황 초기화</button>
         </section>
       </div>
@@ -56,7 +56,7 @@ export default function MyAccount() {
       <section className="account-section">
         <h3 className="collection-section-title">히든카드 ({hiddenCards.length})</h3>
         {hiddenCards.length === 0 ? (
-          <p className="account-empty">아직 없어 — 왁뿌볼·키캡을 계속 누르다 보면 아주 가끔(0.6%) 나와.</p>
+          <p className="account-empty">아직 없음 — 왁뿌볼·키캡을 계속 누르면 아주 가끔(0.6%) 획득 가능</p>
         ) : (
           <div className="hidden-card-list">
             {hiddenCards.map((card) => (
@@ -69,14 +69,14 @@ export default function MyAccount() {
           </div>
         )}
         {hiddenCards.length > 0 && (
-          <p className="account-note">히든카드를 모으면 실물 경품 수령 절차가 이 화면에 순서대로 안내돼.</p>
+          <p className="account-note">히든카드 수집 시 실물 경품 수령 절차, 이 화면에서 순서대로 안내</p>
         )}
       </section>
 
       <section className="account-section">
         <h3 className="collection-section-title">구매한 프리미엄 ({premiumOwned.length})</h3>
         {premiumOwned.length === 0 ? (
-          <p className="account-empty">아직 없어 — 스토어에서 구매할 수 있어.</p>
+          <p className="account-empty">아직 없음 — 스토어에서 구매 획득 가능</p>
         ) : (
           <div className="collection-grid">
             {premiumOwned.map((toy) => (
@@ -94,7 +94,7 @@ export default function MyAccount() {
 
       <section className="account-section account-danger">
         <h3 className="collection-section-title">데이터 초기화</h3>
-        <p className="account-empty">지금까지 쌓은 코인·보유 디자인·히든카드·랭킹 기록을 지우고 처음 상태로 되돌릴 수 있어.</p>
+        <p className="account-empty">지금까지 쌓은 코인·보유 디자인·히든카드·랭킹 기록 삭제, 처음 상태로 초기화</p>
         <button type="button" className="reset-btn" onClick={handleReset}>진행 상황 초기화</button>
       </section>
     </div>
