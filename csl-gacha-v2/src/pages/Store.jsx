@@ -41,7 +41,7 @@ export default function Store() {
               </div>
               <div className="store-card-cat">{CATEGORY_LABEL[toy.category]} · PREMIUM</div>
               <div className="store-card-name">{toy.name}</div>
-              <div className="store-card-note">실제 녹음 사운드 적용</div>
+              {toy.category === 'keycap' && <div className="store-card-note">실제 녹음 사운드 적용</div>}
               <div className="store-card-foot">
                 <span className="store-card-price">₩{toy.price.toLocaleString()}</span>
                 {isOwned ? (

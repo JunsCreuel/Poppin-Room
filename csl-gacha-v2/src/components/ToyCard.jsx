@@ -12,14 +12,12 @@ export default function ToyCard({ toy, owned, equipped, onClick }) {
       disabled={locked && !onClick}
     >
       <div className="toy-swatch">
-        {!locked && (
-          <img
-            src={toy.image}
-            alt={toy.name}
-            style={{ filter: toy.filter }}
-            className={toy.isHolo ? 'is-holo' : ''}
-          />
-        )}
+        <img
+          src={toy.image}
+          alt={locked ? '아직 얻지 못한 디자인' : toy.name}
+          style={{ filter: locked ? undefined : toy.filter }}
+          className={locked ? 'toy-swatch-locked-img' : (toy.isHolo ? 'is-holo' : '')}
+        />
       </div>
       <div className="toy-name">{locked ? '???' : toy.name}</div>
       <div className="toy-grade">{GRADE_LABEL[toy.grade]}</div>
