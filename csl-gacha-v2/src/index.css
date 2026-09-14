@@ -1183,14 +1183,8 @@ button {
   pointer-events: none;
 }
 
-/* ===== 왁뿌볼 다 깨진 뒤 "찌그러진 내용물" 단계 — 우리만의 색상 처리:
-   와스 색이 아니라 그 디자인의 accent 색으로 blob을 물들여서, 디자인마다
-   다른 색으로 내용물이 삐져나오는 것처럼 보이게 한다 ===== */
-.wakpu-ball-img.is-squished {
-  transform: scaleY(0.72) scaleX(1.14);
-  filter: saturate(0.65) brightness(0.9);
-  transition: transform 0.35s cubic-bezier(0.25, 1, 0.4, 1), filter 0.35s ease;
-}
+/* ===== 왁뿌볼 다 깨진 뒤 "찌그러진 내용물" 단계 — 겉껍질(디자인별 색)은
+   사라지고, 안에 든 내용물은 항상 이 흰색/크림색 왁스로 통일해서 보여준다 ===== */
 .wakpu-ball.is-squish-pulse {
   animation: squishJiggle 0.18s ease-out;
 }
@@ -1199,38 +1193,56 @@ button {
   40% { transform: scale(0.97, 1.03) rotate(-2deg); }
   100% { transform: scale(1) rotate(0deg); }
 }
-.wakpu-ball.is-squish-pulse .wakpu-ball-img.is-squished {
-  animation: squishImgPulse 0.18s ease-out;
-}
-@keyframes squishImgPulse {
-  0% { transform: scaleY(0.72) scaleX(1.14); }
-  45% { transform: scaleY(0.62) scaleX(1.24); }
-  100% { transform: scaleY(0.72) scaleX(1.14); }
-}
-.wakpu-ooze {
+.wakpu-wax {
   position: absolute;
-  inset: -15%;
+  inset: -12%;
   pointer-events: none;
 }
-.ooze-blob {
+/* 가운데를 차지하는 큰 왁스 덩어리 — 광택 있는 흰색/크림 그라디언트 */
+.wax-core {
+  position: absolute;
+  inset: 14%;
+  border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%;
+  background: radial-gradient(circle at 35% 28%, #ffffff 0%, #fffdf6 30%, #f3ecd9 62%, #ddd2b8 100%);
+  box-shadow: 0 10px 22px rgba(17, 17, 17, .18), inset 0 -10px 18px rgba(160, 145, 110, .3);
+  border: 1px solid rgba(17, 17, 17, .06);
+  transform: scale(0);
+  animation: waxCoreIn 0.4s cubic-bezier(0.25, 1, 0.4, 1) forwards;
+}
+.wakpu-ball.is-squish-pulse .wax-core {
+  animation: waxCorePulse 0.18s ease-out;
+}
+@keyframes waxCoreIn {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+@keyframes waxCorePulse {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.08, 0.92); }
+  100% { transform: scale(1); }
+}
+/* 가장자리로 삐져나온 작은 왁스 덩어리들 */
+.wax-blob {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 30%;
+  width: 26%;
   aspect-ratio: 1;
   border-radius: 45% 55% 60% 40% / 50% 45% 55% 50%;
+  background: radial-gradient(circle at 35% 30%, #fffdf6 0%, #f3ecd9 45%, #ddd2b8 100%);
+  box-shadow: 0 6px 14px rgba(17, 17, 17, .16);
+  border: 1px solid rgba(17, 17, 17, .06);
   opacity: 0;
-  filter: blur(0.5px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, .15);
   transform: translate(-50%, -50%) scale(0);
-  animation: oozeOut 0.5s cubic-bezier(0.25, 1, 0.4, 1) forwards;
+  animation: waxOut 0.5s cubic-bezier(0.25, 1, 0.4, 1) forwards;
 }
-.blob-1 { --ooze-x: -38%; --ooze-y: -16%; animation-delay: 0.02s; }
-.blob-2 { --ooze-x: 34%; --ooze-y: -10%; animation-delay: 0.07s; }
-.blob-3 { --ooze-x: -22%; --ooze-y: 30%; animation-delay: 0.04s; }
-.blob-4 { --ooze-x: 26%; --ooze-y: 28%; animation-delay: 0.1s; }
-@keyframes oozeOut {
+.blob-1 { --ooze-x: -40%; --ooze-y: -18%; animation-delay: 0.02s; }
+.blob-2 { --ooze-x: 36%; --ooze-y: -12%; animation-delay: 0.07s; }
+.blob-3 { --ooze-x: -24%; --ooze-y: 32%; animation-delay: 0.04s; }
+.blob-4 { --ooze-x: 28%; --ooze-y: 30%; animation-delay: 0.1s; }
+@keyframes waxOut {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
-  55% { opacity: 0.85; }
-  100% { opacity: 0.75; transform: translate(calc(-50% + var(--ooze-x)), calc(-50% + var(--ooze-y))) scale(1); }
+  55% { opacity: 1; }
+  100% { opacity: 0.95; transform: translate(calc(-50% + var(--ooze-x)), calc(-50% + var(--ooze-y))) scale(1); }
 }

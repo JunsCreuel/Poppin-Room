@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 
 export default function Lab() {
-  const { coins, pullCost, canPull, getToy, equipped, owned, hiddenAttempts, hiddenCap } = useGame();
+  const { coins, pullCost, canPull, getToy, equipped, owned, toys, hiddenAttempts, hiddenCap } = useGame();
   const wakpu = getToy('wakpuball', equipped.wakpuball);
   const keycap = getToy('keycap', equipped.keycap);
   const [roomTab, setRoomTab] = useState('normal'); // normal | hidden
 
   const readyAny = canPull('wakpuball') || canPull('keycap');
-  const totalCount = 16;
+  const totalCount = toys.wakpuball.length + toys.keycap.length;
 
   const wbLeft = Math.max(0, hiddenCap.wakpuball - hiddenAttempts.wakpuball);
   const kcLeft = Math.max(0, hiddenCap.keycap - hiddenAttempts.keycap);

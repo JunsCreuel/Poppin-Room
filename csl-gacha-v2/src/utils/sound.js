@@ -125,15 +125,26 @@ export function playSquishTouch() {
   osc.stop(now + 0.11);
 }
 
-// 키캡 — 프리미엄 등급만 CLICK LAB에 있는 실제 기계식 키보드 녹음(keyboard.mp3)을
-// 쓰고, 무료·유료 등급은 합성음(저가 멤브레인 키보드 느낌)으로 구분한다 —
-// "프리미엄은 진짜 녹음 소리"라는 요구사항을 지금 있는 에셋으로 구현한 것.
-const keySound = new Audio('sounds/keyboard.mp3');
-export function playKeyClick(isPremium = true) {
-  if (isPremium) {
-    keySound.currentTime = 0;
-    keySound.volume = getVolume();
-    keySound.play().catch(() => {});
+// 키캡 — 실제 녹음 파일이 배정된 키캡(베이직 핑크/펄 화이트/선더 크리스탈/
+// 쥬얼 블룸/히든 키캡)은 그 파일을 그대로 재생하고, 나머지(스모크 클리어/
+// 라이트닝 실버/핑크 플라워/블랙 오브)는 합성음(저가 멤브레인 키보드 느낌)
+// 으로 구분한다. 파일마다 Audio 객체를 하나씩만 만들어 재사용한다.
+const keySoundCache = new Map();
+function getKeySound(file) {
+  let audio = keySoundCache.get(file);
+  if (!audio) {
+    audio = new Audio(file);
+    keySoundCache.set(file, audio);
+  }
+  return audio;
+}
+
+export function playKeyClick(soundFile = null) {
+  if (soundFile) {
+    const audio = getKeySound(soundFile);
+    audio.currentTime = 0;
+    audio.volume = getVolume();
+    audio.play().catch(() => {});
     return;
   }
   noiseBurst({ duration: 0.035, filterFreq: 2600, gain: 0.22, q: 2.2 });

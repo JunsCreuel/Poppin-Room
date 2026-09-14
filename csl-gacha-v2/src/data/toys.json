@@ -101,7 +101,8 @@
       "accent": "#ff2f8f",
       "image": "images/keycap_01.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keyboard-basic-pink.mp3"
     },
     {
       "id": "kc_02",
@@ -111,7 +112,8 @@
       "accent": "#f4f4f4",
       "image": "images/keycap_02.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keyboard-basic-white.mp3"
     },
     {
       "id": "kc_03",
@@ -163,7 +165,8 @@
       "image": "images/keycap_07.png",
       "filter": "none",
       "isHolo": true,
-      "profile": "sa"
+      "profile": "sa",
+      "sound": "sounds/keyboard-thunder-crystal.mp3"
     },
     {
       "id": "kc_08",
@@ -174,7 +177,108 @@
       "accent": "#c084fc",
       "image": "images/keycap_08.png",
       "filter": "none",
+      "profile": "cherry",
+      "sound": "sounds/keyboard-jewel-bloom.mp3"
+    },
+    {
+      "id": "kc_09",
+      "name": "바나나",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#f6c445",
+      "image": "images/keycap_banana.png",
+      "filter": "none",
+      "profile": "sa"
+    },
+    {
+      "id": "kc_10",
+      "name": "수박",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ef5b5b",
+      "image": "images/keycap_watermelon.png",
+      "filter": "none",
+      "profile": "oem"
+    },
+    {
+      "id": "kc_11",
+      "name": "포도",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#8b5fbf",
+      "image": "images/keycap_grape.png",
+      "filter": "none",
       "profile": "cherry"
+    },
+    {
+      "id": "kc_12",
+      "name": "망고",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ff9d3d",
+      "image": "images/keycap_mango.png",
+      "filter": "none",
+      "profile": "sa"
+    },
+    {
+      "id": "kc_13",
+      "name": "레몬",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#f4d93e",
+      "image": "images/keycap_lemon.png",
+      "filter": "none",
+      "profile": "oem"
+    },
+    {
+      "id": "kc_14",
+      "name": "복숭아",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ffb3ab",
+      "image": "images/keycap_peach.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_15",
+      "name": "민트 도넛",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#8fe0c4",
+      "image": "images/keycap_donut.png",
+      "filter": "none",
+      "profile": "sa"
+    },
+    {
+      "id": "kc_16",
+      "name": "블루 소다바",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#4fc3e0",
+      "image": "images/keycap_popsicle.png",
+      "filter": "none",
+      "profile": "oem"
+    },
+    {
+      "id": "kc_17",
+      "name": "카라멜 푸딩",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#d98e3e",
+      "image": "images/keycap_pudding.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_18",
+      "name": "라벤더 조개",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#b39ddb",
+      "image": "images/keycap_shell.png",
+      "filter": "none",
+      "profile": "sa"
     }
   ]
 }

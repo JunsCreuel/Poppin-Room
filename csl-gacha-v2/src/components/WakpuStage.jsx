@@ -92,16 +92,17 @@ export default function WakpuStage({
         disabled={disabled}
         aria-label="왁뿌볼 터뜨리기"
       >
-        {phase !== 'breaking' && (
-          <img
-            src={image}
-            alt=""
-            className={`wakpu-ball-img ${isHolo ? holoClassName : ''} ${phase === 'squish' ? 'is-squished' : ''}`}
-            style={filter ? { filter } : undefined}
-          />
+        {phase === 'idle' && (
+          <>
+            <img
+              src={image}
+              alt=""
+              className={`wakpu-ball-img ${isHolo ? holoClassName : ''}`}
+              style={filter ? { filter } : undefined}
+            />
+            <CrackOverlay progress={crackProgress} />
+          </>
         )}
-
-        {phase === 'idle' && <CrackOverlay progress={crackProgress} />}
 
         {phase === 'breaking' && (
           <div className="wakpu-shatter">
@@ -111,12 +112,16 @@ export default function WakpuStage({
           </div>
         )}
 
+        {/* 겉껍질이 깨지고 나면 안에 든 하얀 왁스 내용물이 찌그러져
+            삐져나온 모습만 남는다 — 디자인마다 다른 색인 껍질과 달리
+            내용물은 항상 이 흰색/크림색 왁스로 통일돼 있다 */}
         {phase === 'squish' && (
-          <div className="wakpu-ooze">
-            <span className="ooze-blob blob-1" style={{ background: accent }} />
-            <span className="ooze-blob blob-2" style={{ background: accent }} />
-            <span className="ooze-blob blob-3" style={{ background: accent }} />
-            <span className="ooze-blob blob-4" style={{ background: accent }} />
+          <div className="wakpu-wax">
+            <span className="wax-blob blob-1" />
+            <span className="wax-blob blob-2" />
+            <span className="wax-blob blob-3" />
+            <span className="wax-blob blob-4" />
+            <span className="wax-core" />
           </div>
         )}
       </button>

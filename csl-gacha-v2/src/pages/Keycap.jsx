@@ -22,7 +22,7 @@ export default function Keycap() {
 
   const pressOnce = useCallback(() => {
     if (!toy) return;
-    playKeyClick(toy.tier === 'premium');
+    playKeyClick(toy.sound);
     trigger(pressReward('keycap'));
     setPressed((p) => !p);
   }, [toy, pressReward, trigger]);
