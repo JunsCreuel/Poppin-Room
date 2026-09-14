@@ -1,15 +1,16 @@
 import { useState, useCallback } from 'react';
 import { useGame } from '../store/useGame';
 import { playCrackHit, playCrackBreak } from '../utils/sound';
-
-const GAUGE_PER_HIT = 8;
+import { useRewardEffects } from '../utils/useRewardEffects';
+import RewardEffects from '../components/RewardEffects';
 
 export default function Wakpuball() {
-  const { equipped, getToy, addGauge, gauge, gaugeToPull } = useGame();
+  const { equipped, getToy, pressReward, coins } = useGame();
   const toy = getToy('wakpuball', equipped.wakpuball);
   const [hits, setHits] = useState(0);
   const [isBreaking, setIsBreaking] = useState(false);
   const [shake, setShake] = useState(false);
+  const { toast, hiddenCard, trigger, closeHidden } = useRewardEffects();
 
   const handleHit = useCallback(() => {
     if (isBreaking || !toy) return;
@@ -19,10 +20,11 @@ export default function Wakpuball() {
     setShake(true);
     setTimeout(() => setShake(false), 90);
 
+    trigger(pressReward('wakpuball'));
+
     if (next >= toy.hitsToBreak) {
       playCrackBreak();
       setIsBreaking(true);
-      addGauge('wakpuball', GAUGE_PER_HIT);
       setTimeout(() => {
         setIsBreaking(false);
         setHits(0);
@@ -30,9 +32,8 @@ export default function Wakpuball() {
     } else {
       playCrackHit(progress);
       setHits(next);
-      addGauge('wakpuball', GAUGE_PER_HIT);
     }
-  }, [hits, isBreaking, toy, addGauge]);
+  }, [hits, isBreaking, toy, pressReward, trigger]);
 
   if (!toy) return null;
 
@@ -43,7 +44,7 @@ export default function Wakpuball() {
     <div className="case-page">
       <div className="case-eyebrow">02 // 왁뿌볼 룸</div>
       <h1 className="case-title">{toy.name}</h1>
-      <p className="case-sub">연타해서 깨뜨려. 깨질 때마다 게이지가 쌓이고, 다 깨지면 새 볼로 다시 시작돼.</p>
+      <p className="case-sub">연타해서 깨뜨려. 칠 때마다 코인을 얻을 수도 있어 (아주 가끔 히든카드도).</p>
 
       <div className="wakpu-stage">
         <button
@@ -86,15 +87,9 @@ export default function Wakpuball() {
         <div className="wakpu-progress">{hits} / {toy.hitsToBreak} 회</div>
       </div>
 
-      <div className="gauge">
-        <div className="gauge-head">
-          <span className="gauge-label">왁뿌볼 게이지</span>
-          <span className="gauge-value">{Math.min(gauge.wakpuball, gaugeToPull)} / {gaugeToPull}</span>
-        </div>
-        <div className="gauge-track">
-          <div className="gauge-fill" style={{ width: `${Math.min(100, (gauge.wakpuball / gaugeToPull) * 100)}%` }} />
-        </div>
-      </div>
+      <div className="coin-inline">🪙 {coins} 코인</div>
+
+      <RewardEffects toast={toast} hiddenCard={hiddenCard} onCloseHidden={closeHidden} />
     </div>
   );
 }

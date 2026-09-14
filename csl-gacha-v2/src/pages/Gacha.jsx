@@ -6,10 +6,11 @@ import { playGachaSuccess } from '../utils/sound';
 const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 
 export default function Gacha() {
-  const { gauge, gaugeToPull, canPull, pull } = useGame();
+  const { coins, pullCost, canPull, pull, equip, equipped, claimAdCoins } = useGame();
   const [category, setCategory] = useState('wakpuball');
   const [stage, setStage] = useState('idle'); // idle | shaking | result
   const [result, setResult] = useState(null);
+  const [adState, setAdState] = useState('idle'); // idle | playing | done
 
   const handlePull = useCallback(() => {
     if (!canPull(category) || stage === 'shaking') return;
@@ -33,13 +34,33 @@ export default function Gacha() {
     setResult(null);
   };
 
+  const handleWatchAd = () => {
+    if (adState !== 'idle') return;
+    setAdState('playing');
+    // 실제 광고 SDK가 없어서 재생되는 흉내만 낸 뒤 코인을 지급하는 mock.
+    setTimeout(() => {
+      claimAdCoins();
+      setAdState('done');
+      setTimeout(() => setAdState('idle'), 1200);
+    }, 1800);
+  };
+
   const ready = canPull(category) && stage === 'idle';
 
   return (
     <div className="case-page">
       <div className="case-eyebrow">04 // 뽑기</div>
       <h1 className="case-title">캡슐 뽑기</h1>
-      <p className="case-sub">게이지가 다 차면 캡슐을 뽑을 수 있어. Common 70% · Rare 25% · Limited 5%.</p>
+      <p className="case-sub">뽑기는 코인 {pullCost}개가 들어. 유료 등급 디자인만 나와 — 프리미엄은 스토어에서 직접 구매해야 해.</p>
+
+      <div className="coin-bar">
+        <span className="coin-bar-balance">🪙 {coins} 코인</span>
+        <button type="button" className="ad-btn" onClick={handleWatchAd} disabled={adState !== 'idle'}>
+          {adState === 'idle' && '광고 보고 5코인 받기'}
+          {adState === 'playing' && '광고 재생 중...'}
+          {adState === 'done' && '+5 코인 지급 완료'}
+        </button>
+      </div>
 
       <div className="gacha-tabs">
         {['wakpuball', 'keycap'].map((c) => (
@@ -56,21 +77,24 @@ export default function Gacha() {
 
       <CapsuleMachine stage={stage} result={result} />
 
-      <div className="gauge" style={{ margin: '24px 0' }}>
-        <div className="gauge-head">
-          <span className="gauge-label">{CATEGORY_LABEL[category]} 게이지</span>
-          <span className="gauge-value">{Math.min(gauge[category], gaugeToPull)} / {gaugeToPull}</span>
-        </div>
-        <div className="gauge-track">
-          <div className="gauge-fill" style={{ width: `${Math.min(100, (gauge[category] / gaugeToPull) * 100)}%` }} />
-        </div>
-      </div>
+      {stage === 'result' && result && equipped[result.category] !== result.toy.id && (
+        <button
+          type="button"
+          className="gacha-equip-btn"
+          onClick={() => equip(result.category, result.toy.id)}
+        >
+          지금 바로 장착하기
+        </button>
+      )}
+      {stage === 'result' && result && equipped[result.category] === result.toy.id && (
+        <div className="gacha-equipped-note">장착 완료</div>
+      )}
 
       {stage === 'result' ? (
         <button type="button" className="gacha-btn" onClick={reset}>확인</button>
       ) : (
         <button type="button" className="gacha-btn" disabled={!ready} onClick={handlePull}>
-          {stage === 'shaking' ? '뽑는 중...' : ready ? '뽑기' : '게이지가 부족해'}
+          {stage === 'shaking' ? '뽑는 중...' : ready ? `뽑기 (${pullCost}코인)` : '코인이 부족해'}
         </button>
       )}
     </div>

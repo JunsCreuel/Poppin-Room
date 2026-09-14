@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 
 export default function Lab() {
-  const { gauge, gaugeToPull, canPull, getToy, equipped, owned } = useGame();
+  const { coins, pullCost, canPull, getToy, equipped, owned } = useGame();
   const wakpu = getToy('wakpuball', equipped.wakpuball);
   const keycap = getToy('keycap', equipped.keycap);
 
@@ -13,7 +13,7 @@ export default function Lab() {
     <div className="case-page">
       <div className="case-eyebrow">00 // CSL LAB</div>
       <h1 className="case-title">손이 근질거릴 때 들어오는<br />사이버 피젯 랩</h1>
-      <p className="case-sub">놀수록 게이지가 쌓이고, 게이지가 차면 새 토이를 뽑을 수 있어. 뽑은 토이는 도감에 쌓인다.</p>
+      <p className="case-sub">놀 때마다 코인을 얻을 수 있고, 코인으로 뽑기를 해. 뽑은 토이는 도감에 쌓인다.</p>
 
       <div className="lab-rooms">
         <Link to="/wakpuball" className="lab-room-card">
@@ -23,7 +23,6 @@ export default function Lab() {
           <div className="lab-room-body">
             <div className="lab-room-label">왁뿌볼 룸</div>
             <div className="lab-room-desc">갑자기 치미는 화 — 연타로 깨뜨린다</div>
-            <div className="lab-room-gauge">{Math.min(gauge.wakpuball, gaugeToPull)} / {gaugeToPull}</div>
           </div>
         </Link>
 
@@ -34,17 +33,19 @@ export default function Lab() {
           <div className="lab-room-body">
             <div className="lab-room-label">키캡 룸</div>
             <div className="lab-room-desc">가라앉지 않는 초조함 — 꾹꾹 눌러 소리 낸다</div>
-            <div className="lab-room-gauge">{Math.min(gauge.keycap, gaugeToPull)} / {gaugeToPull}</div>
           </div>
         </Link>
       </div>
 
-      <Link to="/gacha" className={`gacha-cta ${readyAny ? 'is-ready' : ''}`}>
-        {readyAny ? '캡슐 뽑으러 가기 →' : '뽑기 (게이지를 더 채워야 함) →'}
-      </Link>
+      <div className="lab-coin-row">
+        <span className="lab-coin-balance">🪙 {coins} 코인</span>
+        <Link to="/gacha" className={`gacha-cta ${readyAny ? 'is-ready' : ''}`}>
+          {readyAny ? `뽑으러 가기 (${pullCost}코인) →` : `뽑기 (코인 ${pullCost}개 필요) →`}
+        </Link>
+      </div>
 
       <div className="lab-footer-note">
-        수집 현황 {owned.length} / {totalCount} · <Link to="/collection">도감 보기 →</Link>
+        수집 현황 {owned.length} / {totalCount} · <Link to="/collection">도감 보기</Link> · <Link to="/store">프리미엄 스토어</Link>
       </div>
     </div>
   );

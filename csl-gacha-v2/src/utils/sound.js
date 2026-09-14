@@ -39,13 +39,21 @@ function noiseBurst({ duration = 0.08, filterFreq = 1400, gain = 0.5, q = 0.9 })
 }
 
 // 왁뿌볼 — 누를 때마다 나는 크런치. progress(0~1)가 올라갈수록 톤이 낮아지고
-// 세져서 점점 더 크게 금이 가는 느낌을 준다.
-export function playCrackHit(progress = 0) {
+// 세져서 점점 더 크게 금이 가는 느낌을 준다. 프리미엄 등급은 아직 실제 녹음
+// 파일이 없어서(왁뿌볼 크런치 녹음 자체가 팀에 아직 없음) 레이어를 한 겹 더
+// 얹어 "더 꽉 찬" 느낌만 흉내낸다 — 진짜 녹음이 생기면 이 조건 분기를 <audio>
+// 재생으로 바꿔치기하면 된다.
+export function playCrackHit(progress = 0, isPremium = false) {
   const base = 2000 - progress * 900;
   noiseBurst({ duration: 0.055, filterFreq: base + Math.random() * 300, gain: 0.32 + progress * 0.18, q: 1.1 });
   setTimeout(() => {
     noiseBurst({ duration: 0.05, filterFreq: base * 0.6 + Math.random() * 200, gain: 0.22 + progress * 0.12, q: 1.4 });
   }, 18 + Math.random() * 12);
+  if (isPremium) {
+    setTimeout(() => {
+      noiseBurst({ duration: 0.06, filterFreq: base * 1.3 + Math.random() * 250, gain: 0.16, q: 1.8 });
+    }, 6);
+  }
 }
 
 // 왁뿌볼 — 완전히 깨지는 순간. 저음 "퍽" + 잔파편이 튀는 고음 크랙을 겹친다.
@@ -58,13 +66,18 @@ export function playCrackBreak() {
   }
 }
 
-// 키캡 — CLICK LAB에 이미 있는 실제 기계식 키보드 녹음을 재생한다. 연타로 빠르게
-// 반복 재생될 때도 끊기지 않고 다시 시작하도록 currentTime을 매번 되감는다.
+// 키캡 — 프리미엄 등급만 CLICK LAB에 있는 실제 기계식 키보드 녹음(keyboard.mp3)을
+// 쓰고, 무료·유료 등급은 합성음(저가 멤브레인 키보드 느낌)으로 구분한다 —
+// "프리미엄은 진짜 녹음 소리"라는 요구사항을 지금 있는 에셋으로 구현한 것.
 const keySound = new Audio('sounds/keyboard.mp3');
-export function playKeyClick() {
-  keySound.currentTime = 0;
-  keySound.volume = getVolume();
-  keySound.play().catch(() => {});
+export function playKeyClick(isPremium = true) {
+  if (isPremium) {
+    keySound.currentTime = 0;
+    keySound.volume = getVolume();
+    keySound.play().catch(() => {});
+    return;
+  }
+  noiseBurst({ duration: 0.035, filterFreq: 2600, gain: 0.22, q: 2.2 });
 }
 
 // 뽑기 성공 — 실제 에셋이 아직 없어서 합성음으로 대체(등급이 높을수록 음이 높아짐).
