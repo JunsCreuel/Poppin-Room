@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import CapsuleMachine from '../components/CapsuleMachine';
 import { playGachaSuccess } from '../utils/sound';
@@ -6,7 +7,7 @@ import { playGachaSuccess } from '../utils/sound';
 const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 
 export default function Gacha() {
-  const { coins, pullCost, canPull, pull, equip, equipped, claimAdCoins } = useGame();
+  const { coins, pullCost, canPull, pull, equip, equipped, claimAdCoins, toys } = useGame();
   const [category, setCategory] = useState('wakpuball');
   const [stage, setStage] = useState('idle'); // idle | shaking | result
   const [result, setResult] = useState(null);
@@ -46,23 +47,15 @@ export default function Gacha() {
   };
 
   const ready = canPull(category) && stage === 'idle';
+  const pool = toys[category].filter((t) => t.tier === 'paid');
 
   return (
     <div className="case-page">
       <div className="case-eyebrow">04 // 뽑기</div>
-      <h1 className="case-title">캡슐 뽑기</h1>
+      <h1 className="case-title">오브제 뽑기</h1>
       <p className="case-sub">뽑기 비용 코인 {pullCost}개, 유료 등급 디자인 전용, 프리미엄은 스토어에서 구매</p>
 
-      <div className="coin-bar">
-        <span className="coin-bar-balance">🪙 {coins} 코인</span>
-        <button type="button" className="ad-btn" onClick={handleWatchAd} disabled={adState !== 'idle'}>
-          {adState === 'idle' && '광고 보고 5코인 받기'}
-          {adState === 'playing' && '광고 재생 중...'}
-          {adState === 'done' && '+5 코인 지급 완료'}
-        </button>
-      </div>
-
-      <div className="gacha-tabs">
+      <div className="v2-archive-tabs">
         {['wakpuball', 'keycap'].map((c) => (
           <button
             key={c}
@@ -70,9 +63,18 @@ export default function Gacha() {
             className={c === category ? 'is-active' : ''}
             onClick={() => { setCategory(c); reset(); }}
           >
-            {CATEGORY_LABEL[c]}
+            {CATEGORY_LABEL[c]} 캡슐
           </button>
         ))}
+      </div>
+
+      <div className="v2-draw-stat-row">
+        <span>보유 코인 <b>{coins}</b></span>
+        <button type="button" className="v2-btn v2-btn-secondary" onClick={handleWatchAd} disabled={adState !== 'idle'}>
+          {adState === 'idle' && '광고 보고 +5 코인'}
+          {adState === 'playing' && '광고 재생 중...'}
+          {adState === 'done' && '+5 코인 지급 완료'}
+        </button>
       </div>
 
       <CapsuleMachine stage={stage} result={result} />
@@ -80,7 +82,8 @@ export default function Gacha() {
       {stage === 'result' && result && equipped[result.category] !== result.toy.id && (
         <button
           type="button"
-          className="gacha-equip-btn"
+          className="v2-btn v2-btn-secondary"
+          style={{ width: '100%', marginBottom: 14 }}
           onClick={() => equip(result.category, result.toy.id)}
         >
           지금 바로 장착하기
@@ -90,10 +93,31 @@ export default function Gacha() {
         <div className="gacha-equipped-note">장착 완료</div>
       )}
 
+      <div className="v2-draw-odds">
+        <div className="v2-draw-odds-label">DRAW RATES</div>
+        <div className="v2-draw-odds-line">
+          <span>유료 등급 오브제 {pool.length}종 중 균등 확률</span>
+          <span>1/{pool.length}</span>
+        </div>
+      </div>
+
       {stage === 'result' ? (
-        <button type="button" className="gacha-btn" onClick={reset}>확인</button>
+        <>
+          <button type="button" className="v2-btn v2-btn-primary" style={{ width: '100%', marginBottom: 10 }} onClick={reset}>
+            한 번 더 뽑기 ({pullCost}코인)
+          </button>
+          <Link to="/collection" className="v2-btn v2-btn-secondary" style={{ width: '100%', marginBottom: 10 }}>
+            내 컬렉션 확인하기
+          </Link>
+        </>
       ) : (
-        <button type="button" className="gacha-btn" disabled={!ready} onClick={handlePull}>
+        <button
+          type="button"
+          className="v2-btn v2-btn-primary"
+          style={{ width: '100%', marginBottom: 10 }}
+          disabled={!ready}
+          onClick={handlePull}
+        >
           {stage === 'shaking' ? '뽑는 중...' : ready ? `뽑기 (${pullCost}코인)` : '코인 부족'}
         </button>
       )}

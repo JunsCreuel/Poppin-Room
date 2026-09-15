@@ -80,6 +80,7 @@ export default function WakpuStage({
               style={filter ? { filter } : undefined}
             />
             <CrackOverlay progress={crackProgress} />
+            {hits > 0 && <span className="v2-combo-badge">💥 콤보 x{hits} 연타중!</span>}
           </>
         )}
 
@@ -91,7 +92,13 @@ export default function WakpuStage({
           </div>
         )}
       </button>
-      <div className="wakpu-progress">{hits} / {hitsToBreak} 회</div>
+      <div className="v2-progress-row" style={{ width: '100%' }}>
+        <span className="v2-progress-label">왁뿌볼 파괴 균열도</span>
+        <span className="v2-progress-pct">{Math.round(crackProgress * 100)}%</span>
+      </div>
+      <div className="v2-progress-track" style={{ width: '100%' }}>
+        <div className="v2-progress-fill" style={{ width: `${Math.round(crackProgress * 100)}%` }} />
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import toysData from '../data/toys.json';
 const STORAGE_KEY = 'csl-gacha-state';
 const PULL_COST = 10; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
+const KEY_DAILY_GOAL = 500; // 키캡 룸 "오늘의 타건 게이지" 표시 목표치(코인 기준)
 
 // 일반 왁뿌볼/키캡 룸에서 누를 때마다 굴리는 보상 확률 — 코인만 나온다.
 // 히든카드는 히든 룸(HiddenWakpuball/HiddenKeycap) 전용.
@@ -42,6 +43,7 @@ function defaultState() {
     loginProvider: null, // 'kakao' | 'google'
     dailyBreaks: 0, // 오늘 왁뿌볼을 완전히 깬 횟수 — 랭킹 계산에 사용
     totalBreaks: 0,
+    dailyKeyCoins: 0, // 오늘 키캡 룸에서 적립한 코인 — 키캡 룸 상단 게이지 표시용
     lastVisit: todayStr(),
     hiddenAttempts: { wakpuball: 0, keycap: 0 }, // 히든 룸에서 오늘 시도한 횟수
     hiddenCap: { wakpuball: HIDDEN_DAILY_BASE, keycap: HIDDEN_DAILY_BASE }, // 광고로 최대 60까지 늘어남
@@ -58,6 +60,7 @@ function loadState() {
     // 날짜가 바뀌었으면 오늘 깬 횟수만 리셋(누적 총합은 유지).
     if (merged.lastVisit !== todayStr()) {
       merged.dailyBreaks = 0;
+      merged.dailyKeyCoins = 0;
       merged.lastVisit = todayStr();
     }
     return merged;
@@ -100,19 +103,18 @@ export function GameProvider({ children }) {
   // 왁뿌볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 코인 보상만 굴리고
   // 그 결과를 그대로 반환한다(화면에서 토스트 연출용). 히든카드는 여기서
   // 안 나온다 — 히든 룸(pressHidden) 전용.
-  const pressReward = useCallback(() => {
+  const pressReward = useCallback((category) => {
     const roll = rollPressReward();
     if (!roll) return null;
 
+    const amount = roll === 'coin1' ? 1 : 5;
     let payload = null;
-    setState((prev) => {
-      if (roll === 'coin1') {
-        payload = { type: 'coin', amount: 1 };
-        return { ...prev, coins: prev.coins + 1 };
-      }
-      payload = { type: 'coin', amount: 5 };
-      return { ...prev, coins: prev.coins + 5 };
-    });
+    setState((prev) => ({
+      ...prev,
+      coins: prev.coins + amount,
+      dailyKeyCoins: category === 'keycap' ? prev.dailyKeyCoins + amount : prev.dailyKeyCoins,
+    }));
+    payload = { type: 'coin', amount };
     return payload;
   }, []);
 
@@ -290,11 +292,13 @@ export function GameProvider({ children }) {
     loginProvider: state.loginProvider,
     dailyBreaks: state.dailyBreaks,
     totalBreaks: state.totalBreaks,
+    dailyKeyCoins: state.dailyKeyCoins,
     hiddenAttempts: state.hiddenAttempts,
     hiddenCap: state.hiddenCap,
     hiddenCycleStart: state.hiddenCycleStart,
     toys: toysData,
     pullCost: PULL_COST,
+    keyDailyGoal: KEY_DAILY_GOAL,
     hiddenDailyMax: HIDDEN_DAILY_MAX,
     hiddenCycleMs: HIDDEN_CYCLE_MS,
     pressReward,

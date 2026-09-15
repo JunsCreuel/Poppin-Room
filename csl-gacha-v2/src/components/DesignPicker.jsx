@@ -22,11 +22,11 @@ export default function DesignPicker({ category }) {
     <div className="design-picker">
       <button
         type="button"
-        className="design-picker-toggle"
+        className="v2-btn v2-btn-secondary design-picker-toggle"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
-        내 디자인 열기 ({ownedToys.length}) {open ? '▲' : '▼'}
+        오브제 변경 ({ownedToys.length}) {open ? '▲' : '▼'}
       </button>
       {open && (
         <div className="design-picker-panel collection-grid">

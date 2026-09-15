@@ -1132,3 +1132,540 @@ button {
   fill: #fffdf6;
   filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, .25));
 }
+
+/* =====================================================================
+   V2 UI — CSL_Prototype.pdf 참고 리디자인 (홈/왁뿌볼/키캡/뽑기/도감)
+   흰 카드 + 검정 필 버튼 + 컬러 배지 스타일로, 기존 케이스파일(모노/라임)
+   톤과는 별개의 컴포넌트 세트. 새로 만든 화면들만 이 클래스를 쓴다.
+   ===================================================================== */
+
+.v2-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.v2-badge.is-active { background: #dcf5e3; color: #1f8a45; }
+.v2-badge.is-limited { background: #fde1e5; color: #d92d4e; }
+.v2-badge.is-rare { background: #ffe8cf; color: #c76a10; }
+.v2-badge.is-common { background: #dfeaff; color: #2860c9; }
+.v2-badge.is-locked { background: var(--panel-2); color: var(--dim); }
+
+.v2-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+}
+.v2-btn-primary {
+  background: var(--text);
+  color: #fff;
+}
+.v2-btn-primary:disabled {
+  background: var(--dim);
+  cursor: not-allowed;
+}
+.v2-btn-secondary {
+  background: var(--panel-2);
+  color: var(--text);
+}
+.v2-btn-row {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0;
+}
+.v2-btn-row .v2-btn {
+  flex: 1;
+}
+.v2-btn-row > .design-picker {
+  flex: 1;
+  margin: 0;
+  max-width: none;
+}
+
+.v2-card {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  padding: 18px;
+}
+
+.v2-progress-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.v2-progress-label {
+  font-size: 14px;
+  color: var(--muted);
+}
+.v2-progress-pct {
+  font-size: 22px;
+  font-weight: 800;
+}
+.v2-progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+.v2-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--text);
+  transition: width 0.2s ease;
+}
+
+/* ===== 홈(Lab) — 스트레스 게이지 카드 + ACTIVE PLAYROOMS ===== */
+.v2-home-gauge {
+  margin-bottom: 24px;
+}
+.v2-home-gauge-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.v2-home-gauge-foot b {
+  color: var(--text);
+}
+
+.v2-section-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+
+.v2-playroom-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.v2-playroom-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  text-decoration: none;
+  color: var(--text);
+}
+.v2-playroom-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.v2-playroom-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.v2-playroom-body {
+  flex: 1;
+  min-width: 0;
+}
+.v2-playroom-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+.v2-playroom-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.v2-playroom-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--panel-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.v2-draw-panel {
+  border-radius: 20px;
+  background: var(--text);
+  color: #fff;
+  padding: 22px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.v2-draw-panel-title {
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+.v2-draw-panel-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 18px;
+}
+.v2-draw-panel .v2-btn-primary {
+  background: #fff;
+  color: var(--text);
+  width: 100%;
+}
+
+/* ===== 왁뿌볼 상세 — NO./STRESS 헤더 + 콤보 배지 ===== */
+.v2-object-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  margin-bottom: 12px;
+}
+.v2-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--panel);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.v2-live-pill .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1f8a45;
+}
+.v2-combo-badge {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #fde1e5;
+  color: #d92d4e;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ===== 키캡 룸 — KEY-DECK 미니 키보드 그리드 ===== */
+.v2-keydeck-banner {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fff6da;
+  color: #8a6a10;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.v2-keydeck-card {
+  margin-bottom: 18px;
+}
+.v2-keydeck-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.v2-keydeck-name {
+  font-size: 18px;
+  font-weight: 800;
+}
+.v2-keydeck-sub {
+  font-size: 12px;
+  color: var(--dim);
+  letter-spacing: 0.04em;
+}
+.v2-keydeck-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.v2-key {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 4px;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: var(--panel);
+  color: var(--text);
+  transition: transform 0.06s ease;
+}
+.v2-key.is-selected {
+  border-color: var(--text);
+  background: #fff;
+}
+.v2-key.is-empty {
+  opacity: 0.35;
+  cursor: default;
+}
+.v2-key.is-pressed {
+  transform: translateY(3px) scale(0.94);
+}
+.v2-key-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--panel-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.v2-key-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.v2-key-letter {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.v2-keydeck-toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+.v2-switch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  border: none;
+  flex-shrink: 0;
+}
+.v2-switch.is-on {
+  background: var(--text);
+}
+.v2-switch-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+  transition: left 0.15s ease;
+}
+.v2-switch.is-on .v2-switch-knob {
+  left: 21px;
+}
+.v2-keydeck-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 20px 0 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.v2-keydeck-stat b {
+  font-size: 20px;
+}
+.v2-keydeck-note {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ===== 뽑기(Object Draw) ===== */
+.v2-draw-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.v2-draw-stat-row b {
+  color: var(--text);
+  font-size: 16px;
+}
+.v2-draw-result-card {
+  position: relative;
+  padding: 28px 18px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.v2-draw-result-badge {
+  display: inline-block;
+  margin-bottom: 16px;
+}
+.v2-draw-result-ring {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  border: 2px dashed var(--line-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.v2-draw-result-ring img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+.v2-draw-result-name {
+  font-weight: 800;
+  font-size: 18px;
+}
+.v2-draw-result-grade {
+  font-size: 13px;
+  color: var(--muted);
+}
+.v2-draw-odds {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--panel);
+  margin-bottom: 16px;
+}
+.v2-draw-odds-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  margin-bottom: 8px;
+}
+.v2-draw-odds-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 3px 0;
+}
+
+/* ===== 도감(Object Archive) ===== */
+.v2-archive-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.v2-archive-tabs button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 14px;
+}
+.v2-archive-tabs button.is-active {
+  background: var(--text);
+  color: #fff;
+}
+.v2-archive-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.v2-archive-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--text);
+}
+.v2-archive-card.is-selected {
+  border-color: var(--text);
+}
+.v2-archive-card.is-locked {
+  color: var(--dim);
+}
+.v2-archive-thumb {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.v2-archive-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.v2-archive-thumb .lock-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--dim);
+  background: rgba(255, 255, 255, 0.35);
+}
+.v2-archive-name {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+.v2-archive-detail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+.v2-archive-detail-name {
+  font-size: 18px;
+  font-weight: 800;
+}
+.v2-archive-detail-grade {
+  font-size: 13px;
+  color: var(--muted);
+}
+.v2-archive-detail-desc {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 12px 0 18px;
+}

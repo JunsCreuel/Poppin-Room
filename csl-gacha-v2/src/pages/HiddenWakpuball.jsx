@@ -26,17 +26,19 @@ export default function HiddenWakpuball() {
 
       <HiddenGauge category="wakpuball" />
 
-      <WakpuStage
-        image={HIDDEN_WB_IMAGE}
-        isHolo
-        holoClassName="is-holo-strong"
-        accent={HIDDEN_WB_ACCENT}
-        hitsToBreak={HIDDEN_WB_HITS}
-        disabled={maxedOut}
-        onPress={() => trigger(pressHidden('wakpuball'))}
-        onBreak={recordBreak}
-        extraClassName="is-hidden-toy"
-      />
+      <div className="v2-card">
+        <WakpuStage
+          image={HIDDEN_WB_IMAGE}
+          isHolo
+          holoClassName="is-holo-strong"
+          accent={HIDDEN_WB_ACCENT}
+          hitsToBreak={HIDDEN_WB_HITS}
+          disabled={maxedOut}
+          onPress={() => trigger(pressHidden('wakpuball'))}
+          onBreak={recordBreak}
+          extraClassName="is-hidden-toy"
+        />
+      </div>
 
       <RewardEffects toast={toast} hiddenCard={hiddenCard} onCloseHidden={closeHidden} />
     </div>
