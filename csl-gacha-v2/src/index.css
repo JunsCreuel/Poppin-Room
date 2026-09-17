@@ -1669,3 +1669,65 @@ button {
   color: var(--muted);
   margin: 12px 0 18px;
 }
+
+/* ===== 키캡 룸 — 디자인별 키 1개씩 (보유 수만큼 자동 배치) ===== */
+.v2-keydeck-grid.is-designs {
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+}
+.v2-keydeck-grid.is-designs .v2-key-letter {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== 컬렉션 — 내 방 (가방의 오브제를 놓아 꾸미는 칸) ===== */
+.room-stage {
+  border: 2px solid var(--text);
+  border-radius: 22px;
+  background: #f7e8ff;
+  padding: 16px;
+  margin-bottom: 26px;
+}
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.room-slot {
+  aspect-ratio: 1;
+  padding: 0;
+  border: 2px dashed rgba(22, 24, 26, 0.25);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.08s ease;
+}
+.room-slot.is-filled {
+  border: 2px solid var(--text);
+  background: #fff;
+}
+.room-slot.is-filled:hover {
+  transform: translateY(-2px);
+}
+.room-slot img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+.room-slot-empty {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--dim);
+}
+.room-foot {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}

@@ -5,6 +5,7 @@ const STORAGE_KEY = 'csl-gacha-state';
 const PULL_COST = 10; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
 const KEY_DAILY_GOAL = 500; // 키캡 룸 "오늘의 타건 게이지" 표시 목표치(코인 기준)
+const ROOM_SLOTS = 6; // 컬렉션 "내 방"에 놓을 수 있는 오브제 칸 수
 
 // 일반 왁뿌볼/키캡 룸에서 누를 때마다 굴리는 보상 확률 — 코인만 나온다.
 // 히든카드는 히든 룸(HiddenWakpuball/HiddenKeycap) 전용.
@@ -48,6 +49,7 @@ function defaultState() {
     hiddenAttempts: { wakpuball: 0, keycap: 0 }, // 히든 룸에서 오늘 시도한 횟수
     hiddenCap: { wakpuball: HIDDEN_DAILY_BASE, keycap: HIDDEN_DAILY_BASE }, // 광고로 최대 60까지 늘어남
     hiddenCycleStart: { wakpuball: null, keycap: null }, // 이번 24시간 주기가 시작된 시각(ms)
+    room: Array(ROOM_SLOTS).fill(null), // 내 방 칸별로 놓인 오브제 id (없으면 null)
   };
 }
 
@@ -63,6 +65,11 @@ function loadState() {
       merged.dailyKeyCoins = 0;
       merged.lastVisit = todayStr();
     }
+    // 방 칸은 항상 ROOM_SLOTS개로 맞추고, 보유하지 않은 id는 비운다.
+    const room = Array.isArray(merged.room) ? merged.room : [];
+    merged.room = Array.from({ length: ROOM_SLOTS }, (_, i) =>
+      room[i] && merged.owned.includes(room[i]) ? room[i] : null
+    );
     return merged;
   } catch {
     return defaultState();
@@ -262,6 +269,29 @@ export function GameProvider({ children }) {
     }));
   }, []);
 
+  // 컬렉션 "내 방" — 가방(보유 오브제)에서 골라 빈 칸에 놓는다. 같은
+  // 오브제는 한 칸만 차지하고, 빈 칸이 없으면 놓을 수 없다.
+  const placeInRoom = useCallback((id) => {
+    let ok = false;
+    setState((prev) => {
+      if (!prev.owned.includes(id) || prev.room.includes(id)) return prev;
+      const slot = prev.room.indexOf(null);
+      if (slot === -1) return prev;
+      ok = true;
+      const room = [...prev.room];
+      room[slot] = id;
+      return { ...prev, room };
+    });
+    return ok;
+  }, []);
+
+  const removeFromRoom = useCallback((id) => {
+    setState((prev) => {
+      if (!prev.room.includes(id)) return prev;
+      return { ...prev, room: prev.room.map((slotId) => (slotId === id ? null : slotId)) };
+    });
+  }, []);
+
   const getToy = useCallback((category, id) => {
     return toysData[category].find((t) => t.id === id) || null;
   }, []);
@@ -296,6 +326,8 @@ export function GameProvider({ children }) {
     hiddenAttempts: state.hiddenAttempts,
     hiddenCap: state.hiddenCap,
     hiddenCycleStart: state.hiddenCycleStart,
+    room: state.room,
+    roomSlots: ROOM_SLOTS,
     toys: toysData,
     pullCost: PULL_COST,
     keyDailyGoal: KEY_DAILY_GOAL,
@@ -310,6 +342,8 @@ export function GameProvider({ children }) {
     pull,
     purchasePremium,
     equip,
+    placeInRoom,
+    removeFromRoom,
     getToy,
     login,
     logout,
