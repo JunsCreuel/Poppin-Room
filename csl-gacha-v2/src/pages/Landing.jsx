@@ -4,10 +4,19 @@ import '../landing.css';
 
 // POPPIN ROOM 첫 화면 — poppin-room-landing-page/index.html 초안을 그대로
 // 옮긴 것. 마크업·문구·스타일은 손대지 않았고, 링크만 앱의 실제 화면으로
-// 연결했다(시작하기 → 왁뿌볼 룸, 컬렉션 보기 → 컬렉션, 상점 보기 → 상점 & 랭킹).
-// 하단 통계 3칸은 초안의 고정 숫자 대신 실제 진행 상태를 보여준다.
+// 연결했다. 시작하기와 상단 PLAY는 같은 페이지의 "그냥 눌러. 모이면 끝."
+// 6개 카드 화면으로 내려가고, 그 카드 6개가 각 기능(왁뿌볼/키캡/뽑기/컬렉션/
+// 시크릿/상점 & 랭킹)으로 들어가는 진짜 입구다. 컬렉션 보기 → 컬렉션,
+// 상점 보기 → 상점 & 랭킹. 하단 통계 3칸은 실제 진행 상태.
 export default function Landing() {
   const { totalBreaks, owned, hiddenCards } = useGame();
+
+  // 초안의 href="#play" 같은 페이지 내 앵커는 HashRouter가 "/play" 경로로
+  // 해석해버려서(→ 첫 화면으로 되돌아감) 해시를 건드리지 않고 직접 스크롤한다.
+  const scrollTo = (id) => (e) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <main className="landing">
@@ -15,9 +24,9 @@ export default function Landing() {
         <nav className="nav">
           <div className="logo">POPPIN ROOM</div>
           <div className="nav-menu">
-            <a href="#play">PLAY</a>
-            <a href="#collection">COLLECTION</a>
-            <a href="#shop">SHOP</a>
+            <a href="#play" onClick={scrollTo('play')}>PLAY</a>
+            <a href="#collection" onClick={scrollTo('collection')}>COLLECTION</a>
+            <a href="#shop" onClick={scrollTo('shop')}>SHOP</a>
           </div>
         </nav>
 
@@ -36,7 +45,7 @@ export default function Landing() {
             </p>
 
             <div className="buttons">
-              <Link to="/wakpuball" className="btn pink">시작하기</Link>
+              <a href="#play" className="btn pink" onClick={scrollTo('play')}>시작하기</a>
               <Link to="/collection" className="btn white">컬렉션 보기</Link>
             </div>
           </div>
