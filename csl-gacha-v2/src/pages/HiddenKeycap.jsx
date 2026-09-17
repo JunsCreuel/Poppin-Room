@@ -45,7 +45,7 @@ export default function HiddenKeycap() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">10 // 히든 키캡 룸</div>
+      <div className="case-eyebrow">SECRET ROOM · 키캡</div>
       <h1 className="case-title">히든 키캡</h1>
       <p className="case-sub">코인 없음 — 누를 때마다 0.6% 확률로 히든카드 도전</p>
 

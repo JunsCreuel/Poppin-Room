@@ -61,7 +61,7 @@ export default function Collection() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">05 // 컬렉션</div>
+      <div className="case-eyebrow">COLLECTION</div>
       <h1 className="case-title">내 방</h1>
       <p className="case-sub">가방의 오브제를 방에 배치, 드래그로 원하는 위치에 이동, 최대 {roomSlots}개</p>
 

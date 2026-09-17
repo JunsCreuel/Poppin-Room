@@ -51,7 +51,7 @@ export default function Gacha() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">04 // 뽑기</div>
+      <div className="case-eyebrow">RANDOM DRAW</div>
       <h1 className="case-title">오브제 뽑기</h1>
       <p className="case-sub">뽑기 비용 코인 {pullCost}개, 유료 등급 디자인 전용, 프리미엄은 스토어에서 구매</p>
 

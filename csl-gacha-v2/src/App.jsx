@@ -1,4 +1,5 @@
-import { HashRouter, Routes, Route, NavLink, Navigate, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { HashRouter, Routes, Route, NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { GameProvider, useGame } from './store/useGame';
 import Landing from './pages/Landing';
 import Wakpuball from './pages/Wakpuball';
@@ -36,6 +37,17 @@ function NavBar() {
   );
 }
 
+// 화면이 바뀔 때마다 맨 위로 — HashRouter는 이전 화면의 스크롤 위치를
+// 그대로 두기 때문에, 컬렉션 아래쪽에서 다른 룸으로 넘어가면 제목이
+// 헤더에 가려진 채로 시작하는 문제가 있었다.
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 // 랜딩(/)은 자체 네비게이션을 가진 풀페이지라 앱 헤더 없이 그리고,
 // 나머지 화면은 공통 헤더(case-shell) 아래에 그린다.
 function AppLayout() {
@@ -51,6 +63,7 @@ function App() {
   return (
     <GameProvider>
       <HashRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route element={<AppLayout />}>

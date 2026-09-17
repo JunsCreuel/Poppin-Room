@@ -20,7 +20,7 @@ export default function HiddenWakpuball() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">09 // 히든 왁뿌볼 룸</div>
+      <div className="case-eyebrow">SECRET ROOM · 팝볼</div>
       <h1 className="case-title">히든 왁뿌볼</h1>
       <p className="case-sub">코인 없음 — 칠 때마다 0.6% 확률로 히든카드 도전</p>
 

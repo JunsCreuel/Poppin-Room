@@ -61,7 +61,7 @@ export default function Keycap() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">03 // 키캡 룸</div>
+      <div className="case-eyebrow">PLAY MODE · 탭키 타건</div>
       <h1 className="case-title">키캡 룸</h1>
 
       <div className="v2-keydeck-banner">
@@ -74,7 +74,7 @@ export default function Keycap() {
         <div className="v2-keydeck-head">
           <div>
             <div className="v2-keydeck-name">KEY-DECK {ownedKeycaps.length}</div>
-            <div className="v2-keydeck-sub">CYBER STRESS SERIES</div>
+            <div className="v2-keydeck-sub">POPPIN ROOM SERIES</div>
           </div>
           <span className="v2-badge is-active">CONNECTED</span>
         </div>

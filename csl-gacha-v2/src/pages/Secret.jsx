@@ -12,7 +12,7 @@ export default function Secret() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">04 // 시크릿 룸</div>
+      <div className="case-eyebrow">SECRET ROOM</div>
       <h1 className="case-title">시크릿 룸</h1>
       <p className="case-sub">코인 없이 0.6% 히든카드만 도전, 하루 40번(광고로 최대 60번)</p>
 

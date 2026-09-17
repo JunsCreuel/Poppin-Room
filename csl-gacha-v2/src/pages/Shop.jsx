@@ -8,7 +8,7 @@ const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 export default function Shop() {
   return (
     <div className="case-page">
-      <div className="case-eyebrow">06 // 상점 & 랭킹</div>
+      <div className="case-eyebrow">SHOP & RANKING</div>
       <h1 className="case-title">상점 & 랭킹</h1>
       <p className="case-sub">프리미엄 오브제 구매, 오늘 왁뿌볼 깬 횟수 기준 순위 확인</p>
 
