@@ -6,15 +6,13 @@ import { useRewardEffects } from '../utils/useRewardEffects';
 import RewardEffects from '../components/RewardEffects';
 
 const PRESS_HOLD_MS = 90; // 실제 키보드처럼 눌렸다가 짧게 있다 자동으로 올라옴
-const KEY_LABELS = ['A', 'S', 'D', 'F', 'J', 'K', 'L', ';'];
 
-// 키캡 룸 — 보유한 키캡 디자인을 최대 8개까지 KEY-DECK 미니 키보드
-// 형태(A S D F / J K L ;)로 동시에 배치해두고, 아무 키나 눌러서 그
-// 디자인 고유의 사운드로 타건할 수 있다. 누른 키가 곧 장착 키가 된다.
+// 키캡 룸 — 보유한 키캡 디자인마다 키 1개씩 나열해두고(8칸 고정 배치가
+// 아니라 디자인 수만큼), 아무 키나 누르면 그 디자인 고유의 사운드로
+// 타건된다. 누른 키가 곧 장착 키가 된다.
 export default function Keycap() {
   const { toys, owned, equipped, equip, pressReward, coins, dailyKeyCoins, keyDailyGoal } = useGame();
   const ownedKeycaps = toys.keycap.filter((t) => owned.includes(t.id));
-  const slots = KEY_LABELS.map((label, i) => ({ label, toy: ownedKeycaps[i] || null }));
   const equippedToy = toys.keycap.find((t) => t.id === equipped.keycap) || ownedKeycaps[0] || null;
 
   const [pressedId, setPressedId] = useState(null);
@@ -81,32 +79,28 @@ export default function Keycap() {
           <span className="v2-badge is-active">CONNECTED</span>
         </div>
 
-        <div className="v2-keydeck-grid">
-          {slots.map(({ label, toy }) => (
+        <div className="v2-keydeck-grid is-designs">
+          {ownedKeycaps.map((toy) => (
             <button
-              key={label}
+              key={toy.id}
               type="button"
-              disabled={!toy}
               onClick={() => pressKey(toy)}
               className={[
                 'v2-key',
-                !toy ? 'is-empty' : '',
-                toy && equipped.keycap === toy.id ? 'is-selected' : '',
-                toy && pressedId === toy.id ? 'is-pressed' : '',
+                equipped.keycap === toy.id ? 'is-selected' : '',
+                pressedId === toy.id ? 'is-pressed' : '',
               ].filter(Boolean).join(' ')}
-              aria-label={toy ? toy.name : '비어있음'}
+              aria-label={toy.name}
             >
               <div className="v2-key-thumb">
-                {toy && (
-                  <img
-                    src={toy.image}
-                    alt=""
-                    style={{ filter: toy.filter }}
-                    className={toy.isHolo ? 'is-holo' : ''}
-                  />
-                )}
+                <img
+                  src={toy.image}
+                  alt=""
+                  style={{ filter: toy.filter }}
+                  className={toy.isHolo ? 'is-holo' : ''}
+                />
               </div>
-              <span className="v2-key-letter">{label}</span>
+              <span className="v2-key-letter">{toy.name}</span>
             </button>
           ))}
         </div>
@@ -134,7 +128,7 @@ export default function Keycap() {
         <div className="v2-progress-fill" style={{ width: `${goalPct}%` }} />
       </div>
       <div className="v2-keydeck-note">
-        실제 기계식 키보드를 누르는 것과 동일하게 반응하는 사운드와 피드백, 원하는 키에 원하는 오브제를 배치해 마음껏 타건
+        디자인별 키 1개, 누르면 그 키캡 장착 + 고유 사운드, ESC 키는 장착중인 키캡으로 타건
       </div>
 
       <div className="coin-inline">🪙 {coins} 코인</div>

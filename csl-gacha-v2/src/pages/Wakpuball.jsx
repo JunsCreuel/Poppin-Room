@@ -45,13 +45,13 @@ export default function Wakpuball() {
 
       <div className="v2-btn-row">
         <DesignPicker category="wakpuball" />
-        <Link to="/ranking" className="v2-btn v2-btn-primary">게이지 수확하기</Link>
+        <Link to="/shop" className="v2-btn v2-btn-primary">게이지 수확하기</Link>
       </div>
 
       <Link to="/hidden/wakpuball" className="hidden-room-cta">
         히든 왁뿌볼 룸 · 히든카드 도전 →
       </Link>
-      <div className="lab-footer-note">오늘 {dailyBreaks}번 파괴 · <Link to="/ranking">랭킹 보기</Link></div>
+      <div className="lab-footer-note">오늘 {dailyBreaks}번 파괴 · <Link to="/shop">랭킹 보기</Link></div>
 
       <RewardEffects toast={toast} hiddenCard={hiddenCard} onCloseHidden={closeHidden} />
     </div>

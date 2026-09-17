@@ -1,15 +1,7 @@
 name: Deploy to GitHub Pages
 
-# 사이트가 전부 정적 HTML/CSS/JS(각 미니앱은 이미 빌드된 결과물이 커밋되어
-# 있음)라 별도 빌드 단계는 필요 없다. 이 워크플로우가 하는 유일한 일은,
-# 저장소에는 절대 커밋하지 않는 Gemini API 키(secrets.GEMINI_API_KEY)를
-# 배포 직전에 config.js로 구워 넣는 것 — 그래서 깃 히스토리에는 키가
-# 남지 않는다.
-#
-# 주의: config.js는 브라우저에서 직접 fetch되므로, 배포된 사이트에서는
-# 여전히 누구나 네트워크 탭으로 키 값을 볼 수 있다. 이 워크플로우는
-# "깃허브 저장소에 영구히 남는 것"만 막아줄 뿐이니, Google AI Studio에서
-# 이 키를 우리 Pages 도메인으로 HTTP 리퍼러 제한을 꼭 걸어둘 것.
+# 저장소에는 csl-gacha-v2(Vite + React) 하나만 남아 있어서, 배포는
+# csl-gacha-v2를 빌드한 dist/ 를 그대로 Pages에 올리는 것으로 끝난다.
 on:
   push:
     branches: [claude/local-remote-control-2iryi9]
@@ -30,15 +22,25 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    defaults:
+      run:
+        working-directory: csl-gacha-v2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject Gemini API key into config.js
-        run: |
-          echo "window.CSL_GEMINI_KEY = \"${GEMINI_API_KEY}\";" > config.js
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: csl-gacha-v2/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
@@ -46,7 +48,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: csl-gacha-v2/dist
 
       - name: Deploy to GitHub Pages
         id: deployment
