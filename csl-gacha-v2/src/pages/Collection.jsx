@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
+import RoomStage from '../components/RoomStage';
 
 const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 const GRADE_BADGE = { common: 'is-common', rare: 'is-rare', limited: 'is-limited' };
 const GRADE_LABEL = { common: 'COMMON', rare: 'RARE', limited: 'LIMITED' };
 
-// 컬렉션 — 위쪽은 "내 방"(뽑기·상점에서 얻은 오브제를 놓아 꾸미는 칸),
-// 아래쪽은 "가방"(보유한 오브제 인벤토리). 가방에서 오브제를 고르면
-// 장착하거나 방에 놓을 수 있고, 방에 놓인 오브제를 누르면 다시 가방으로.
+// 컬렉션 — 위쪽은 "내 방"(뽑기·상점에서 얻은 오브제를 드래그로 자유 배치해
+// 꾸미는 공간), 아래쪽은 "가방"(보유한 오브제 인벤토리). 가방에서 오브제를
+// 고르면 장착하거나 방에 놓을 수 있고, 방의 오브제는 × 로 다시 가방으로.
 export default function Collection() {
-  const { toys, owned, equipped, equip, room, roomSlots, placeInRoom, removeFromRoom, getToy } = useGame();
+  const { toys, owned, equipped, equip, room, roomSlots, placeInRoom, moveInRoom, removeFromRoom } = useGame();
   const navigate = useNavigate();
   const [category, setCategory] = useState('wakpuball');
   const [selectedId, setSelectedId] = useState(null);
@@ -20,19 +21,19 @@ export default function Collection() {
 
   const ownedCount = owned.length;
   const totalCount = allToys.length;
-  const placedCount = room.filter(Boolean).length;
-  const roomFull = placedCount >= roomSlots;
+  const isInRoom = (id) => room.some((r) => r.id === id);
+  const roomFull = room.length >= roomSlots;
 
   const bag = toys[category].filter((t) => owned.includes(t.id));
   const locked = toys[category].filter((t) => !owned.includes(t.id));
   const selected = selectedId ? findToy(selectedId) : null;
   const isSelectedOwned = selected && owned.includes(selected.id);
   const isSelectedEquipped = selected && equipped[selected.category] === selected.id;
-  const isSelectedPlaced = selected && room.includes(selected.id);
+  const isSelectedPlaced = selected && isInRoom(selected.id);
 
   const renderCard = (toy, isOwned) => {
     const isEquipped = equipped[category] === toy.id;
-    const isPlaced = room.includes(toy.id);
+    const isPlaced = isInRoom(toy.id);
     return (
       <button
         key={toy.id}
@@ -62,35 +63,9 @@ export default function Collection() {
     <div className="case-page">
       <div className="case-eyebrow">05 // 컬렉션</div>
       <h1 className="case-title">내 방</h1>
-      <p className="case-sub">가방의 오브제를 방에 배치, 최대 {roomSlots}개, 놓인 오브제 클릭 시 가방으로 회수</p>
+      <p className="case-sub">가방의 오브제를 방에 배치, 드래그로 원하는 위치에 이동, 최대 {roomSlots}개</p>
 
-      <div className="room-stage">
-        <div className="room-grid">
-          {room.map((id, i) => {
-            const toy = id ? findToy(id) : null;
-            return (
-              <button
-                key={i}
-                type="button"
-                className={`room-slot ${toy ? 'is-filled' : ''}`}
-                onClick={() => (toy ? removeFromRoom(toy.id) : null)}
-                aria-label={toy ? `${toy.name} 회수` : '빈 칸'}
-                title={toy ? `${toy.name} · 클릭 시 가방으로` : '빈 칸'}
-              >
-                {toy ? (
-                  <img src={toy.image} alt="" style={{ filter: toy.filter }} className={toy.isHolo ? 'is-holo' : ''} />
-                ) : (
-                  <span className="room-slot-empty">+</span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-        <div className="room-foot">
-          <span>방에 놓인 오브제 {placedCount} / {roomSlots}</span>
-          <span>장착중: {getToy('wakpuball', equipped.wakpuball)?.name} · {getToy('keycap', equipped.keycap)?.name}</span>
-        </div>
-      </div>
+      <RoomStage items={room} findToy={findToy} onMove={moveInRoom} onRemove={removeFromRoom} maxItems={roomSlots} />
 
       <h3 className="collection-section-title">가방 ({ownedCount} / {totalCount})</h3>
 
