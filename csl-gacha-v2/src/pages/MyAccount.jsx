@@ -17,7 +17,7 @@ export default function MyAccount() {
   if (!loggedIn) {
     return (
       <div className="case-page">
-        <div className="case-eyebrow">07 // 내 계정</div>
+        <div className="case-eyebrow">MY ACCOUNT</div>
         <h1 className="case-title">계정 연결</h1>
         <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정 연결 후 확인 가능, 카카오 또는 Google에서 로그인</p>
 
@@ -41,7 +41,7 @@ export default function MyAccount() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">07 // 내 계정</div>
+      <div className="case-eyebrow">MY ACCOUNT</div>
       <div className="account-head">
         <h1 className="case-title">내 계정</h1>
         <button type="button" className="logout-btn" onClick={logout}>로그아웃</button>

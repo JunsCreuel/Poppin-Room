@@ -5,7 +5,13 @@ const STORAGE_KEY = 'csl-gacha-state';
 const PULL_COST = 10; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
 const KEY_DAILY_GOAL = 500; // 키캡 룸 "오늘의 타건 게이지" 표시 목표치(코인 기준)
-const ROOM_SLOTS = 6; // 컬렉션 "내 방"에 놓을 수 있는 오브제 칸 수
+const ROOM_SLOTS = 6; // 컬렉션 "내 방"에 동시에 놓을 수 있는 오브제 수
+// 새로 놓을 때 처음 자리 잡아주는 위치(방 기준 % 좌표) — 겹치지 않게
+// 순서대로 비어 있는 자리부터 쓰고, 그 뒤엔 드래그로 옮긴다.
+const ROOM_PRESET_SPOTS = [
+  { x: 50, y: 50 }, { x: 22, y: 30 }, { x: 78, y: 32 },
+  { x: 24, y: 74 }, { x: 76, y: 74 }, { x: 50, y: 18 },
+];
 
 // 일반 왁뿌볼/키캡 룸에서 누를 때마다 굴리는 보상 확률 — 코인만 나온다.
 // 히든카드는 히든 룸(HiddenWakpuball/HiddenKeycap) 전용.
@@ -49,7 +55,7 @@ function defaultState() {
     hiddenAttempts: { wakpuball: 0, keycap: 0 }, // 히든 룸에서 오늘 시도한 횟수
     hiddenCap: { wakpuball: HIDDEN_DAILY_BASE, keycap: HIDDEN_DAILY_BASE }, // 광고로 최대 60까지 늘어남
     hiddenCycleStart: { wakpuball: null, keycap: null }, // 이번 24시간 주기가 시작된 시각(ms)
-    room: Array(ROOM_SLOTS).fill(null), // 내 방 칸별로 놓인 오브제 id (없으면 null)
+    room: [], // 내 방에 놓인 오브제 — { id, x, y } (x/y는 방 기준 0~100 % 좌표, 드래그로 이동)
   };
 }
 
@@ -65,15 +71,28 @@ function loadState() {
       merged.dailyKeyCoins = 0;
       merged.lastVisit = todayStr();
     }
-    // 방 칸은 항상 ROOM_SLOTS개로 맞추고, 보유하지 않은 id는 비운다.
-    const room = Array.isArray(merged.room) ? merged.room : [];
-    merged.room = Array.from({ length: ROOM_SLOTS }, (_, i) =>
-      room[i] && merged.owned.includes(room[i]) ? room[i] : null
-    );
+    // 방 배치 정리: 예전 형태(칸별 id 배열)는 좌표 형태로 옮기고, 보유하지
+    // 않은 오브제·중복은 빼고, 최대 수를 넘지 않게 자른다.
+    const rawRoom = Array.isArray(merged.room) ? merged.room : [];
+    const seen = new Set();
+    const room = [];
+    rawRoom.forEach((entry, i) => {
+      const item = typeof entry === 'string' ? { id: entry, ...ROOM_PRESET_SPOTS[i % ROOM_PRESET_SPOTS.length] } : entry;
+      if (!item || !item.id || seen.has(item.id) || !merged.owned.includes(item.id)) return;
+      seen.add(item.id);
+      room.push({ id: item.id, x: clampPct(item.x, 50), y: clampPct(item.y, 50) });
+    });
+    merged.room = room.slice(0, ROOM_SLOTS);
     return merged;
   } catch {
     return defaultState();
   }
+}
+
+function clampPct(v, fallback) {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return fallback;
+  return Math.min(100, Math.max(0, n));
 }
 
 function rollPressReward() {
@@ -269,26 +288,37 @@ export function GameProvider({ children }) {
     }));
   }, []);
 
-  // 컬렉션 "내 방" — 가방(보유 오브제)에서 골라 빈 칸에 놓는다. 같은
-  // 오브제는 한 칸만 차지하고, 빈 칸이 없으면 놓을 수 없다.
+  // 컬렉션 "내 방" — 가방(보유 오브제)에서 골라 방에 놓는다. 같은 오브제는
+  // 하나만, 최대 ROOM_SLOTS개까지. 처음엔 비어 있는 프리셋 자리에 놓이고,
+  // 그 뒤엔 드래그(moveInRoom)로 원하는 위치로 옮긴다.
   const placeInRoom = useCallback((id) => {
     let ok = false;
     setState((prev) => {
-      if (!prev.owned.includes(id) || prev.room.includes(id)) return prev;
-      const slot = prev.room.indexOf(null);
-      if (slot === -1) return prev;
+      if (!prev.owned.includes(id) || prev.room.some((r) => r.id === id)) return prev;
+      if (prev.room.length >= ROOM_SLOTS) return prev;
+      const taken = (spot) => prev.room.some((r) => Math.abs(r.x - spot.x) < 12 && Math.abs(r.y - spot.y) < 12);
+      const spot = ROOM_PRESET_SPOTS.find((sp) => !taken(sp)) || ROOM_PRESET_SPOTS[0];
       ok = true;
-      const room = [...prev.room];
-      room[slot] = id;
-      return { ...prev, room };
+      return { ...prev, room: [...prev.room, { id, x: spot.x, y: spot.y }] };
     });
     return ok;
   }, []);
 
+  // 드래그로 옮긴 위치 저장 — x/y는 방 기준 0~100 % 좌표(중심점).
+  const moveInRoom = useCallback((id, x, y) => {
+    setState((prev) => {
+      if (!prev.room.some((r) => r.id === id)) return prev;
+      return {
+        ...prev,
+        room: prev.room.map((r) => (r.id === id ? { ...r, x: clampPct(x, r.x), y: clampPct(y, r.y) } : r)),
+      };
+    });
+  }, []);
+
   const removeFromRoom = useCallback((id) => {
     setState((prev) => {
-      if (!prev.room.includes(id)) return prev;
-      return { ...prev, room: prev.room.map((slotId) => (slotId === id ? null : slotId)) };
+      if (!prev.room.some((r) => r.id === id)) return prev;
+      return { ...prev, room: prev.room.filter((r) => r.id !== id) };
     });
   }, []);
 
@@ -343,6 +373,7 @@ export function GameProvider({ children }) {
     purchasePremium,
     equip,
     placeInRoom,
+    moveInRoom,
     removeFromRoom,
     getToy,
     login,

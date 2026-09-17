@@ -18,7 +18,7 @@ export default function Wakpuball() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">02 // 왁뿌볼 룸</div>
+      <div className="case-eyebrow">PLAY MODE · 팝볼 누르기</div>
       <h1 className="case-title">{toy.name}</h1>
 
       <div className="v2-live-pill">
