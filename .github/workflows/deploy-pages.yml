@@ -1,10 +1,10 @@
 name: Deploy to GitHub Pages
 
-# 저장소에는 csl-gacha-v2(Vite + React) 하나만 남아 있어서, 배포는
-# csl-gacha-v2를 빌드한 dist/ 를 그대로 Pages에 올리는 것으로 끝난다.
+# GitHub Pages 배포 — poppinroom(Vite + React)을 빌드한 dist/ 를 그대로 올린다.
+# main 브랜치에 푸시될 때마다 자동 실행.
 on:
   push:
-    branches: [claude/local-remote-control-2iryi9]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -24,7 +24,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     defaults:
       run:
-        working-directory: csl-gacha-v2
+        working-directory: poppinroom
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: csl-gacha-v2/package-lock.json
+          cache-dependency-path: poppinroom/package-lock.json
 
       - name: Install
         run: npm ci
@@ -48,7 +48,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: csl-gacha-v2/dist
+          path: poppinroom/dist
 
       - name: Deploy to GitHub Pages
         id: deployment
