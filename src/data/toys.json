@@ -9,7 +9,7 @@
       "image": "images/wakpuball_01.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 12
+      "hitsToBreak": 10
     },
     {
       "id": "wb_02",
@@ -31,7 +31,7 @@
       "image": "images/wakpuball_03.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 12
+      "hitsToBreak": 10
     },
     {
       "id": "wb_04",
@@ -42,7 +42,7 @@
       "image": "images/wakpuball_04.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_05",
@@ -53,7 +53,7 @@
       "image": "images/wakpuball_05.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_06",
@@ -64,7 +64,7 @@
       "image": "images/wakpuball_06.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 18
+      "hitsToBreak": 15
     },
     {
       "id": "wb_07",
@@ -76,7 +76,7 @@
       "image": "images/wakpuball_07.png",
       "filter": "none",
       "crackPattern": "shatter",
-      "hitsToBreak": 30
+      "hitsToBreak": 20
     },
     {
       "id": "wb_08",
@@ -89,7 +89,7 @@
       "filter": "none",
       "isHolo": true,
       "crackPattern": "shatter",
-      "hitsToBreak": 32
+      "hitsToBreak": 20
     },
     {
       "id": "wb_09",
@@ -100,7 +100,7 @@
       "image": "images/wakpuball_banana.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_10",
@@ -111,7 +111,7 @@
       "image": "images/wakpuball_watermelon.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_11",
@@ -122,7 +122,7 @@
       "image": "images/wakpuball_grape.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_12",
@@ -133,7 +133,7 @@
       "image": "images/wakpuball_mango.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_13",
@@ -144,7 +144,7 @@
       "image": "images/wakpuball_lemon.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_14",
@@ -155,7 +155,7 @@
       "image": "images/wakpuball_peach.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_15",
@@ -166,7 +166,7 @@
       "image": "images/wakpuball_donut.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_16",
@@ -177,7 +177,7 @@
       "image": "images/wakpuball_popsicle.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_17",
@@ -188,7 +188,7 @@
       "image": "images/wakpuball_pudding.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     },
     {
       "id": "wb_18",
@@ -199,7 +199,7 @@
       "image": "images/wakpuball_shell.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 16
+      "hitsToBreak": 15
     }
   ],
   "keycap": [
