@@ -385,6 +385,170 @@
       "image": "images/keycap_shell.png",
       "filter": "none",
       "profile": "sa"
+    },
+    {
+      "id": "kc_19",
+      "name": "허니 드립",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#f5a623",
+      "image": "images/keycap_honey.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_20",
+      "name": "마시멜로 스트라이프",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ffb6d9",
+      "image": "images/keycap_marshmallow.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_21",
+      "name": "홀로그램 스타더스트",
+      "grade": "limited",
+      "tier": "premium",
+      "price": 3400,
+      "accent": "#a9b8ff",
+      "image": "images/keycap_holostar.png",
+      "filter": "none",
+      "isHolo": true,
+      "profile": "sa"
+    },
+    {
+      "id": "kc_22",
+      "name": "실버 이스케이프",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#c7c9cc",
+      "image": "images/keycap_silveresc.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_23",
+      "name": "핫핑크 글로시",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ff1f8f",
+      "image": "images/keycap_hotpink_gloss.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_24",
+      "name": "화이트 아스크",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#f4f4f4",
+      "image": "images/keycap_asterisk.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_25",
+      "name": "캐러멜 드리즐",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#c97a2b",
+      "image": "images/keycap_caramel_drizzle.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_26",
+      "name": "클리어 글래스",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#bcd3ea",
+      "image": "images/keycap_glass.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_27",
+      "name": "탠저린 젤리",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ff7a1a",
+      "image": "images/keycap_tangerine.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_28",
+      "name": "스모크 크림슨",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#c2185b",
+      "image": "images/keycap_smoke_crimson.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_29",
+      "name": "핑크 지오드",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ec3d7a",
+      "image": "images/keycap_pink_geode.png",
+      "filter": "none",
+      "profile": "sa"
+    },
+    {
+      "id": "kc_30",
+      "name": "라벤더 쿠션",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#c6a8f0",
+      "image": "images/keycap_lavender_cushion.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_31",
+      "name": "포레스트 퍼",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#4f7de0",
+      "image": "images/keycap_forest_fur.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_32",
+      "name": "핫핑크 퍼",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#ff2f8f",
+      "image": "images/keycap_hotpink_fur.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_33",
+      "name": "퍼퍼 재킷",
+      "grade": "rare",
+      "tier": "paid",
+      "accent": "#9aa0a6",
+      "image": "images/keycap_puffer.png",
+      "filter": "none",
+      "profile": "cherry"
+    },
+    {
+      "id": "kc_34",
+      "name": "라이트닝 글로우",
+      "grade": "limited",
+      "tier": "premium",
+      "price": 3400,
+      "accent": "#ff2f8f",
+      "image": "images/keycap_lightning.png",
+      "filter": "none",
+      "isHolo": true,
+      "profile": "sa"
     }
   ]
 }

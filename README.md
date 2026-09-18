@@ -86,7 +86,7 @@ Poppin-Room/
    ├─ store/
    │  └─ useGame.jsx          # 전역 게임 상태 (코인·보유·장착·히든카드·내 방)
    ├─ data/
-   │  ├─ toys.json            # 오브제 36종 데이터
+   │  ├─ toys.json            # 오브제 52종 데이터(팝볼 18 · 키캡 34)
    │  └─ crackStages.js       # 금가는 단계 이미지 자리
    └─ utils/
       ├─ sound.js             # 효과음
@@ -120,8 +120,8 @@ Poppin-Room/
 | tier | 배지 | 획득 방법 | 수량 |
 |---|---|---|---|
 | free | COMMON | 처음부터 보유 | 팝볼 3 · 키캡 3 |
-| paid | RARE | 뽑기 (코인 200개) | 팝볼 13 · 키캡 13 |
-| premium | LIMITED | 상점 구매 (₩2,900~3,900, mock) | 팝볼 2 · 키캡 2 |
+| paid | RARE | 뽑기 (코인 200개) | 팝볼 13 · 키캡 27 |
+| premium | LIMITED | 상점 구매 (₩2,900~3,900, mock) | 팝볼 2 · 키캡 4 |
 
 ### 코인
 - 팝볼 타격·키캡 타건 1회마다 굴림: 35% 확률 1코인, 5% 확률 5코인
