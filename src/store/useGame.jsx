@@ -149,6 +149,12 @@ export function GameProvider({ children }) {
     setState((prev) => ({ ...prev, secretKeys: prev.secretKeys + amount }));
   }, []);
 
+  // 테스트용 전체 스킨 지급 — 시연·개발용 임시 기능, 출시 전 제거
+  const addTestAllSkins = useCallback(() => {
+    const allIds = Object.keys(toysData).flatMap((category) => toysData[category].map((t) => t.id));
+    setState((prev) => ({ ...prev, owned: [...new Set([...prev.owned, ...allIds])] }));
+  }, []);
+
   // 시크릿 키 구매 — 코인 차감
   const buySecretKey = useCallback(() => {
     let ok = false;
@@ -319,6 +325,7 @@ export function GameProvider({ children }) {
     claimAdCoins,
     addTestCoins,
     addTestKeys,
+    addTestAllSkins,
     buySecretKey,
     claimAdKey,
     enterSecretRoom,

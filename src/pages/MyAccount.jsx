@@ -4,7 +4,7 @@ import { useGame } from '../store/useGame';
 const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
 
 export default function MyAccount() {
-  const { loggedIn, loginProvider, login, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, secretKeys } = useGame();
+  const { loggedIn, loginProvider, login, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, addTestAllSkins, secretKeys } = useGame();
 
   const premiumOwned = ['wakpuball', 'keycap'].flatMap((category) =>
     toys[category].filter((t) => t.tier === 'premium' && owned.includes(t.id)).map((t) => ({ ...t, category }))
@@ -37,6 +37,7 @@ export default function MyAccount() {
         <div className="v2-btn-row" style={{ margin: 0 }}>
           <button type="button" className="v2-btn v2-btn-secondary" onClick={() => addTestCoins(200)}>테스트 코인 +200</button>
           <button type="button" className="v2-btn v2-btn-secondary" onClick={() => addTestKeys(1)}>테스트 시크릿 키 +1</button>
+          <button type="button" className="v2-btn v2-btn-secondary" onClick={addTestAllSkins}>테스트 모든 스킨 추가</button>
         </div>
       </section>
 
@@ -108,6 +109,7 @@ export default function MyAccount() {
         <div className="v2-btn-row" style={{ margin: 0 }}>
           <button type="button" className="v2-btn v2-btn-secondary" onClick={() => addTestCoins(200)}>테스트 코인 +200</button>
           <button type="button" className="v2-btn v2-btn-secondary" onClick={() => addTestKeys(1)}>테스트 시크릿 키 +1</button>
+          <button type="button" className="v2-btn v2-btn-secondary" onClick={addTestAllSkins}>테스트 모든 스킨 추가</button>
         </div>
       </section>
 
