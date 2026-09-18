@@ -1,4 +1,4 @@
-// 게임 상태 저장소 — 코인, 보유/장착 오브제, 히든카드, 내 방 배치를 localStorage에 저장
+// 게임 상태 저장소 — 코인, 보유/장착 오브제, 히든카드를 localStorage에 저장
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import toysData from '../data/toys.json';
 
@@ -7,7 +7,6 @@ const LEGACY_STORAGE_KEY = 'csl-gacha-state'; // 이름 변경 전 저장 키, �
 const PULL_COST = 200; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
 const KEY_DAILY_GOAL = 500; // 키캡 룸 "오늘의 타건 게이지" 표시 목표치(코인 기준)
-const ROOM_SLOTS = 6; // 컬렉션"내 방"에 동시에 놓을 수 있는 오브제 수
 // 시크릿 키 — 상점에서 코인 구매 / 하루 3개까지 광고 시청 / 팝볼·키캡 타격 시 0.06% 드롭
 // 키 1개 = 히든 팝볼 룸 또는 히든 키캡 룸 중 하나에 1회 입장
 const SECRET_KEY_PRICE = 300;
@@ -22,11 +21,6 @@ const SECRET_CARD_TABLE = [
   { type: 'coins', amount: 100, pct: 10 },
 ];
 const SECRET_CARD_BASE = { type: 'coins', amount: 50 };
-// 방에 새로 놓을 때의 기본 위치(방 기준 % 좌표), 비어 있는 자리부터 순서대로
-const ROOM_PRESET_SPOTS = [
-  { x: 50, y: 50 }, { x: 22, y: 30 }, { x: 78, y: 32 },
-  { x: 24, y: 74 }, { x: 76, y: 74 }, { x: 50, y: 18 },
-];
 
 // 일반 팝볼/키캡 룸에서 누를 때마다 굴리는 보상 확률 — 코인만 나온다.
 // 히든카드는 히든 룸(HiddenWakpuball/HiddenKeycap) 전용.
@@ -59,7 +53,6 @@ function defaultState() {
     totalBreaks: 0,
     dailyKeyCoins: 0, // 오늘 키캡 룸에서 적립한 코인 — 키캡 룸 상단 게이지 표시용
     lastVisit: todayStr(),
-    room: [], // 내 방에 놓인 오브제 — { id, x, y } (x/y는 방 기준 0~100 % 좌표, 드래그로 이동)
     secretKeys: 0, // 보유 시크릿 키
     secretEntry: null, // 키로 입장한 시크릿 룸 — 'wakpuball' | 'keycap' | null (카드 뽑으면 소모)
     dailyAdKeys: 0, // 오늘 광고 보고 받은 시크릿 키 수 (하루 최대 3)
@@ -79,27 +72,11 @@ function loadState() {
       merged.dailyAdKeys = 0;
       merged.lastVisit = todayStr();
     }
-    // 방 배치 정리 — 옛 형식(id 배열)은 좌표 형식으로 변환, 미보유·중복 제거, 최대 수 제한
-    const rawRoom = Array.isArray(merged.room) ? merged.room : [];
-    const seen = new Set();
-    const room = [];
-    rawRoom.forEach((entry, i) => {
-      const item = typeof entry === 'string' ? { id: entry, ...ROOM_PRESET_SPOTS[i % ROOM_PRESET_SPOTS.length] } : entry;
-      if (!item || !item.id || seen.has(item.id) || !merged.owned.includes(item.id)) return;
-      seen.add(item.id);
-      room.push({ id: item.id, x: clampPct(item.x, 50), y: clampPct(item.y, 50) });
-    });
-    merged.room = room.slice(0, ROOM_SLOTS);
+    delete merged.room;
     return merged;
   } catch {
     return defaultState();
   }
-}
-
-function clampPct(v, fallback) {
-  const n = Number(v);
-  if (!Number.isFinite(n)) return fallback;
-  return Math.min(100, Math.max(0, n));
 }
 
 function rollPressReward() {
@@ -299,38 +276,6 @@ export function GameProvider({ children }) {
     }));
   }, []);
 
-  // 방에 놓기 — 보유 오브제만, 같은 오브제는 하나만, 최대 ROOM_SLOTS개
-  const placeInRoom = useCallback((id) => {
-    let ok = false;
-    setState((prev) => {
-      if (!prev.owned.includes(id) || prev.room.some((r) => r.id === id)) return prev;
-      if (prev.room.length >= ROOM_SLOTS) return prev;
-      const taken = (spot) => prev.room.some((r) => Math.abs(r.x - spot.x) < 12 && Math.abs(r.y - spot.y) < 12);
-      const spot = ROOM_PRESET_SPOTS.find((sp) => !taken(sp)) || ROOM_PRESET_SPOTS[0];
-      ok = true;
-      return { ...prev, room: [...prev.room, { id, x: spot.x, y: spot.y }] };
-    });
-    return ok;
-  }, []);
-
-  // 방 안 위치 이동 — x/y는 방 기준 0~100 % 좌표
-  const moveInRoom = useCallback((id, x, y) => {
-    setState((prev) => {
-      if (!prev.room.some((r) => r.id === id)) return prev;
-      return {
-        ...prev,
-        room: prev.room.map((r) => (r.id === id ? { ...r, x: clampPct(x, r.x), y: clampPct(y, r.y) } : r)),
-      };
-    });
-  }, []);
-
-  const removeFromRoom = useCallback((id) => {
-    setState((prev) => {
-      if (!prev.room.some((r) => r.id === id)) return prev;
-      return { ...prev, room: prev.room.filter((r) => r.id !== id) };
-    });
-  }, []);
-
   const getToy = useCallback((category, id) => {
     return toysData[category].find((t) => t.id === id) || null;
   }, []);
@@ -359,8 +304,6 @@ export function GameProvider({ children }) {
     dailyBreaks: state.dailyBreaks,
     totalBreaks: state.totalBreaks,
     dailyKeyCoins: state.dailyKeyCoins,
-    room: state.room,
-    roomSlots: ROOM_SLOTS,
     secretKeys: state.secretKeys,
     secretEntry: state.secretEntry,
     dailyAdKeys: state.dailyAdKeys,
@@ -384,9 +327,6 @@ export function GameProvider({ children }) {
     pull,
     purchasePremium,
     equip,
-    placeInRoom,
-    moveInRoom,
-    removeFromRoom,
     getToy,
     login,
     logout,

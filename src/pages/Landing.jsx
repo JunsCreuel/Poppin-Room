@@ -98,7 +98,7 @@ export default function Landing() {
           <Link to="/collection" className="card">
             <div className="emoji"><img src="images/wakpuball_peach.png" alt="" /></div>
             <h3>컬렉션</h3>
-            <p>모은 장난감들을 내 방에 채워요.</p>
+            <p>모은 오브제 확인, 장착 가능</p>
           </Link>
 
           <Link to="/secret" className="card">

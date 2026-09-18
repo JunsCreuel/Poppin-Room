@@ -83,10 +83,6 @@ function StoreSection() {
   const [purchasing, setPurchasing] = useState(null); // toy.id 진행 중
   const [justBought, setJustBought] = useState(null);
 
-  const premiumToys = ['wakpuball', 'keycap'].flatMap((category) =>
-    toys[category].filter((t) => t.tier === 'premium').map((t) => ({ ...t, category }))
-  );
-
   const handleBuy = (toy) => {
     if (owned.includes(toy.id) || purchasing) return;
     setPurchasing(toy.id);
@@ -99,39 +95,46 @@ function StoreSection() {
     }, 900);
   };
 
+  const renderCard = (toy) => {
+    const isOwned = owned.includes(toy.id);
+    const isBuying = purchasing === toy.id;
+    return (
+      <div key={toy.id} className={`store-card ${toy.isHolo ? 'is-holo-card' : ''}`}>
+        <div className="store-card-swatch">
+          <img src={toy.image} alt={toy.name} style={{ filter: toy.filter }} className={toy.isHolo ? 'is-holo' : ''} />
+        </div>
+        <div className="store-card-cat">{CATEGORY_LABEL[toy.category]} · PREMIUM</div>
+        <div className="store-card-name">{toy.name}</div>
+        {toy.category === 'keycap' && <div className="store-card-note">실제 녹음 사운드 적용</div>}
+        <div className="store-card-foot">
+          <span className="store-card-price">₩{toy.price.toLocaleString()}</span>
+          {isOwned ? (
+            <button type="button" className="store-buy-btn is-owned" onClick={() => equip(toy.category, toy.id)}>
+              {justBought === toy.id ? '구매 완료 · 장착' : '보유 중 · 장착'}
+            </button>
+          ) : (
+            <button type="button" className="store-buy-btn" onClick={() => handleBuy(toy)} disabled={isBuying}>
+              {isBuying ? '결제 중...' : '구매하기'}
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const wakpuballToys = toys.wakpuball.filter((t) => t.tier === 'premium').map((t) => ({ ...t, category: 'wakpuball' }));
+  const keycapToys = toys.keycap.filter((t) => t.tier === 'premium').map((t) => ({ ...t, category: 'keycap' }));
+
   return (
     <section className="account-section">
       <h3 className="collection-section-title">프리미엄 상점 (₩)</h3>
       <p className="account-empty">결제 즉시 지급, 프리미엄 키캡은 실제 녹음 사운드 적용</p>
 
-      <div className="store-grid">
-        {premiumToys.map((toy) => {
-          const isOwned = owned.includes(toy.id);
-          const isBuying = purchasing === toy.id;
-          return (
-            <div key={toy.id} className={`store-card ${toy.isHolo ? 'is-holo-card' : ''}`}>
-              <div className="store-card-swatch">
-                <img src={toy.image} alt={toy.name} style={{ filter: toy.filter }} className={toy.isHolo ? 'is-holo' : ''} />
-              </div>
-              <div className="store-card-cat">{CATEGORY_LABEL[toy.category]} · PREMIUM</div>
-              <div className="store-card-name">{toy.name}</div>
-              {toy.category === 'keycap' && <div className="store-card-note">실제 녹음 사운드 적용</div>}
-              <div className="store-card-foot">
-                <span className="store-card-price">₩{toy.price.toLocaleString()}</span>
-                {isOwned ? (
-                  <button type="button" className="store-buy-btn is-owned" onClick={() => equip(toy.category, toy.id)}>
-                    {justBought === toy.id ? '구매 완료 · 장착' : '보유 중 · 장착'}
-                  </button>
-                ) : (
-                  <button type="button" className="store-buy-btn" onClick={() => handleBuy(toy)} disabled={isBuying}>
-                    {isBuying ? '결제 중...' : '구매하기'}
-                  </button>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <div className="store-subtitle">팝볼</div>
+      <div className="store-grid">{wakpuballToys.map(renderCard)}</div>
+
+      <div className="store-subtitle">키캡</div>
+      <div className="store-grid">{keycapToys.map(renderCard)}</div>
     </section>
   );
 }

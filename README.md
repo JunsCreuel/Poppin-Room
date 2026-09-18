@@ -2,7 +2,7 @@
 
 > 누르고, 터뜨리고, 모으는 나만의 오브제 룸 — 디지털 토이 컬렉션 웹앱
 
-1조 그룹프로젝트. 팝볼을 터뜨리고 키캡을 두드려 코인을 모으고, 뽑기와 상점으로 오브제를 수집해 내 방을 꾸미는 스트레스 해소 앱입니다.
+1조 그룹프로젝트. 팝볼을 터뜨리고 키캡을 두드려 코인을 모으고, 뽑기와 상점으로 오브제를 수집하는 스트레스 해소 앱입니다.
 
 ---
 
@@ -12,7 +12,7 @@
 |---|---|
 | 서비스명 | POPPIN ROOM (포핀룸) |
 | 형태 | 모바일 우선 반응형 웹앱 (SPA) |
-| 핵심 루프 | 누르기(팝볼·키캡) → 코인 획득 → 뽑기·구매로 오브제 수집 → 내 방 꾸미기 |
+| 핵심 루프 | 누르기(팝볼·키캡) → 코인 획득 → 뽑기·구매로 오브제 수집 → 컬렉션 완성 |
 | 배포 | GitHub Pages (main 브랜치 푸시 시 자동 빌드·배포) |
 | 저장 방식 | 서버 없음, 브라우저 localStorage에 진행 상황 저장 |
 
@@ -28,7 +28,6 @@
 | 상태 관리 | React Context + useState | 전역 게임 상태 (`src/store/useGame.jsx`) |
 | 스타일 | 순수 CSS (CSS 변수) | `index.css` 공통 테마, `landing.css` 랜딩 전용 |
 | 사운드 | Web Audio API + mp3 | 타격·타건·뽑기 효과음 |
-| 드래그 | Pointer Events API | 내 방 오브제 자유 배치 (마우스·터치 공통) |
 | 린트 | oxlint | 코드 검사 |
 | 배포 | GitHub Actions + GitHub Pages | `.github/workflows/deploy-pages.yml` |
 
@@ -68,14 +67,13 @@ Poppin-Room/
    │  ├─ Wakpuball.jsx        # 팝볼 룸
    │  ├─ Keycap.jsx           # 키캡 룸
    │  ├─ Gacha.jsx            # 뽑기
-   │  ├─ Collection.jsx       # 컬렉션 (내 방 + 가방)
+   │  ├─ Collection.jsx       # 컬렉션 (가방)
    │  ├─ Secret.jsx           # 시크릿 룸 입구
    │  ├─ HiddenWakpuball.jsx  # 히든 팝볼 룸
    │  ├─ HiddenKeycap.jsx     # 히든 키캡 룸
    │  ├─ Shop.jsx             # 상점 & 랭킹
    │  └─ MyAccount.jsx        # 내 계정
    ├─ components/             # 재사용 컴포넌트
-   │  ├─ RoomStage.jsx        # 내 방 드래그 배치
    │  ├─ WakpuStage.jsx       # 팝볼 타격·파괴 연출
    │  ├─ CrackOverlay.jsx     # 금가는 오버레이
    │  ├─ CapsuleMachine.jsx   # 캡슐머신·뽑기 결과
@@ -84,7 +82,7 @@ Poppin-Room/
    │  ├─ RewardEffects.jsx    # 코인 토스트·히든카드 모달
    │  └─ ToyCard.jsx          # 오브제 카드
    ├─ store/
-   │  └─ useGame.jsx          # 전역 게임 상태 (코인·보유·장착·히든카드·내 방)
+   │  └─ useGame.jsx          # 전역 게임 상태 (코인·보유·장착·히든카드)
    ├─ data/
    │  ├─ toys.json            # 오브제 52종 데이터(팝볼 18 · 키캡 34)
    │  └─ crackStages.js       # 금가는 단계 이미지 자리
@@ -104,7 +102,7 @@ Poppin-Room/
 | 팝볼 룸 | `/wakpuball` | 연타로 파괴, 진행도에 따라 금·왁스 연출, 칠 때마다 코인 굴림, 디자인 변경 | `Wakpuball.jsx`, `WakpuStage.jsx`, `CrackOverlay.jsx` |
 | 키캡 룸 | `/keycap` | 보유 디자인별 키 1개씩, 누르면 장착 + 고유 사운드 + 코인, ESC 키 지원, ASMR 토글 | `Keycap.jsx`, `sound.js` |
 | 뽑기 | `/gacha` | 코인 200개로 유료 등급 랜덤 1개, 중복 시 30% 환급, 광고 보고 5코인(mock) | `Gacha.jsx`, `CapsuleMachine.jsx` |
-| 컬렉션 | `/collection` | 내 방(최대 6개, 드래그 자유 배치, × 회수) + 가방(보유 오브제, 장착/방에 놓기) + 미획득 목록 | `Collection.jsx`, `RoomStage.jsx` |
+| 컬렉션 | `/collection` | 가방(보유 오브제 확인, 장착) + 미획득 목록 | `Collection.jsx` |
 | 시크릿 룸 | `/secret` | 시크릿 키 1개 = 히든 팝볼 룸 또는 히든 키캡 룸 중 하나 1회 입장, 키 없으면 잠김 | `Secret.jsx` |
 | 히든 룸 | `/hidden/wakpuball`, `/hidden/keycap` | 입장 후 클릭 1번 → 흔들림 → 카드 1장 (100코인 10% / 200코인 5% / 500코인 1% / 키 5개 0.5% / 히든카드 0.01% / 나머지 50코인, 꽝 없음), 입장권 없이 접근 시 시크릿 입구로 | `HiddenWakpuball.jsx`, `HiddenKeycap.jsx`, `SecretDraw.jsx` |
 | 상점 & 랭킹 | `/shop` | 코인 상점(시크릿 키 300코인, 광고 보고 키 받기 하루 3개), 프리미엄 오브제 구매(mock), 오늘 깬 횟수 기준 상위 N% 랭킹, 결과 카드 PNG 저장 | `Shop.jsx` |
@@ -137,11 +135,6 @@ Poppin-Room/
 - 확률: 100코인 10% / 200코인 5% / 500코인 1% / 시크릿 키 5개 0.5% / 히든카드 0.01% / 나머지 83.49%는 50코인 (꽝 없음)
 - 히든카드는 코드 발급 후 내 계정에 보관
 
-### 내 방
-- 가방(보유 오브제)에서 골라 최대 6개 배치
-- 드래그로 자유 이동, 위치는 방 기준 % 좌표로 저장되어 화면 크기가 달라도 유지
-- × 버튼으로 가방 회수
-
 ---
 
 ## 7. 데이터 구조
@@ -162,7 +155,67 @@ Poppin-Room/
 | `price` | premium 가격(원) |
 
 ### localStorage (`poppinroom-state`)
-`coins`, `owned`, `equipped`, `hiddenCards`, `room[{id,x,y}]`, `secretKeys`, `secretEntry`, `dailyAdKeys`, `dailyBreaks`, `totalBreaks`, `dailyKeyCoins`, `loggedIn`
+`coins`, `owned`, `equipped`, `hiddenCards`, `secretKeys`, `secretEntry`, `dailyAdKeys`, `dailyBreaks`, `totalBreaks`, `dailyKeyCoins`, `loggedIn`
+
+### 팝볼 디자인 (18종)
+| No | 이름 | 등급 | 설명 |
+|---|---|---|---|
+| wb_01 | 베이직 핑크 | COMMON | 기본 핑크 왁스, 무광 표면 |
+| wb_02 | 스월 스파클 | COMMON | 소용돌이 무늬, 반짝임 입자 |
+| wb_03 | 마블 스트레스볼 | COMMON | 대리석 무늬 |
+| wb_04 | 버블 젤리 | RARE | 투명 젤리, 기포 무늬 |
+| wb_05 | 선더 크랙 | RARE | 그레이 톤, 번개 균열 무늬 |
+| wb_06 | 스타 오브 | RARE | 진한 핑크, 별 각인 |
+| wb_07 | 네온 블랙 | LIMITED | 블랙 바탕, 네온 라인 |
+| wb_08 | 홀로그램 젬 | LIMITED | 보라 홀로그램, 보석 컷 |
+| wb_09 | 바나나 | RARE | 바나나 모양·색 |
+| wb_10 | 수박 | RARE | 수박 모양·색 |
+| wb_11 | 포도 | RARE | 포도 모양·색 |
+| wb_12 | 망고 | RARE | 망고 모양·색 |
+| wb_13 | 레몬 | RARE | 레몬 모양·색 |
+| wb_14 | 복숭아 | RARE | 복숭아 모양·색 |
+| wb_15 | 민트 도넛 | RARE | 민트색 도넛 모양 |
+| wb_16 | 블루 소다바 | RARE | 파란 소다맛 아이스바 모양 |
+| wb_17 | 카라멜 푸딩 | RARE | 카라멜 푸딩 모양 |
+| wb_18 | 라벤더 조개 | RARE | 라벤더색 조개 모양 |
+
+### 키캡 디자인 (34종)
+| No | 이름 | 등급 | 설명 |
+|---|---|---|---|
+| kc_01 | 베이직 핑크 | COMMON | 기본 핑크 키캡 |
+| kc_02 | 펄 화이트 | COMMON | 진주빛 화이트 |
+| kc_03 | 스모크 클리어 | COMMON | 투명 스모크 톤 |
+| kc_04 | 라이트닝 실버 | RARE | 은색, 번개 무늬 |
+| kc_05 | 핑크 플라워 | RARE | 핑크 꽃무늬 |
+| kc_06 | 블랙 오브 | RARE | 블랙 구체형 캡 |
+| kc_07 | 선더 크리스탈 | LIMITED | 홀로그램 크리스탈, 번개 각인 |
+| kc_08 | 쥬얼 블룸 | LIMITED | 보석·꽃 장식 |
+| kc_09 | 바나나 | RARE | 바나나 모양·색 |
+| kc_10 | 수박 | RARE | 수박 모양·색 |
+| kc_11 | 포도 | RARE | 포도 모양·색 |
+| kc_12 | 망고 | RARE | 망고 모양·색 |
+| kc_13 | 레몬 | RARE | 레몬 모양·색 |
+| kc_14 | 복숭아 | RARE | 복숭아 모양·색 |
+| kc_15 | 민트 도넛 | RARE | 민트색 도넛 모양 |
+| kc_16 | 블루 소다바 | RARE | 파란 소다맛 아이스바 모양 |
+| kc_17 | 카라멜 푸딩 | RARE | 카라멜 푸딩 모양 |
+| kc_18 | 라벤더 조개 | RARE | 라벤더색 조개 모양 |
+| kc_19 | 허니 드립 | RARE | 꿀 흐르는 무늬 |
+| kc_20 | 마시멜로 스트라이프 | RARE | 마시멜로 줄무늬 |
+| kc_21 | 홀로그램 스타더스트 | LIMITED | 홀로그램 별가루 무늬 |
+| kc_22 | 실버 이스케이프 | RARE | 은색, ESC 키 각인 |
+| kc_23 | 핫핑크 글로시 | RARE | 핫핑크 광택 |
+| kc_24 | 화이트 아스크 | RARE | 화이트, 별표(*) 각인 |
+| kc_25 | 캐러멜 드리즐 | RARE | 캐러멜 드리즐 무늬 |
+| kc_26 | 클리어 글래스 | RARE | 투명 유리 질감 |
+| kc_27 | 탠저린 젤리 | RARE | 탠저린 젤리 색 |
+| kc_28 | 스모크 크림슨 | RARE | 진홍 스모크 톤 |
+| kc_29 | 핑크 지오드 | RARE | 핑크 지오드(광물) 무늬 |
+| kc_30 | 라벤더 쿠션 | RARE | 라벤더색 쿠션형 |
+| kc_31 | 포레스트 퍼 | RARE | 포레스트 톤, 퍼(털) 질감 |
+| kc_32 | 핫핑크 퍼 | RARE | 핫핑크 퍼(털) 질감 |
+| kc_33 | 퍼퍼 재킷 | RARE | 퍼퍼재킷 누빔 질감 |
+| kc_34 | 라이트닝 글로우 | LIMITED | 홀로그램, 번개 글로우 |
 
 ---
 
@@ -179,7 +232,7 @@ Poppin-Room/
 | 팝볼·키캡·뽑기·히든 룸 게임 로직 | 박준성 | React + Web Audio | 코드 전부 AI, 규칙(확률·비용·제한)은 사람이 결정 |
 | 상점 + 랭킹 통합 | 박준성 | 두 페이지를 하나로 합침 | 코드 AI |
 | 키캡 룸 디자인별 1키 배치 | 박준성 | 기존 8칸 KEY-DECK 재구성 | 코드 AI |
-| 컬렉션 = 가방 + 내 방 (드래그 배치) | 박준성 | Pointer Events, % 좌표 저장, 옛 형식 마이그레이션 | 코드 전부 AI, 요구사항은 사람 |
+| 컬렉션 = 가방 (보유 오브제 확인·장착) | 박준성 | 도감형 그리드, 미획득 목록 | 코드 전부 AI, 요구사항은 사람 |
 | 앱 전체 디자인 시스템 (랜딩 톤 통일) | 박준성 | CSS 변수 토큰 + 테마 오버라이드 | 코드 AI, 방향("랜딩 감성 유지")은 사람 |
 | 저장소 정리 (옛 CSL LAB 삭제, 브랜치 통합, Pages 배포) | 박준성 | git, GitHub Actions | AI가 실행, 사람이 결정 |
 | 이미지·사운드 에셋 | 팀 | 렌더 이미지, 녹음 파일 제공 | 없음 |
@@ -197,6 +250,5 @@ Poppin-Room/
 | 프리미엄 결제 | mock — 즉시 지급 |
 | 광고 SDK | mock — 코인·시크릿 키 즉시 보상 |
 | 랭킹 서버 | 없음 — 깬 횟수로 상위 % 시뮬레이션 (`calcRankPercentile`) |
-| 룸 데코·시크릿 박스 상점 품목 | 없음 — 랜딩 문구에만 언급 |
 | 팝볼 단계별 파손 사진 | 자리만 있음 (`crackStages.js`), 사진 오면 경로만 채우기 |
 | 키캡 실제 녹음 사운드 | 파일은 `public/sounds/`에 있음, 클릭 1회 길이로 트리밍 후 `toys.json`의 `sound`에 연결 |

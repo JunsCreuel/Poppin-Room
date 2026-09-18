@@ -1,16 +1,15 @@
-// 컬렉션 페이지 — 내 방(드래그 배치) + 가방(보유 오브제) + 미획득 목록
+// 컬렉션 페이지 — 가방(보유 오브제) + 미획득 목록
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
-import RoomStage from '../components/RoomStage';
 
 const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
 const GRADE_BADGE = { common: 'is-common', rare: 'is-rare', limited: 'is-limited' };
 const GRADE_LABEL = { common: 'COMMON', rare: 'RARE', limited: 'LIMITED' };
 
-// 가방에서 오브제 선택 → 장착하기 / 방에 놓기, 방의 오브제는 × 로 가방 회수
+// 가방에서 오브제 선택 → 장착하기
 export default function Collection() {
-  const { toys, owned, equipped, equip, room, roomSlots, placeInRoom, moveInRoom, removeFromRoom } = useGame();
+  const { toys, owned, equipped, equip } = useGame();
   const navigate = useNavigate();
   const [category, setCategory] = useState('wakpuball');
   const [selectedId, setSelectedId] = useState(null);
@@ -20,19 +19,15 @@ export default function Collection() {
 
   const ownedCount = owned.length;
   const totalCount = allToys.length;
-  const isInRoom = (id) => room.some((r) => r.id === id);
-  const roomFull = room.length >= roomSlots;
 
   const bag = toys[category].filter((t) => owned.includes(t.id));
   const locked = toys[category].filter((t) => !owned.includes(t.id));
   const selected = selectedId ? findToy(selectedId) : null;
   const isSelectedOwned = selected && owned.includes(selected.id);
   const isSelectedEquipped = selected && equipped[selected.category] === selected.id;
-  const isSelectedPlaced = selected && isInRoom(selected.id);
 
   const renderCard = (toy, isOwned) => {
     const isEquipped = equipped[category] === toy.id;
-    const isPlaced = isInRoom(toy.id);
     return (
       <button
         key={toy.id}
@@ -53,7 +48,7 @@ export default function Collection() {
         <span className={`v2-badge ${isEquipped ? 'is-active' : isOwned ? (GRADE_BADGE[toy.grade] || 'is-common') : 'is-locked'}`}>
           {isEquipped ? 'ACTIVE' : isOwned ? GRADE_LABEL[toy.grade] : 'LOCKED'}
         </span>
-        <span className="v2-archive-name">{isOwned ? toy.name : '미획득'}{isPlaced ? ' · 방' : ''}</span>
+        <span className="v2-archive-name">{isOwned ? toy.name : '미획득'}</span>
       </button>
     );
   };
@@ -61,10 +56,8 @@ export default function Collection() {
   return (
     <div className="case-page">
       <div className="case-eyebrow">COLLECTION</div>
-      <h1 className="case-title">내 방</h1>
-      <p className="case-sub">가방의 오브제를 방에 배치, 드래그로 원하는 위치에 이동, 최대 {roomSlots}개</p>
-
-      <RoomStage items={room} findToy={findToy} onMove={moveInRoom} onRemove={removeFromRoom} maxItems={roomSlots} />
+      <h1 className="case-title">컬렉션</h1>
+      <p className="case-sub">보유 오브제 확인, 장착</p>
 
       <h3 className="collection-section-title">가방 ({ownedCount} / {totalCount})</h3>
 
@@ -97,7 +90,7 @@ export default function Collection() {
           </div>
           <p className="v2-archive-detail-desc">
             {isSelectedOwned
-              ? `${selected.name} 오브제, 장착 시 룸에서 사용, 방에 놓으면 내 방 꾸미기에 표시`
+              ? `${selected.name} 오브제, 장착 시 룸에서 사용`
               : selected.tier === 'premium'
                 ? '미획득 프리미엄 오브제, 상점에서 구매 획득 가능'
                 : '미획득 오브제, 뽑기로 획득 가능'}
@@ -113,20 +106,6 @@ export default function Collection() {
               >
                 {isSelectedEquipped ? '장착중' : '장착하기'}
               </button>
-              {isSelectedPlaced ? (
-                <button type="button" className="v2-btn v2-btn-secondary" onClick={() => removeFromRoom(selected.id)}>
-                  방에서 빼기
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="v2-btn v2-btn-secondary"
-                  disabled={roomFull}
-                  onClick={() => placeInRoom(selected.id)}
-                >
-                  {roomFull ? '방 가득 참' : '방에 놓기'}
-                </button>
-              )}
             </div>
           )}
           {!isSelectedOwned && selected.tier === 'premium' && (
