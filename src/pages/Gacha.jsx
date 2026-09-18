@@ -1,4 +1,4 @@
-// 뽑기 페이지 — 코인 10개로 유료 등급 오브제 랜덤 획득, 광고 보고 코인 받기
+// 뽑기 페이지 — 코인 200개로 유료 등급 오브제 랜덤 획득, 광고 보고 코인 받기
 import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';

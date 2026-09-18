@@ -103,7 +103,7 @@ Poppin-Room/
 | 랜딩 | `/` | 브랜드 소개, 시작하기 → 6개 플레이 모드 카드, 실시간 통계(깬 횟수·오브제·히든카드) | `Landing.jsx`, `landing.css` |
 | 왁뿌볼 룸 | `/wakpuball` | 연타로 파괴, 진행도에 따라 금·왁스 연출, 칠 때마다 코인 굴림, 디자인 변경 | `Wakpuball.jsx`, `WakpuStage.jsx`, `CrackOverlay.jsx` |
 | 키캡 룸 | `/keycap` | 보유 디자인별 키 1개씩, 누르면 장착 + 고유 사운드 + 코인, ESC 키 지원, ASMR 토글 | `Keycap.jsx`, `sound.js` |
-| 뽑기 | `/gacha` | 코인 10개로 유료 등급 랜덤 1개, 중복 시 30% 환급, 광고 보고 5코인(mock) | `Gacha.jsx`, `CapsuleMachine.jsx` |
+| 뽑기 | `/gacha` | 코인 200개로 유료 등급 랜덤 1개, 중복 시 30% 환급, 광고 보고 5코인(mock) | `Gacha.jsx`, `CapsuleMachine.jsx` |
 | 컬렉션 | `/collection` | 내 방(최대 6개, 드래그 자유 배치, × 회수) + 가방(보유 오브제, 장착/방에 놓기) + 미획득 목록 | `Collection.jsx`, `RoomStage.jsx` |
 | 시크릿 룸 | `/secret` | 히든 왁뿌볼/키캡 룸 입구 (진입 조건 미정) | `Secret.jsx` |
 | 히든 룸 | `/hidden/wakpuball`, `/hidden/keycap` | 코인 없이 0.6% 확률 히든카드, 하루 40회(광고로 최대 60회), 24시간 롤링 리셋 | `HiddenWakpuball.jsx`, `HiddenKeycap.jsx`, `HiddenGauge.jsx` |
@@ -120,12 +120,12 @@ Poppin-Room/
 | tier | 배지 | 획득 방법 | 수량 |
 |---|---|---|---|
 | free | COMMON | 처음부터 보유 | 왁뿌볼 3 · 키캡 3 |
-| paid | RARE | 뽑기 (코인 10개) | 왁뿌볼 13 · 키캡 13 |
+| paid | RARE | 뽑기 (코인 200개) | 왁뿌볼 13 · 키캡 13 |
 | premium | LIMITED | 상점 구매 (₩2,900~3,900, mock) | 왁뿌볼 2 · 키캡 2 |
 
 ### 코인
 - 왁뿌볼 타격·키캡 타건 1회마다 굴림: 35% 확률 1코인, 5% 확률 5코인
-- 뽑기 1회 10코인, 이미 보유한 오브제가 나오면 3코인 환급
+- 뽑기 1회 200코인, 이미 보유한 오브제가 나오면 60코인 환급
 - 광고 시청 시 5코인 (mock)
 
 ### 히든카드

@@ -4,7 +4,7 @@ import toysData from '../data/toys.json';
 
 const STORAGE_KEY = 'poppinroom-state'; // 진행 상황 저장 키(localStorage)
 const LEGACY_STORAGE_KEY = 'csl-gacha-state'; // 이름 변경 전 저장 키, 남아 있으면 읽어옴
-const PULL_COST = 10; // 뽑기 1회당 코인 비용
+const PULL_COST = 200; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
 const KEY_DAILY_GOAL = 500; // 키캡 룸 "오늘의 타건 게이지" 표시 목표치(코인 기준)
 const ROOM_SLOTS = 6; // 컬렉션 "내 방"에 동시에 놓을 수 있는 오브제 수
