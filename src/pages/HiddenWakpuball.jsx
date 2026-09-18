@@ -6,7 +6,7 @@ export default function HiddenWakpuball() {
     <div className="case-page">
       <div className="case-eyebrow">SECRET ROOM · 팝볼</div>
       <h1 className="case-title">히든 팝볼</h1>
-      <p className="case-sub">팝볼을 한 번 누르면 흔들린 뒤 카드 1장, 코인·시크릿 키·히든카드 중 하나 또는 꽝</p>
+      <p className="case-sub">카드 1장 — 코인·시크릿 키·히든카드 중 하나</p>
       <SecretDraw category="wakpuball" image="images/hidden_wakpuball.png" alt="히든 팝볼" />
     </div>
   );

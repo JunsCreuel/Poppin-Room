@@ -1,4 +1,4 @@
-// 시크릿 룸 무대 컴포넌트 — 입장권 확인, 클릭 1번에 흔들흔들 → 카드 결과(코인/키/히든카드/꽝), 확률표
+// 시크릿 룸 무대 컴포넌트 — 입장권 확인, 클릭하면 흔들림 → 카드 결과(코인/키/히든카드), 확률표
 import { useEffect, useRef, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
@@ -10,11 +10,10 @@ const RESULT_VIEW = {
   coins: (r) => ({ emoji: '🪙', title: `+${r.amount} 코인`, desc: '코인 지급 완료', cls: '' }),
   keys: (r) => ({ emoji: '🔑', title: `시크릿 키 ${r.amount}개`, desc: '키 지급 완료', cls: '' }),
   hidden: () => ({ emoji: '🎉', title: '히든카드!', desc: '내 계정에 보관, 실물 경품 수령 안내는 내 계정에서 확인', cls: 'is-hidden' }),
-  miss: () => ({ emoji: '💨', title: '꽝', desc: '다음 기회에', cls: 'is-miss' }),
 };
 
 export default function SecretDraw({ category, image, alt }) {
-  const { secretEntry, drawSecretCard, secretCardTable, secretKeys } = useGame();
+  const { secretEntry, drawSecretCard, secretCardTable, secretCardBase, secretKeys } = useGame();
   const [phase, setPhase] = useState('ready'); // ready | shaking | result
   const [result, setResult] = useState(null);
   const timeoutRef = useRef(null);
@@ -31,10 +30,10 @@ export default function SecretDraw({ category, image, alt }) {
     setPhase('shaking');
     playCrackHit(0.5, true);
     timeoutRef.current = setTimeout(() => {
-      const r = drawSecretCard(category);
-      setResult(r ?? { type: 'miss' });
+      const r = drawSecretCard(category) ?? { type: 'coins', amount: secretCardBase.amount };
+      setResult(r);
       setPhase('result');
-      if (r && r.type !== 'miss') playGachaSuccess();
+      playGachaSuccess();
     }, WOBBLE_MS);
   };
 
@@ -54,7 +53,6 @@ export default function SecretDraw({ category, image, alt }) {
             <img src={image} alt={alt} className="is-holo-strong" draggable="false" />
           </button>
 
-          {phase === 'ready' && <div className="v2-keydeck-banner">👆 클릭 1번, 흔들린 뒤 카드 1장</div>}
           {phase === 'shaking' && <div className="v2-keydeck-banner">✨ 흔들흔들...</div>}
           {phase === 'result' && view && (
             <div className={`secret-card ${view.cls}`}>
@@ -74,7 +72,7 @@ export default function SecretDraw({ category, image, alt }) {
               <b>{row.pct}%</b>
             </div>
           ))}
-          <div className="secret-odds-row"><span>꽝</span><b>{(100 - secretCardTable.reduce((a, r) => a + r.pct, 0)).toFixed(2)}%</b></div>
+          <div className="secret-odds-row"><span>{secretCardBase.amount} 코인</span><b>{(100 - secretCardTable.reduce((a, r) => a + r.pct, 0)).toFixed(2)}%</b></div>
         </div>
       </div>
 

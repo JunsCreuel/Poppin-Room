@@ -13,7 +13,7 @@ const ROOM_SLOTS = 6; // 컬렉션"내 방"에 동시에 놓을 수 있는 오�
 const SECRET_KEY_PRICE = 300;
 const SECRET_KEY_DROP = 0.0006;
 const AD_KEY_DAILY_MAX = 3;
-// 시크릿 룸 카드 확률(%) — 위에서부터 순서대로 판정, 나머지는 꽝
+// 시크릿 룸 카드 확률(%) — 위에서부터 순서대로 판정, 나머지는 기본 보상(SECRET_CARD_BASE) — 꽝 없음
 const SECRET_CARD_TABLE = [
   { type: 'hidden', pct: 0.01 },
   { type: 'keys', amount: 5, pct: 0.5 },
@@ -21,6 +21,7 @@ const SECRET_CARD_TABLE = [
   { type: 'coins', amount: 200, pct: 5 },
   { type: 'coins', amount: 100, pct: 10 },
 ];
+const SECRET_CARD_BASE = { type: 'coins', amount: 50 };
 // 방에 새로 놓을 때의 기본 위치(방 기준 % 좌표), 비어 있는 자리부터 순서대로
 const ROOM_PRESET_SPOTS = [
   { x: 50, y: 50 }, { x: 22, y: 30 }, { x: 78, y: 32 },
@@ -205,8 +206,8 @@ export function GameProvider({ children }) {
     return ok;
   }, []);
 
-  // 시크릿 룸 카드 뽑기 — 입장권 소모, 확률표대로 보상 지급, 결과 반환
-  // { type: 'coins' | 'keys' | 'hidden' | 'miss', amount?, card? }
+  // 시크릿 룸 카드 뽑기 — 입장권 소모, 확률표대로 보상 지급(꽝 없음, 기본 50코인), 결과 반환
+  // { type: 'coins' | 'keys' | 'hidden', amount?, card? }
   const drawSecretCard = useCallback((category) => {
     let result = null;
     setState((prev) => {
@@ -219,9 +220,8 @@ export function GameProvider({ children }) {
         if (r < acc) { hit = row; break; }
       }
       const next = { ...prev, secretEntry: null };
-      if (!hit) {
-        result = { type: 'miss' };
-      } else if (hit.type === 'coins') {
+      if (!hit) hit = SECRET_CARD_BASE;
+      if (hit.type === 'coins') {
         next.coins = prev.coins + hit.amount;
         result = { type: 'coins', amount: hit.amount };
       } else if (hit.type === 'keys') {
@@ -368,6 +368,7 @@ export function GameProvider({ children }) {
     secretKeyPrice: SECRET_KEY_PRICE,
     secretKeyDrop: SECRET_KEY_DROP,
     secretCardTable: SECRET_CARD_TABLE,
+    secretCardBase: SECRET_CARD_BASE,
     toys: toysData,
     pullCost: PULL_COST,
     keyDailyGoal: KEY_DAILY_GOAL,

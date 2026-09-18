@@ -20,7 +20,7 @@ export default function Secret() {
     <div className="case-page">
       <div className="case-eyebrow">SECRET ROOM</div>
       <h1 className="case-title">시크릿 룸</h1>
-      <p className="case-sub">시크릿 키 1개 = 룸 1곳 1회 입장, 들어가서 한 번 누르면 카드 1장</p>
+      <p className="case-sub">시크릿 키 1개 = 룸 1곳 1회 입장, 카드 1장 획득</p>
 
       {secretEntry ? (
         <div className="v2-keydeck-banner">🎟️ 입장권 있음 — {secretEntry === 'wakpuball' ? '히든 팝볼 룸' : '히든 키캡 룸'} 입장 가능</div>
@@ -48,7 +48,7 @@ export default function Secret() {
               </div>
               <div className="v2-playroom-body">
                 <div className="v2-playroom-title">{room.title}</div>
-                <div className="v2-playroom-desc">클릭 1번, 카드 1장 — 코인·키·히든카드 또는 꽝</div>
+                <div className="v2-playroom-desc">카드 1장 — 코인·키·히든카드 중 하나</div>
                 {isEntry
                   ? <span className="v2-badge is-active">입장 가능</span>
                   : locked
