@@ -50,7 +50,7 @@ export default function Secret() {
                 <div className="v2-playroom-title">{room.title}</div>
                 <div className="v2-playroom-desc">카드 1장 — 코인·키·히든카드 중 하나</div>
                 {isEntry
-                  ? <span className="v2-badge is-active">입장 가능</span>
+                  ? <span className="v2-badge is-active">키 사용하기</span>
                   : locked
                     ? <span className="v2-badge is-locked">LOCKED 🔒</span>
                     : <span className="v2-badge is-limited">키 1개 사용</span>}
