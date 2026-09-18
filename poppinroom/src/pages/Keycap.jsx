@@ -1,140 +1,114 @@
-// 키캡 룸 페이지 — 보유 디자인별 키 1개씩, 누르면 장착 + 사운드 + 코인 보상
+// 키캡 룸 페이지 — 장착한 키캡 1개를 타건, 누를 때마다 사운드 + 코인 보상, 오브제 변경으로 디자인 교체
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import { playKeyClick } from '../utils/sound';
 import { useRewardEffects } from '../utils/useRewardEffects';
 import RewardEffects from '../components/RewardEffects';
+import DesignPicker from '../components/DesignPicker';
 
-const PRESS_HOLD_MS = 90; // 실제 키보드처럼 눌렸다가 짧게 있다 자동으로 올라옴
+const PRESS_HOLD_MS = 90; // 눌렸다가 자동으로 올라오는 시간
+const STRESS_LABEL = { common: 'LOW', rare: 'MEDIUM', limited: 'HIGH' };
 
-// 누른 키가 곧 장착 키가 된다
+// 왁뿌볼 룸과 같은 구성: 코인 pill → 카드(오브제 헤더 + 무대 + 게이지) → 오브제 변경/게이지 수확 → 히든 룸 CTA
 export default function Keycap() {
-  const { toys, owned, equipped, equip, pressReward, coins, dailyKeyCoins, keyDailyGoal } = useGame();
-  const ownedKeycaps = toys.keycap.filter((t) => owned.includes(t.id));
-  const equippedToy = toys.keycap.find((t) => t.id === equipped.keycap) || ownedKeycaps[0] || null;
-
-  const [pressedId, setPressedId] = useState(null);
-  const [asmrOn, setAsmrOn] = useState(true);
-  const [lastPress, setLastPress] = useState(null); // { name, amount }
+  const { equipped, getToy, pressReward, coins, dailyKeyCoins, keyDailyGoal } = useGame();
+  const toy = getToy('keycap', equipped.keycap);
   const { toast, hiddenCard, trigger, closeHidden } = useRewardEffects();
 
+  const [pressed, setPressed] = useState(false);
+  const [combo, setCombo] = useState(0);
   const releaseTimeoutRef = useRef(null);
-  const bannerTimeoutRef = useRef(null);
+  const comboTimeoutRef = useRef(null);
 
-  const pressKey = useCallback((toy) => {
+  const pressOnce = useCallback(() => {
     if (!toy) return;
-    equip('keycap', toy.id);
-    if (asmrOn) playKeyClick(toy.sound);
-    const reward = pressReward('keycap');
-    trigger(reward);
+    playKeyClick(toy.sound);
+    trigger(pressReward('keycap'));
 
-    setLastPress({ name: toy.name, amount: reward?.amount });
-    clearTimeout(bannerTimeoutRef.current);
-    bannerTimeoutRef.current = setTimeout(() => setLastPress(null), 2200);
-
-    setPressedId(toy.id);
+    setPressed(true);
     clearTimeout(releaseTimeoutRef.current);
-    releaseTimeoutRef.current = setTimeout(() => setPressedId(null), PRESS_HOLD_MS);
-  }, [equip, asmrOn, pressReward, trigger]);
+    releaseTimeoutRef.current = setTimeout(() => setPressed(false), PRESS_HOLD_MS);
+
+    // 1.2초 안에 연달아 누르면 콤보 유지
+    setCombo((c) => c + 1);
+    clearTimeout(comboTimeoutRef.current);
+    comboTimeoutRef.current = setTimeout(() => setCombo(0), 1200);
+  }, [toy, pressReward, trigger]);
 
   useEffect(() => () => {
     clearTimeout(releaseTimeoutRef.current);
-    clearTimeout(bannerTimeoutRef.current);
+    clearTimeout(comboTimeoutRef.current);
   }, []);
 
   useEffect(() => {
-    // 실제 키보드의 ESC를 눌러도 지금 장착중인 키로 같은 반응.
+    // 실제 키보드 ESC로도 타건
     const handleKeyDown = (e) => {
       if (e.code !== 'Escape' || e.repeat) return;
       e.preventDefault();
-      pressKey(equippedToy);
+      pressOnce();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [pressKey, equippedToy]);
+  }, [pressOnce]);
 
-  if (!equippedToy) return null;
+  if (!toy) return null;
 
+  const no = toy.id.replace(/\D/g, '').padStart(2, '0');
   const goalPct = Math.min(100, Math.round((dailyKeyCoins / keyDailyGoal) * 100));
 
   return (
     <div className="case-page">
       <div className="case-eyebrow">PLAY MODE · 탭키 타건</div>
-      <h1 className="case-title">키캡 룸</h1>
+      <h1 className="case-title">{toy.name}</h1>
 
-      <div className="v2-keydeck-banner">
-        {lastPress
-          ? `⌨️ ${lastPress.name} 클릭!${lastPress.amount ? ` 게이지 +${lastPress.amount} 코인 적립` : ''}`
-          : '⌨️ 원하는 키를 눌러 타건 시작'}
+      <div className="v2-live-pill">
+        <span className="dot" />
+        {coins} 코인 적립중
       </div>
 
-      <div className="v2-card v2-keydeck-card">
-        <div className="v2-keydeck-head">
-          <div>
-            <div className="v2-keydeck-name">KEY-DECK {ownedKeycaps.length}</div>
-            <div className="v2-keydeck-sub">POPPIN ROOM SERIES</div>
-          </div>
-          <span className="v2-badge is-active">CONNECTED</span>
+      <div className="v2-card">
+        <div className="v2-object-head">
+          <span>NO. {no} {toy.name.toUpperCase()}</span>
+          <span>STRESS: {STRESS_LABEL[toy.grade] || 'LOW'}</span>
         </div>
 
-        <div className="v2-keydeck-grid is-designs">
-          {ownedKeycaps.map((toy) => (
-            <button
-              key={toy.id}
-              type="button"
-              onClick={() => pressKey(toy)}
-              className={[
-                'v2-key',
-                equipped.keycap === toy.id ? 'is-selected' : '',
-                pressedId === toy.id ? 'is-pressed' : '',
-              ].filter(Boolean).join(' ')}
-              aria-label={toy.name}
-            >
-              <div className="v2-key-thumb">
-                <img
-                  src={toy.image}
-                  alt=""
-                  style={{ filter: toy.filter }}
-                  className={toy.isHolo ? 'is-holo' : ''}
-                />
-              </div>
-              <span className="v2-key-letter">{toy.name}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="v2-keydeck-toggle-row">
-          <span>타건 ASMR 사운드 활성화</span>
+        <div className="keycap-stage">
           <button
             type="button"
-            className={`v2-switch ${asmrOn ? 'is-on' : ''}`}
-            onClick={() => setAsmrOn((v) => !v)}
-            role="switch"
-            aria-checked={asmrOn}
-            aria-label="타건 ASMR 사운드"
+            className={`keycap-single ${pressed ? 'is-pressed' : ''}`}
+            onClick={pressOnce}
+            aria-label={`${toy.name} 타건`}
           >
-            <span className="v2-switch-knob" />
+            <img
+              src={toy.image}
+              alt={toy.name}
+              className={`keycap-single-img ${toy.isHolo ? 'is-holo' : ''}`}
+              style={{ filter: toy.filter }}
+              draggable="false"
+            />
+            {combo > 0 && <span className="v2-combo-badge">⌨️ 콤보 x{combo} 타건중!</span>}
           </button>
+        </div>
+
+        <div className="v2-progress-row" style={{ width: '100%' }}>
+          <span className="v2-progress-label">오늘의 타건 게이지</span>
+          <span className="v2-progress-pct">{goalPct}%</span>
+        </div>
+        <div className="v2-progress-track" style={{ width: '100%' }}>
+          <div className="v2-progress-fill" style={{ width: `${goalPct}%` }} />
         </div>
       </div>
 
-      <div className="v2-keydeck-stat">
-        <span>오늘의 타건 게이지 적립</span>
-        <b>{dailyKeyCoins} / {keyDailyGoal} 코인</b>
+      <div className="v2-btn-row">
+        <DesignPicker category="keycap" />
+        <Link to="/shop" className="v2-btn v2-btn-primary">게이지 수확하기</Link>
       </div>
-      <div className="v2-progress-track" style={{ marginBottom: 18 }}>
-        <div className="v2-progress-fill" style={{ width: `${goalPct}%` }} />
-      </div>
-      <div className="v2-keydeck-note">
-        디자인별 키 1개, 누르면 그 키캡 장착 + 고유 사운드, ESC 키는 장착중인 키캡으로 타건
-      </div>
-
-      <div className="coin-inline">🪙 {coins} 코인</div>
 
       <Link to="/hidden/keycap" className="hidden-room-cta">
         히든 키캡 룸 · 히든카드 도전 →
       </Link>
+      <div className="lab-footer-note">오늘 {dailyKeyCoins}코인 적립 · <Link to="/shop">랭킹 보기</Link></div>
 
       <RewardEffects toast={toast} hiddenCard={hiddenCard} onCloseHidden={closeHidden} />
     </div>

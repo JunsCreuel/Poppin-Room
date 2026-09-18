@@ -1180,6 +1180,7 @@ button {
 }
 .v2-btn-row {
   display: flex;
+  align-items: flex-start; /* 오브제 변경 패널이 펼쳐져도 옆 버튼 높이는 그대로 */
   gap: 10px;
   margin: 18px 0;
 }
@@ -1668,15 +1669,9 @@ button {
   margin: 12px 0 18px;
 }
 
-/* ===== 키캡 룸 — 디자인별 키 1개씩 (보유 수만큼 자동 배치) ===== */
-.v2-keydeck-grid.is-designs {
-  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-}
-.v2-keydeck-grid.is-designs .v2-key-letter {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* 키캡 무대 — 왁뿌볼 무대와 같은 카드 안에서 콤보 배지 위치 기준 */
+.keycap-stage {
+  position: relative;
 }
 
 /* ===== 컬렉션 — 내 방 (오브제를 드래그로 자유 배치해 꾸미는 공간) ===== */
