@@ -225,6 +225,11 @@ export function GameProvider({ children }) {
     return 5;
   }, []);
 
+  // 테스트용 코인 지급 — 시연·개발용 임시 기능, 출시 전 제거
+  const addTestCoins = useCallback((amount) => {
+    setState((prev) => ({ ...prev, coins: prev.coins + amount }));
+  }, []);
+
   const canPull = useCallback(
     (category) => {
       const hasPaidLeft = toysData[category].some((t) => t.tier === 'paid');
@@ -362,6 +367,7 @@ export function GameProvider({ children }) {
     isHiddenMaxed,
     claimHiddenAdBoost,
     claimAdCoins,
+    addTestCoins,
     canPull,
     pull,
     purchasePremium,

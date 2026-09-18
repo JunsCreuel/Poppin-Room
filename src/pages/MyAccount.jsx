@@ -4,7 +4,7 @@ import { useGame } from '../store/useGame';
 const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 
 export default function MyAccount() {
-  const { loggedIn, loginProvider, login, logout, coins, hiddenCards, owned, toys, resetProgress } = useGame();
+  const { loggedIn, loginProvider, login, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins } = useGame();
 
   const premiumOwned = ['wakpuball', 'keycap'].flatMap((category) =>
     toys[category].filter((t) => t.tier === 'premium' && owned.includes(t.id)).map((t) => ({ ...t, category }))
@@ -31,7 +31,13 @@ export default function MyAccount() {
           </button>
         </div>
 
-        <section className="account-section account-danger">
+        <section className="account-section">
+        <h3 className="collection-section-title">테스트 (임시)</h3>
+        <p className="account-empty">시연·개발용, 보유 코인 {coins}</p>
+        <button type="button" className="v2-btn v2-btn-secondary" onClick={() => addTestCoins(200)}>테스트 코인 +200</button>
+      </section>
+
+      <section className="account-section account-danger">
           <h3 className="collection-section-title">데이터 초기화</h3>
           <p className="account-empty">지금까지 쌓은 코인·보유 디자인 기록 삭제, 처음 상태로 초기화</p>
           <button type="button" className="reset-btn" onClick={handleReset}>진행 상황 초기화</button>
@@ -91,6 +97,12 @@ export default function MyAccount() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="account-section">
+        <h3 className="collection-section-title">테스트 (임시)</h3>
+        <p className="account-empty">시연·개발용, 보유 코인 {coins}</p>
+        <button type="button" className="v2-btn v2-btn-secondary" onClick={() => addTestCoins(200)}>테스트 코인 +200</button>
       </section>
 
       <section className="account-section account-danger">
