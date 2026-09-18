@@ -53,7 +53,6 @@ export default function SecretDraw({ category, image, alt }) {
             <img src={image} alt={alt} className="is-holo-strong" draggable="false" />
           </button>
 
-          {phase === 'shaking' && <div className="v2-keydeck-banner">✨ 흔들흔들...</div>}
           {phase === 'result' && view && (
             <div className={`secret-card ${view.cls}`}>
               <div className="secret-card-emoji">{view.emoji}</div>
