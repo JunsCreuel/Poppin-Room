@@ -37,7 +37,8 @@
 ## 3. 실행 방법
 
 ```bash
-cd poppinroom
+git clone https://github.com/JunsCreuel/Poppin-Room.git
+cd Poppin-Room
 npm install
 npm run dev       # 개발 서버 http://localhost:5173
 npm run build     # 프로덕션 빌드 → dist/
@@ -50,7 +51,8 @@ npm run lint      # 린트
 ## 4. 폴더 구조
 
 ```
-poppinroom/
+Poppin-Room/
+├─ .github/workflows/deploy-pages.yml   # GitHub Pages 자동 배포
 ├─ index.html                 # 앱 HTML 뼈대
 ├─ vite.config.js             # Vite 설정 (상대 경로 빌드)
 ├─ public/

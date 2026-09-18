@@ -1,6 +1,6 @@
 name: Deploy to GitHub Pages
 
-# GitHub Pages 배포 — poppinroom(Vite + React)을 빌드한 dist/ 를 그대로 올린다.
+# GitHub Pages 배포 — 앱(Vite + React)을 빌드한 dist/ 를 그대로 올린다.
 # main 브랜치에 푸시될 때마다 자동 실행.
 on:
   push:
@@ -22,9 +22,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    defaults:
-      run:
-        working-directory: poppinroom
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,7 +31,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: poppinroom/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install
         run: npm ci
@@ -50,7 +47,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: poppinroom/dist
+          path: dist
 
       - name: Deploy to GitHub Pages
         id: deployment
