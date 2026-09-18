@@ -260,6 +260,20 @@
   align-items: center;
 }
 
+/* 이모지 자리에 실제 오브제 이미지 */
+.landing .main-ball img,
+.landing .mini-item img,
+.landing .objects div img,
+.landing .emoji img {
+  object-fit: contain;
+  pointer-events: none;
+}
+.landing .main-ball img { width: 82%; height: 82%; }
+.landing .mini-item img { width: 78%; height: 78%; }
+.landing .objects div img { width: 74%; height: 74%; }
+.landing .emoji { height: 48px; }
+.landing .emoji img { width: 48px; height: 48px; }
+
 @media (max-width: 900px) {
   .landing .hero-content,
   .landing .collection {

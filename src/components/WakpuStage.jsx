@@ -1,7 +1,6 @@
 // 팝볼 무대 컴포넌트 — 타격 쿨다운, 금가는 연출, 파편 연출, 리셋
 import { useState, useCallback, useRef } from 'react';
 import { playCrackHit, playCrackBreak } from '../utils/sound';
-import CrackOverlay from './CrackOverlay';
 
 const BREAK_SHATTER_MS = 480; // 겉껍질이 파편으로 튀는 연출이 지속되는 시간
 const HIT_COOLDOWN_MS = 260; // 이보다 빨리 연속으로 눌러도 무시 — "탁탁탁탁" 연타가 아니라 "탁 탁 탁" 한 번씩 눌리는 느낌
@@ -78,7 +77,7 @@ export default function WakpuStage({
               className={`wakpu-ball-img ${isHolo ? holoClassName : ''}`}
               style={filter ? { filter } : undefined}
             />
-            <CrackOverlay progress={crackProgress} />
+            {/* 금가는 오버레이(CrackOverlay)는 크랙 디자인 확정 전까지 표시하지 않음 */}
             {hits > 0 && <span className="v2-combo-badge">💥 콤보 x{hits} 연타중!</span>}
           </>
         )}

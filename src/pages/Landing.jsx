@@ -48,10 +48,10 @@ export default function Landing() {
 
           <div className="phone-card">
             <div className="room-box">
-              <div className="main-ball">POP!</div>
-              <div className="mini-item item1">🍒</div>
-              <div className="mini-item item2">⭐</div>
-              <div className="mini-item item3">🧸</div>
+              <div className="main-ball"><img src="images/wakpuball_01.png" alt="팝볼" /></div>
+              <div className="mini-item item1"><img src="images/keycap_07.png" alt="키캡" /></div>
+              <div className="mini-item item2"><img src="images/wakpuball_watermelon.png" alt="팝볼" /></div>
+              <div className="mini-item item3"><img src="images/keycap_pudding.png" alt="키캡" /></div>
             </div>
 
             <div className="stats">
@@ -78,31 +78,31 @@ export default function Landing() {
 
         <div className="cards">
           <Link to="/wakpuball" className="card">
-            <div className="emoji">🫧</div>
+            <div className="emoji"><img src="images/wakpuball_02.png" alt="" /></div>
             <h3>팝볼 누르기</h3>
             <p>팝볼을 톡톡 누르고 코인을 모아요.</p>
           </Link>
 
           <Link to="/keycap" className="card">
-            <div className="emoji">⌨️</div>
+            <div className="emoji"><img src="images/keycap_01.png" alt="" /></div>
             <h3>탭키 타건</h3>
             <p>키캡을 두드리면서 사운드와 이펙트를 즐겨요.</p>
           </Link>
 
           <Link to="/gacha" className="card">
-            <div className="emoji">🎁</div>
+            <div className="emoji"><img src="images/gacha_machine.png" alt="" /></div>
             <h3>랜덤 뽑기</h3>
             <p>랜덤 박스에서 새로운 오브제를 뽑아요.</p>
           </Link>
 
           <Link to="/collection" className="card">
-            <div className="emoji">🧸</div>
+            <div className="emoji"><img src="images/wakpuball_peach.png" alt="" /></div>
             <h3>컬렉션</h3>
             <p>모은 장난감들을 내 방에 채워요.</p>
           </Link>
 
           <Link to="/secret" className="card">
-            <div className="emoji">🚪</div>
+            <div className="emoji"><img src="images/hidden_keycap.png" alt="" /></div>
             <h3>시크릿 룸</h3>
             <p>조건을 달성하면 숨겨진 방이 열려요.</p>
           </Link>
@@ -129,12 +129,12 @@ export default function Landing() {
         </div>
 
         <div className="objects">
-          <div>🍒</div>
-          <div>🪩</div>
-          <div>🐰</div>
-          <div>🌈</div>
-          <div>🍮</div>
-          <div>💎</div>
+          <div><img src="images/wakpuball_grape.png" alt="팝볼" /></div>
+          <div><img src="images/keycap_lemon.png" alt="키캡" /></div>
+          <div><img src="images/wakpuball_mango.png" alt="팝볼" /></div>
+          <div><img src="images/keycap_watermelon.png" alt="키캡" /></div>
+          <div><img src="images/wakpuball_08.png" alt="팝볼" /></div>
+          <div><img src="images/keycap_banana.png" alt="키캡" /></div>
         </div>
       </section>
 
