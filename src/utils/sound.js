@@ -1,5 +1,5 @@
-// 효과음 — 왁뿌볼 타격/파괴, 키캡 타건, 뽑기 성공 (Web Audio 합성 + mp3)
-// 왁뿌볼 소리는 Web Audio로 노이즈를 필터링해 합성, 키캡 소리는 mp3 파일(없으면 합성음)
+// 효과음 — 팝볼 타격/파괴, 키캡 타건, 뽑기 성공 (Web Audio 합성 + mp3)
+// 팝볼 소리는 Web Audio로 노이즈를 필터링해 합성, 키캡 소리는 mp3 파일(없으면 합성음)
 import { getVolume } from './volume.js';
 
 let ctx;
@@ -37,9 +37,9 @@ function noiseBurst({ duration = 0.08, filterFreq = 1400, gain = 0.5, q = 0.9 })
   src.stop(now + duration + 0.02);
 }
 
-// 왁뿌볼 — 누를 때마다 나는 크런치. progress(0~1)가 올라갈수록 톤이 낮아지고
+// 팝볼 — 누를 때마다 나는 크런치. progress(0~1)가 올라갈수록 톤이 낮아지고
 // 세져서 점점 더 크게 금이 가는 느낌을 준다. 프리미엄 등급은 아직 실제 녹음
-// 파일이 없어서(왁뿌볼 크런치 녹음 자체가 팀에 아직 없음) 레이어를 한 겹 더
+// 파일이 없어서(팝볼 크런치 녹음 자체가 팀에 아직 없음) 레이어를 한 겹 더
 // 얹어 "더 꽉 찬" 느낌만 흉내낸다 — 진짜 녹음이 생기면 이 조건 분기를 <audio>
 // 재생으로 바꿔치기하면 된다.
 export function playCrackHit(progress = 0, isPremium = false) {
@@ -55,7 +55,7 @@ export function playCrackHit(progress = 0, isPremium = false) {
   }
 }
 
-// 왁뿌볼 — 완전히 깨지는 순간. 저음 "퍽" + 잔파편이 튀는 고음 크랙을 겹친다.
+// 팝볼 — 완전히 깨지는 순간. 저음 "퍽" + 잔파편이 튀는 고음 크랙을 겹친다.
 export function playCrackBreak() {
   noiseBurst({ duration: 0.22, filterFreq: 260, gain: 0.6, q: 0.6 });
   for (let i = 0; i < 5; i++) {

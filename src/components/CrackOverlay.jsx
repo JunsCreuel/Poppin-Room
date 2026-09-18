@@ -1,4 +1,4 @@
-// 금가는 오버레이 컴포넌트 — 왁뿌볼 파괴 진행도를 SVG 선과 왁스 비침으로 표시
+// 금가는 오버레이 컴포넌트 — 팝볼 파괴 진행도를 SVG 선과 왁스 비침으로 표시
 import { getCrackImage } from '../data/crackStages';
 
 // 단계별 사진(crackStages.js)이 있으면 사진, 없으면 SVG 선 + 왁스 비침으로 표시

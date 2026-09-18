@@ -1,4 +1,4 @@
-// 히든 왁뿌볼 룸 페이지 — 코인 없이 0.6% 확률 히든카드만, 하루 시도 제한
+// 히든 팝볼 룸 페이지 — 코인 없이 0.6% 확률 히든카드만, 하루 시도 제한
 import { useGame } from '../store/useGame';
 import { useRewardEffects } from '../utils/useRewardEffects';
 import RewardEffects from '../components/RewardEffects';
@@ -10,7 +10,7 @@ const HIDDEN_WB_IMAGE = 'images/hidden_wakpuball.png';
 const HIDDEN_WB_ACCENT = '#e0357f';
 const HIDDEN_WB_HITS = 14;
 
-// 히든 왁뿌볼 룸 — 일반 왁뿌볼 룸과 달리 코인은 전혀 안 나오고, 오직
+// 히든 팝볼 룸 — 일반 팝볼 룸과 달리 코인은 전혀 안 나오고, 오직
 // 히든카드(0.6%)만 노리는 곳. 대신 하루에 부실 수 있는 횟수가 정해져 있다.
 export default function HiddenWakpuball() {
   const { pressHidden, isHiddenMaxed, recordBreak } = useGame();
@@ -21,7 +21,7 @@ export default function HiddenWakpuball() {
   return (
     <div className="case-page">
       <div className="case-eyebrow">SECRET ROOM · 팝볼</div>
-      <h1 className="case-title">히든 왁뿌볼</h1>
+      <h1 className="case-title">히든 팝볼</h1>
       <p className="case-sub">코인 없음 — 칠 때마다 0.6% 확률로 히든카드 도전</p>
 
       <HiddenGauge category="wakpuball" />

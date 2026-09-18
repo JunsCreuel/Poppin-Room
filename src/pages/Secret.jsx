@@ -1,4 +1,4 @@
-// 시크릿 룸 입구 페이지 — 히든 왁뿌볼/키캡 룸으로 이동 (진입 조건 미정)
+// 시크릿 룸 입구 페이지 — 히든 팝볼/키캡 룸으로 이동 (진입 조건 미정)
 import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 
@@ -23,7 +23,7 @@ export default function Secret() {
             <img src="images/hidden_wakpuball.png" alt="" className="is-holo-strong" />
           </div>
           <div className="v2-playroom-body">
-            <div className="v2-playroom-title">히든 왁뿌볼 룸</div>
+            <div className="v2-playroom-title">히든 팝볼 룸</div>
             <div className="v2-playroom-desc">코인 없이 0.6% 히든카드 도전</div>
             <span className="v2-badge is-limited">오늘 {wbLeft}번 남음</span>
           </div>

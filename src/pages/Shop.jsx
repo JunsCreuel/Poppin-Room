@@ -2,14 +2,14 @@
 import { useState } from 'react';
 import { useGame, calcRankPercentile } from '../store/useGame';
 
-const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
+const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
 
 export default function Shop() {
   return (
     <div className="case-page">
       <div className="case-eyebrow">SHOP & RANKING</div>
       <h1 className="case-title">상점 & 랭킹</h1>
-      <p className="case-sub">프리미엄 오브제 구매, 오늘 왁뿌볼 깬 횟수 기준 순위 확인</p>
+      <p className="case-sub">프리미엄 오브제 구매, 오늘 팝볼 깬 횟수 기준 순위 확인</p>
 
       <StoreSection />
       <RankingSection />
@@ -107,7 +107,7 @@ function RankingSection() {
 
     ctx.fillStyle = '#16181a';
     ctx.font = '500 46px "Space Grotesk", sans-serif';
-    ctx.fillText(`오늘 왁뿌볼 ${dailyBreaks}번 깸`, 540, 900);
+    ctx.fillText(`오늘 팝볼 ${dailyBreaks}번 깸`, 540, 900);
     ctx.fillStyle = '#6d716e';
     ctx.font = '400 34px "Space Grotesk", sans-serif';
     ctx.fillText(`누적 ${totalBreaks}번`, 540, 955);
@@ -134,10 +134,10 @@ function RankingSection() {
   return (
     <section className="account-section">
       <h3 className="collection-section-title">오늘의 랭킹</h3>
-      <p className="account-empty">오늘 왁뿌볼 깬 횟수 기준, 다른 유저와 비교한 순위</p>
+      <p className="account-empty">오늘 팝볼 깬 횟수 기준, 다른 유저와 비교한 순위</p>
 
       <div className="rank-card">
-        <div className="rank-card-label">오늘 왁뿌볼 깬 횟수 기준</div>
+        <div className="rank-card-label">오늘 팝볼 깬 횟수 기준</div>
         <div className="rank-card-percentile">상위 {percentile}%</div>
         <div className="rank-card-stats">
           <div className="rank-stat">

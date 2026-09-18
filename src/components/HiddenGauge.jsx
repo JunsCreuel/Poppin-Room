@@ -12,7 +12,7 @@ function formatRemaining(ms) {
   return `${h}시간 ${m}분`;
 }
 
-// 히든 왁뿌볼/키캡 룸 상단에 띄우는 "오늘 남은 시도" 게이지 — 다 쓰면
+// 히든 팝볼/키캡 룸 상단에 띄우는 "오늘 남은 시도" 게이지 — 다 쓰면
 // 광고 보고 20회 추가(최대 60회) 버튼과 다음 리셋까지 남은 시간을 보여준다.
 export default function HiddenGauge({ category }) {
   const { hiddenAttempts, hiddenCap, hiddenCycleStart, hiddenDailyMax, hiddenCycleMs, isHiddenMaxed, claimHiddenAdBoost } = useGame();

@@ -1,4 +1,4 @@
-// 왁뿌볼 룸 페이지 — 왁뿌볼 연타로 파괴, 칠 때마다 코인 보상, 디자인 변경
+// 팝볼 룸 페이지 — 팝볼 연타로 파괴, 칠 때마다 코인 보상, 디자인 변경
 import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import { useRewardEffects } from '../utils/useRewardEffects';

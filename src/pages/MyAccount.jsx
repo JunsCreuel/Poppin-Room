@@ -1,7 +1,7 @@
 // 내 계정 페이지 — 로그인(mock), 코인·히든카드·프리미엄 보유 내역, 진행 상황 초기화
 import { useGame } from '../store/useGame';
 
-const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
+const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
 
 export default function MyAccount() {
   const { loggedIn, loginProvider, login, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins } = useGame();
@@ -63,7 +63,7 @@ export default function MyAccount() {
       <section className="account-section">
         <h3 className="collection-section-title">히든카드 ({hiddenCards.length})</h3>
         {hiddenCards.length === 0 ? (
-          <p className="account-empty">아직 없음 — 왁뿌볼·키캡을 계속 누르면 아주 가끔(0.6%) 획득 가능</p>
+          <p className="account-empty">아직 없음 — 팝볼·키캡을 계속 누르면 아주 가끔(0.6%) 획득 가능</p>
         ) : (
           <div className="hidden-card-list">
             {hiddenCards.map((card) => (

@@ -1,4 +1,4 @@
-// 왁뿌볼 무대 컴포넌트 — 타격 쿨다운, 금가는 연출, 파편 연출, 리셋
+// 팝볼 무대 컴포넌트 — 타격 쿨다운, 금가는 연출, 파편 연출, 리셋
 import { useState, useCallback, useRef } from 'react';
 import { playCrackHit, playCrackBreak } from '../utils/sound';
 import CrackOverlay from './CrackOverlay';
@@ -6,7 +6,7 @@ import CrackOverlay from './CrackOverlay';
 const BREAK_SHATTER_MS = 480; // 겉껍질이 파편으로 튀는 연출이 지속되는 시간
 const HIT_COOLDOWN_MS = 260; // 이보다 빨리 연속으로 눌러도 무시 — "탁탁탁탁" 연타가 아니라 "탁 탁 탁" 한 번씩 눌리는 느낌
 
-// 일반/히든 왁뿌볼 룸이 공유
+// 일반/히든 팝볼 룸이 공유
 export default function WakpuStage({
   image, filter, isHolo, holoClassName = 'is-holo', accent, hitsToBreak,
   disabled, onPress, onBreak, extraClassName = '',
@@ -68,7 +68,7 @@ export default function WakpuStage({
         style={phase === 'idle' ? { '--hit-squash': squashAmount } : undefined}
         onClick={handlePress}
         disabled={disabled}
-        aria-label="왁뿌볼 터뜨리기"
+        aria-label="팝볼 터뜨리기"
       >
         {phase === 'idle' && (
           <>
@@ -92,7 +92,7 @@ export default function WakpuStage({
         )}
       </button>
       <div className="v2-progress-row" style={{ width: '100%' }}>
-        <span className="v2-progress-label">왁뿌볼 파괴 균열도</span>
+        <span className="v2-progress-label">팝볼 파괴 균열도</span>
         <span className="v2-progress-pct">{Math.round(crackProgress * 100)}%</span>
       </div>
       <div className="v2-progress-track" style={{ width: '100%' }}>

@@ -14,7 +14,7 @@ const ROOM_PRESET_SPOTS = [
   { x: 24, y: 74 }, { x: 76, y: 74 }, { x: 50, y: 18 },
 ];
 
-// 일반 왁뿌볼/키캡 룸에서 누를 때마다 굴리는 보상 확률 — 코인만 나온다.
+// 일반 팝볼/키캡 룸에서 누를 때마다 굴리는 보상 확률 — 코인만 나온다.
 // 히든카드는 히든 룸(HiddenWakpuball/HiddenKeycap) 전용.
 const PRESS_REWARD = { coin5: 0.05, coin1: 0.35 };
 
@@ -49,7 +49,7 @@ function defaultState() {
     hiddenCards: [], // { code, category, wonAt }
     loggedIn: false,
     loginProvider: null, // 'kakao' | 'google'
-    dailyBreaks: 0, // 오늘 왁뿌볼을 완전히 깬 횟수 — 랭킹 계산에 사용
+    dailyBreaks: 0, // 오늘 팝볼을 완전히 깬 횟수 — 랭킹 계산에 사용
     totalBreaks: 0,
     dailyKeyCoins: 0, // 오늘 키캡 룸에서 적립한 코인 — 키캡 룸 상단 게이지 표시용
     lastVisit: todayStr(),
@@ -126,7 +126,7 @@ export function GameProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
-  // 왁뿌볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 코인 보상만 굴리고
+  // 팝볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 코인 보상만 굴리고
   // 그 결과를 그대로 반환한다(화면에서 토스트 연출용). 히든카드는 여기서
   // 안 나온다 — 히든 룸(pressHidden) 전용.
   const pressReward = useCallback((category) => {
@@ -144,7 +144,7 @@ export function GameProvider({ children }) {
     return payload;
   }, []);
 
-  // 히든 왁뿌볼/키캡 룸 전용 — 코인은 전혀 안 나오고, 누를 때마다 0.6%
+  // 히든 팝볼/키캡 룸 전용 — 코인은 전혀 안 나오고, 누를 때마다 0.6%
   // 확률로만 히든카드가 나온다. 하루 시도 횟수가 정해져 있어서(기본 40,
   // 광고로 최대 60) 다 쓰면 24시간이 지나야 다시 리셋된다.
   const pressHidden = useCallback((category) => {
@@ -276,7 +276,7 @@ export function GameProvider({ children }) {
     return ok;
   }, []);
 
-  // 왁뿌볼이 완전히 깨질 때마다 호출 — 오늘 깬 횟수를 쌓는다(랭킹 계산용).
+  // 팝볼이 완전히 깨질 때마다 호출 — 오늘 깬 횟수를 쌓는다(랭킹 계산용).
   const recordBreak = useCallback(() => {
     setState((prev) => ({
       ...prev,

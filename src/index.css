@@ -890,7 +890,7 @@ button {
   color: var(--dim);
 }
 
-/* ===== design picker (왁뿌볼/키캡 룸 즉시 장착) ===== */
+/* ===== design picker (팝볼/키캡 룸 즉시 장착) ===== */
 .design-picker {
   margin: 0 auto 4px;
   max-width: 460px;
@@ -912,7 +912,7 @@ button {
   margin-top: 10px;
 }
 
-/* ===== ranking cta (왁뿌볼 룸) ===== */
+/* ===== ranking cta (팝볼 룸) ===== */
 .ranking-cta {
   display: block;
   text-align: center;
@@ -996,7 +996,7 @@ button {
   font-size: 13px;
 }
 
-/* ===== 히든 룸 진입 CTA (왁뿌볼/키캡 룸) ===== */
+/* ===== 히든 룸 진입 CTA (팝볼/키캡 룸) ===== */
 .hidden-room-cta {
   display: block;
   text-align: center;
@@ -1110,7 +1110,7 @@ button {
   75% { filter: hue-rotate(270deg) saturate(2.8) brightness(1.4); }
 }
 
-/* ===== 왁뿌볼 금가는 단계별 이미지 (crackStages.js에 경로가 채워지면 사용) ===== */
+/* ===== 팝볼 금가는 단계별 이미지 (crackStages.js에 경로가 채워지면 사용) ===== */
 .wakpu-crack-img {
   position: absolute;
   inset: 0;
@@ -1120,7 +1120,7 @@ button {
   pointer-events: none;
 }
 
-/* ===== 왁뿌볼 깨지는 중 — 금 틈으로 미리 비치는 왁스 (다 깨지기 전) ===== */
+/* ===== 팝볼 깨지는 중 — 금 틈으로 미리 비치는 왁스 (다 깨지기 전) ===== */
 .wakpu-wax-glow {
   position: absolute;
   inset: 18%;
@@ -1336,7 +1336,7 @@ button {
   width: 100%;
 }
 
-/* ===== 왁뿌볼 상세 — NO./STRESS 헤더 + 콤보 배지 ===== */
+/* ===== 팝볼 상세 — NO./STRESS 헤더 + 콤보 배지 ===== */
 .v2-object-head {
   display: flex;
   justify-content: space-between;
@@ -1669,7 +1669,7 @@ button {
   margin: 12px 0 18px;
 }
 
-/* 키캡 무대 — 왁뿌볼 무대와 같은 카드 안에서 콤보 배지 위치 기준 */
+/* 키캡 무대 — 팝볼 무대와 같은 카드 안에서 콤보 배지 위치 기준 */
 .keycap-stage {
   position: relative;
 }

@@ -5,7 +5,7 @@ import { useGame } from '../store/useGame';
 import CapsuleMachine from '../components/CapsuleMachine';
 import { playGachaSuccess } from '../utils/sound';
 
-const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
+const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
 
 export default function Gacha() {
   const { coins, pullCost, canPull, pull, equip, equipped, claimAdCoins, toys } = useGame();

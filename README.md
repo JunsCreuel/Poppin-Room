@@ -2,7 +2,7 @@
 
 > 누르고, 터뜨리고, 모으는 나만의 오브제 룸 — 디지털 토이 컬렉션 웹앱
 
-1조 그룹프로젝트. 왁뿌볼을 터뜨리고 키캡을 두드려 코인을 모으고, 뽑기와 상점으로 오브제를 수집해 내 방을 꾸미는 스트레스 해소 앱입니다.
+1조 그룹프로젝트. 팝볼을 터뜨리고 키캡을 두드려 코인을 모으고, 뽑기와 상점으로 오브제를 수집해 내 방을 꾸미는 스트레스 해소 앱입니다.
 
 ---
 
@@ -12,7 +12,7 @@
 |---|---|
 | 서비스명 | POPPIN ROOM (포핀룸) |
 | 형태 | 모바일 우선 반응형 웹앱 (SPA) |
-| 핵심 루프 | 누르기(왁뿌볼·키캡) → 코인 획득 → 뽑기·구매로 오브제 수집 → 내 방 꾸미기 |
+| 핵심 루프 | 누르기(팝볼·키캡) → 코인 획득 → 뽑기·구매로 오브제 수집 → 내 방 꾸미기 |
 | 배포 | GitHub Pages (main 브랜치 푸시 시 자동 빌드·배포) |
 | 저장 방식 | 서버 없음, 브라우저 localStorage에 진행 상황 저장 |
 
@@ -56,7 +56,7 @@ Poppin-Room/
 ├─ index.html                 # 앱 HTML 뼈대
 ├─ vite.config.js             # Vite 설정 (상대 경로 빌드)
 ├─ public/
-│  ├─ images/                 # 왁뿌볼·키캡·히든·캡슐머신 이미지
+│  ├─ images/                 # 팝볼·키캡·히든·캡슐머신 이미지
 │  └─ sounds/                 # 키캡 타건 mp3
 └─ src/
    ├─ main.jsx                # 진입점
@@ -65,18 +65,18 @@ Poppin-Room/
    ├─ landing.css             # 랜딩 페이지 스타일
    ├─ pages/                  # 화면 단위 컴포넌트
    │  ├─ Landing.jsx          # 랜딩 (첫 화면)
-   │  ├─ Wakpuball.jsx        # 왁뿌볼 룸
+   │  ├─ Wakpuball.jsx        # 팝볼 룸
    │  ├─ Keycap.jsx           # 키캡 룸
    │  ├─ Gacha.jsx            # 뽑기
    │  ├─ Collection.jsx       # 컬렉션 (내 방 + 가방)
    │  ├─ Secret.jsx           # 시크릿 룸 입구
-   │  ├─ HiddenWakpuball.jsx  # 히든 왁뿌볼 룸
+   │  ├─ HiddenWakpuball.jsx  # 히든 팝볼 룸
    │  ├─ HiddenKeycap.jsx     # 히든 키캡 룸
    │  ├─ Shop.jsx             # 상점 & 랭킹
    │  └─ MyAccount.jsx        # 내 계정
    ├─ components/             # 재사용 컴포넌트
    │  ├─ RoomStage.jsx        # 내 방 드래그 배치
-   │  ├─ WakpuStage.jsx       # 왁뿌볼 타격·파괴 연출
+   │  ├─ WakpuStage.jsx       # 팝볼 타격·파괴 연출
    │  ├─ CrackOverlay.jsx     # 금가는 오버레이
    │  ├─ CapsuleMachine.jsx   # 캡슐머신·뽑기 결과
    │  ├─ DesignPicker.jsx     # 룸 안 디자인 변경
@@ -101,11 +101,11 @@ Poppin-Room/
 | 화면 | 경로 | 기능 | 주요 파일 |
 |---|---|---|---|
 | 랜딩 | `/` | 브랜드 소개, 시작하기 → 6개 플레이 모드 카드, 실시간 통계(깬 횟수·오브제·히든카드) | `Landing.jsx`, `landing.css` |
-| 왁뿌볼 룸 | `/wakpuball` | 연타로 파괴, 진행도에 따라 금·왁스 연출, 칠 때마다 코인 굴림, 디자인 변경 | `Wakpuball.jsx`, `WakpuStage.jsx`, `CrackOverlay.jsx` |
+| 팝볼 룸 | `/wakpuball` | 연타로 파괴, 진행도에 따라 금·왁스 연출, 칠 때마다 코인 굴림, 디자인 변경 | `Wakpuball.jsx`, `WakpuStage.jsx`, `CrackOverlay.jsx` |
 | 키캡 룸 | `/keycap` | 보유 디자인별 키 1개씩, 누르면 장착 + 고유 사운드 + 코인, ESC 키 지원, ASMR 토글 | `Keycap.jsx`, `sound.js` |
 | 뽑기 | `/gacha` | 코인 200개로 유료 등급 랜덤 1개, 중복 시 30% 환급, 광고 보고 5코인(mock) | `Gacha.jsx`, `CapsuleMachine.jsx` |
 | 컬렉션 | `/collection` | 내 방(최대 6개, 드래그 자유 배치, × 회수) + 가방(보유 오브제, 장착/방에 놓기) + 미획득 목록 | `Collection.jsx`, `RoomStage.jsx` |
-| 시크릿 룸 | `/secret` | 히든 왁뿌볼/키캡 룸 입구 (진입 조건 미정) | `Secret.jsx` |
+| 시크릿 룸 | `/secret` | 히든 팝볼/키캡 룸 입구 (진입 조건 미정) | `Secret.jsx` |
 | 히든 룸 | `/hidden/wakpuball`, `/hidden/keycap` | 코인 없이 0.6% 확률 히든카드, 하루 40회(광고로 최대 60회), 24시간 롤링 리셋 | `HiddenWakpuball.jsx`, `HiddenKeycap.jsx`, `HiddenGauge.jsx` |
 | 상점 & 랭킹 | `/shop` | 프리미엄 오브제 구매(mock), 오늘 깬 횟수 기준 상위 N% 랭킹, 결과 카드 PNG 저장 | `Shop.jsx` |
 | 내 계정 | `/account` | 카카오/Google 로그인(mock), 코인·히든카드·프리미엄 내역, 진행 상황 초기화 | `MyAccount.jsx` |
@@ -119,12 +119,12 @@ Poppin-Room/
 ### 오브제 등급
 | tier | 배지 | 획득 방법 | 수량 |
 |---|---|---|---|
-| free | COMMON | 처음부터 보유 | 왁뿌볼 3 · 키캡 3 |
-| paid | RARE | 뽑기 (코인 200개) | 왁뿌볼 13 · 키캡 13 |
-| premium | LIMITED | 상점 구매 (₩2,900~3,900, mock) | 왁뿌볼 2 · 키캡 2 |
+| free | COMMON | 처음부터 보유 | 팝볼 3 · 키캡 3 |
+| paid | RARE | 뽑기 (코인 200개) | 팝볼 13 · 키캡 13 |
+| premium | LIMITED | 상점 구매 (₩2,900~3,900, mock) | 팝볼 2 · 키캡 2 |
 
 ### 코인
-- 왁뿌볼 타격·키캡 타건 1회마다 굴림: 35% 확률 1코인, 5% 확률 5코인
+- 팝볼 타격·키캡 타건 1회마다 굴림: 35% 확률 1코인, 5% 확률 5코인
 - 뽑기 1회 200코인, 이미 보유한 오브제가 나오면 60코인 환급
 - 광고 시청 시 5코인 (mock)
 
@@ -153,7 +153,7 @@ Poppin-Room/
 | `tier` | `free` / `paid` / `premium` (획득 방법) |
 | `image` | `images/…png` |
 | `accent`, `filter`, `isHolo` | 색·필터·홀로그램 연출 |
-| `hitsToBreak`, `crackPattern` | 왁뿌볼 파괴 횟수·금 패턴 |
+| `hitsToBreak`, `crackPattern` | 팝볼 파괴 횟수·금 패턴 |
 | `sound` | 키캡 mp3 경로 (없으면 합성음) |
 | `price` | premium 가격(원) |
 
@@ -172,7 +172,7 @@ Poppin-Room/
 | 랜딩 페이지 디자인·마크업 | 김민지 | HTML/CSS 직접 작성 (초안) | 없음 |
 | 랜딩을 앱 첫 화면으로 통합 | 박준성 | 초안 HTML/CSS → React 컴포넌트 변환, 라우팅 연결 | 코드 전부 AI, 사람이 흐름 지시·검수 |
 | 화면 흐름 설계 (시작하기 → 6개 카드 → 각 기능) | 박준성 | 기획 후 AI에게 지시 | 없음 (기획) |
-| 왁뿌볼·키캡·뽑기·히든 룸 게임 로직 | 박준성 | React + Web Audio | 코드 전부 AI, 규칙(확률·비용·제한)은 사람이 결정 |
+| 팝볼·키캡·뽑기·히든 룸 게임 로직 | 박준성 | React + Web Audio | 코드 전부 AI, 규칙(확률·비용·제한)은 사람이 결정 |
 | 상점 + 랭킹 통합 | 박준성 | 두 페이지를 하나로 합침 | 코드 AI |
 | 키캡 룸 디자인별 1키 배치 | 박준성 | 기존 8칸 KEY-DECK 재구성 | 코드 AI |
 | 컬렉션 = 가방 + 내 방 (드래그 배치) | 박준성 | Pointer Events, % 좌표 저장, 옛 형식 마이그레이션 | 코드 전부 AI, 요구사항은 사람 |
@@ -195,5 +195,5 @@ Poppin-Room/
 | 광고 SDK | mock — 즉시 보상 |
 | 랭킹 서버 | 없음 — 깬 횟수로 상위 % 시뮬레이션 (`calcRankPercentile`) |
 | 룸 데코·시크릿 박스 상점 품목 | 없음 — 랜딩 문구에만 언급 |
-| 왁뿌볼 단계별 파손 사진 | 자리만 있음 (`crackStages.js`), 사진 오면 경로만 채우기 |
+| 팝볼 단계별 파손 사진 | 자리만 있음 (`crackStages.js`), 사진 오면 경로만 채우기 |
 | 키캡 실제 녹음 사운드 | 파일은 `public/sounds/`에 있음, 클릭 1회 길이로 트리밍 후 `toys.json`의 `sound`에 연결 |
