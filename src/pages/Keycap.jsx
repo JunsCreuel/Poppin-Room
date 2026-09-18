@@ -105,9 +105,6 @@ export default function Keycap() {
         <Link to="/shop" className="v2-btn v2-btn-primary">게이지 수확하기</Link>
       </div>
 
-      <Link to="/hidden/keycap" className="hidden-room-cta">
-        히든 키캡 룸 · 히든카드 도전 →
-      </Link>
       <div className="lab-footer-note">오늘 {dailyKeyCoins}코인 적립 · <Link to="/shop">랭킹 보기</Link></div>
 
       <RewardEffects toast={toast} hiddenCard={hiddenCard} onCloseHidden={closeHidden} />
