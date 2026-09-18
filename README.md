@@ -29,6 +29,7 @@
 | 스타일 | 순수 CSS (CSS 변수) | `index.css` 공통 테마, `landing.css` 랜딩 전용 |
 | 사운드 | Web Audio API + mp3 | 타격·타건·뽑기 효과음 |
 | 드래그 | Pointer Events API | 내 방 오브제 자유 배치 (마우스·터치 공통) |
+| 배경·커서 반응 | CSS 변수 + Pointer Events (라이브러리 없음) | 스티커 배경, 커서 파랄락스 (`BackgroundFx.jsx`, `usePointerParallax.js`) |
 | 린트 | oxlint | 코드 검사 |
 | 배포 | GitHub Actions + GitHub Pages | `.github/workflows/deploy-pages.yml` |
 
@@ -105,9 +106,9 @@ Poppin-Room/
 | 키캡 룸 | `/keycap` | 보유 디자인별 키 1개씩, 누르면 장착 + 고유 사운드 + 코인, ESC 키 지원, ASMR 토글 | `Keycap.jsx`, `sound.js` |
 | 뽑기 | `/gacha` | 코인 200개로 유료 등급 랜덤 1개, 중복 시 30% 환급, 광고 보고 5코인(mock) | `Gacha.jsx`, `CapsuleMachine.jsx` |
 | 컬렉션 | `/collection` | 내 방(최대 6개, 드래그 자유 배치, × 회수) + 가방(보유 오브제, 장착/방에 놓기) + 미획득 목록 | `Collection.jsx`, `RoomStage.jsx` |
-| 시크릿 룸 | `/secret` | 히든 팝볼/키캡 룸 입구 (진입 조건 미정) | `Secret.jsx` |
+| 시크릿 룸 | `/secret` | 시크릿 키(상점 300코인 구매 / 팝볼·키캡 타격 시 1% 드롭) 사용 시 24시간 개방, 잠김 상태에서는 히든 룸 진입 차단 | `Secret.jsx`, `App.jsx`(RequireSecret) |
 | 히든 룸 | `/hidden/wakpuball`, `/hidden/keycap` | 코인 없이 0.6% 확률 히든카드, 하루 40회(광고로 최대 60회), 24시간 롤링 리셋 | `HiddenWakpuball.jsx`, `HiddenKeycap.jsx`, `HiddenGauge.jsx` |
-| 상점 & 랭킹 | `/shop` | 프리미엄 오브제 구매(mock), 오늘 깬 횟수 기준 상위 N% 랭킹, 결과 카드 PNG 저장 | `Shop.jsx` |
+| 상점 & 랭킹 | `/shop` | 코인 상점(시크릿 키 300코인), 프리미엄 오브제 구매(mock), 오늘 깬 횟수 기준 상위 N% 랭킹, 결과 카드 PNG 저장 | `Shop.jsx` |
 | 내 계정 | `/account` | 카카오/Google 로그인(mock), 코인·히든카드·프리미엄 내역, 진행 상황 초기화 | `MyAccount.jsx` |
 
 옛 주소 `/store`, `/ranking`은 `/shop`으로, `/lab`은 `/`로 리다이렉트됩니다.
@@ -127,6 +128,10 @@ Poppin-Room/
 - 팝볼 타격·키캡 타건 1회마다 굴림: 35% 확률 1코인, 5% 확률 5코인
 - 뽑기 1회 200코인, 이미 보유한 오브제가 나오면 60코인 환급
 - 광고 시청 시 5코인 (mock)
+
+### 시크릿 키
+- 상점에서 300코인에 구매, 또는 팝볼·키캡 타격 1회마다 1% 확률로 코인 대신 드롭
+- 키 1개 사용 시 시크릿 룸 24시간 개방(연속 사용 시 시간 누적), 잠김 상태에서는 히든 룸 주소로 직접 접근해도 시크릿 입구로 이동
 
 ### 히든카드
 - 히든 룸에서만 획득 가능, 누를 때마다 0.6%
@@ -158,7 +163,7 @@ Poppin-Room/
 | `price` | premium 가격(원) |
 
 ### localStorage (`poppinroom-state`)
-`coins`, `owned`, `equipped`, `hiddenCards`, `room[{id,x,y}]`, `dailyBreaks`, `totalBreaks`, `dailyKeyCoins`, `hiddenAttempts`, `hiddenCap`, `hiddenCycleStart`, `loggedIn`
+`coins`, `owned`, `equipped`, `hiddenCards`, `room[{id,x,y}]`, `secretKeys`, `secretOpenUntil`, `dailyBreaks`, `totalBreaks`, `dailyKeyCoins`, `hiddenAttempts`, `hiddenCap`, `hiddenCycleStart`, `loggedIn`
 
 ---
 
@@ -189,7 +194,6 @@ Poppin-Room/
 
 | 항목 | 상태 |
 |---|---|
-| 시크릿 룸 진입 조건 | 미정 — 조건 확정 후 `Secret.jsx`에 잠금 처리 |
 | 로그인 (카카오/Google OAuth) | mock — 버튼만 동작 |
 | 프리미엄 결제 | mock — 즉시 지급 |
 | 광고 SDK | mock — 즉시 보상 |

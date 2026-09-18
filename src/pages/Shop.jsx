@@ -11,9 +11,45 @@ export default function Shop() {
       <h1 className="case-title">상점 & 랭킹</h1>
       <p className="case-sub">프리미엄 오브제 구매, 오늘 팝볼 깬 횟수 기준 순위 확인</p>
 
+      <KeyShopSection />
       <StoreSection />
       <RankingSection />
     </div>
+  );
+}
+
+// 코인 상점 — 시크릿 키 구매
+function KeyShopSection() {
+  const { coins, secretKeys, secretKeyPrice, buySecretKey } = useGame();
+  const [justBought, setJustBought] = useState(false);
+  const canBuy = coins >= secretKeyPrice;
+
+  const handleBuy = () => {
+    if (!buySecretKey()) return;
+    setJustBought(true);
+    setTimeout(() => setJustBought(false), 2000);
+  };
+
+  return (
+    <section className="account-section">
+      <h3 className="collection-section-title">코인 상점</h3>
+      <p className="account-empty">보유 코인 {coins}, 시크릿 키 사용 시 시크릿 룸 24시간 개방</p>
+
+      <div className="store-grid">
+        <div className="store-card">
+          <div className="store-card-swatch store-card-emoji">🔑</div>
+          <div className="store-card-cat">SECRET · KEY</div>
+          <div className="store-card-name">시크릿 키</div>
+          <div className="store-card-note">보유 {secretKeys}개 · 타격 시 1% 드롭</div>
+          <div className="store-card-foot">
+            <span className="store-card-price">🪙 {secretKeyPrice}</span>
+            <button type="button" className="store-buy-btn" onClick={handleBuy} disabled={!canBuy}>
+              {justBought ? '구매 완료' : canBuy ? '구매하기' : '코인 부족'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -40,7 +76,7 @@ function StoreSection() {
 
   return (
     <section className="account-section">
-      <h3 className="collection-section-title">프리미엄 상점</h3>
+      <h3 className="collection-section-title">프리미엄 상점 (₩)</h3>
       <p className="account-empty">결제 즉시 지급, 프리미엄 키캡은 실제 녹음 사운드 적용</p>
 
       <div className="store-grid">

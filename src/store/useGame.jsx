@@ -7,7 +7,12 @@ const LEGACY_STORAGE_KEY = 'csl-gacha-state'; // 이름 변경 전 저장 키, �
 const PULL_COST = 200; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
 const KEY_DAILY_GOAL = 500; // 키캡 룸 "오늘의 타건 게이지" 표시 목표치(코인 기준)
-const ROOM_SLOTS = 6; // 컬렉션 "내 방"에 동시에 놓을 수 있는 오브제 수
+const ROOM_SLOTS = 6; // 컬렉션"내 방"에 동시에 놓을 수 있는 오브제 수
+// 시크릿 키 — 상점에서 코인으로 구매하거나 팝볼·키캡 타격 시 낮은 확률로 드롭,
+// 키 1개 사용 시 시크릿 룸이 일정 시간 개방
+const SECRET_KEY_PRICE = 300;
+const SECRET_KEY_DROP = 0.01;
+const SECRET_OPEN_MS = 24 * 60 * 60 * 1000;
 // 방에 새로 놓을 때의 기본 위치(방 기준 % 좌표), 비어 있는 자리부터 순서대로
 const ROOM_PRESET_SPOTS = [
   { x: 50, y: 50 }, { x: 22, y: 30 }, { x: 78, y: 32 },
@@ -57,6 +62,8 @@ function defaultState() {
     hiddenCap: { wakpuball: HIDDEN_DAILY_BASE, keycap: HIDDEN_DAILY_BASE }, // 광고로 최대 60까지 늘어남
     hiddenCycleStart: { wakpuball: null, keycap: null }, // 이번 24시간 주기가 시작된 시각(ms)
     room: [], // 내 방에 놓인 오브제 — { id, x, y } (x/y는 방 기준 0~100 % 좌표, 드래그로 이동)
+    secretKeys: 0, // 보유 시크릿 키
+    secretOpenUntil: null, // 시크릿 룸 개방 만료 시각(ms), null이면 잠김
   };
 }
 
@@ -130,6 +137,12 @@ export function GameProvider({ children }) {
   // 그 결과를 그대로 반환한다(화면에서 토스트 연출용). 히든카드는 여기서
   // 안 나온다 — 히든 룸(pressHidden) 전용.
   const pressReward = useCallback((category) => {
+    // 낮은 확률로 코인 대신 시크릿 키 드롭
+    if (Math.random() < SECRET_KEY_DROP) {
+      setState((prev) => ({ ...prev, secretKeys: prev.secretKeys + 1 }));
+      return { type: 'key' };
+    }
+
     const roll = rollPressReward();
     if (!roll) return null;
 
@@ -228,6 +241,34 @@ export function GameProvider({ children }) {
   // 테스트용 코인 지급 — 시연·개발용 임시 기능, 출시 전 제거
   const addTestCoins = useCallback((amount) => {
     setState((prev) => ({ ...prev, coins: prev.coins + amount }));
+  }, []);
+
+  // 테스트용 시크릿 키 지급 — 시연·개발용 임시 기능, 출시 전 제거
+  const addTestKeys = useCallback((amount) => {
+    setState((prev) => ({ ...prev, secretKeys: prev.secretKeys + amount }));
+  }, []);
+
+  // 시크릿 키 구매 — 코인 차감
+  const buySecretKey = useCallback(() => {
+    let ok = false;
+    setState((prev) => {
+      if (prev.coins < SECRET_KEY_PRICE) return prev;
+      ok = true;
+      return { ...prev, coins: prev.coins - SECRET_KEY_PRICE, secretKeys: prev.secretKeys + 1 };
+    });
+    return ok;
+  }, []);
+
+  // 시크릿 키 사용 — 키 1개 소모, 시크릿 룸 개방 시간 연장
+  const useSecretKey = useCallback(() => {
+    let ok = false;
+    setState((prev) => {
+      if (prev.secretKeys < 1) return prev;
+      ok = true;
+      const base = prev.secretOpenUntil && prev.secretOpenUntil > Date.now() ? prev.secretOpenUntil : Date.now();
+      return { ...prev, secretKeys: prev.secretKeys - 1, secretOpenUntil: base + SECRET_OPEN_MS };
+    });
+    return ok;
   }, []);
 
   const canPull = useCallback(
@@ -357,6 +398,12 @@ export function GameProvider({ children }) {
     hiddenCycleStart: state.hiddenCycleStart,
     room: state.room,
     roomSlots: ROOM_SLOTS,
+    secretKeys: state.secretKeys,
+    secretOpenUntil: state.secretOpenUntil,
+    secretOpen: !!state.secretOpenUntil && Date.now() < state.secretOpenUntil,
+    secretKeyPrice: SECRET_KEY_PRICE,
+    secretKeyDrop: SECRET_KEY_DROP,
+    secretOpenMs: SECRET_OPEN_MS,
     toys: toysData,
     pullCost: PULL_COST,
     keyDailyGoal: KEY_DAILY_GOAL,
@@ -368,6 +415,9 @@ export function GameProvider({ children }) {
     claimHiddenAdBoost,
     claimAdCoins,
     addTestCoins,
+    addTestKeys,
+    buySecretKey,
+    useSecretKey,
     canPull,
     pull,
     purchasePremium,

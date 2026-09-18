@@ -3,8 +3,8 @@ export default function RewardEffects({ toast, hiddenCard, onCloseHidden }) {
   return (
     <>
       {toast && (
-        <div className={`reward-toast ${toast.type === 'hidden' ? 'is-hidden' : ''}`}>
-          {toast.type === 'coin' ? `+${toast.amount} 코인` : '히든카드 획득!'}
+        <div className={`reward-toast ${toast.type === 'hidden' ? 'is-hidden' : ''} ${toast.type === 'key' ? 'is-key' : ''}`}>
+          {toast.type === 'coin' ? `+${toast.amount} 코인` : toast.type === 'key' ? '🔑 시크릿 키 획득!' : '히든카드 획득!'}
         </div>
       )}
 
