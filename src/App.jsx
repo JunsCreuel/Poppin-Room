@@ -12,8 +12,6 @@ import Collection from './pages/Collection';
 import Secret from './pages/Secret';
 import Shop from './pages/Shop';
 import MyAccount from './pages/MyAccount';
-import BackgroundFx from './components/BackgroundFx';
-import { usePointerParallax } from './utils/usePointerParallax';
 
 function NavBar() {
   const linkClass = ({ isActive }) => (isActive ? 'is-active' : '');
@@ -49,12 +47,6 @@ function ScrollToTop() {
   return null;
 }
 
-// 시크릿 룸이 열려 있을 때만 히든 룸 진입 허용, 아니면 시크릿 입구로
-function RequireSecret() {
-  const { secretOpen } = useGame();
-  return secretOpen ? <Outlet /> : <Navigate to="/secret" replace />;
-}
-
 // 공통 헤더 레이아웃 — 랜딩(/)을 제외한 모든 화면에 적용
 function AppLayout() {
   return (
@@ -66,21 +58,17 @@ function AppLayout() {
 }
 
 function App() {
-  usePointerParallax();
   return (
     <GameProvider>
       <HashRouter>
         <ScrollToTop />
-        <BackgroundFx />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route element={<AppLayout />}>
             <Route path="/wakpuball" element={<Wakpuball />} />
             <Route path="/keycap" element={<Keycap />} />
-            <Route element={<RequireSecret />}>
-              <Route path="/hidden/wakpuball" element={<HiddenWakpuball />} />
-              <Route path="/hidden/keycap" element={<HiddenKeycap />} />
-            </Route>
+            <Route path="/hidden/wakpuball" element={<HiddenWakpuball />} />
+            <Route path="/hidden/keycap" element={<HiddenKeycap />} />
             <Route path="/gacha" element={<Gacha />} />
             <Route path="/collection" element={<Collection />} />
             <Route path="/secret" element={<Secret />} />

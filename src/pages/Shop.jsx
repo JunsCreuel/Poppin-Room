@@ -20,9 +20,11 @@ export default function Shop() {
 
 // 코인 상점 — 시크릿 키 구매
 function KeyShopSection() {
-  const { coins, secretKeys, secretKeyPrice, buySecretKey } = useGame();
+  const { coins, secretKeys, secretKeyPrice, buySecretKey, claimAdKey, dailyAdKeys, adKeyDailyMax } = useGame();
   const [justBought, setJustBought] = useState(false);
+  const [adPlaying, setAdPlaying] = useState(false);
   const canBuy = coins >= secretKeyPrice;
+  const adLeft = Math.max(0, adKeyDailyMax - dailyAdKeys);
 
   const handleBuy = () => {
     if (!buySecretKey()) return;
@@ -30,21 +32,44 @@ function KeyShopSection() {
     setTimeout(() => setJustBought(false), 2000);
   };
 
+  // 광고 mock — 광고 SDK 연동 전까지 1.8초 재생 흉내 후 키 지급
+  const handleAd = () => {
+    if (adPlaying || adLeft <= 0) return;
+    setAdPlaying(true);
+    setTimeout(() => {
+      claimAdKey();
+      setAdPlaying(false);
+    }, 1800);
+  };
+
   return (
     <section className="account-section">
       <h3 className="collection-section-title">코인 상점</h3>
-      <p className="account-empty">보유 코인 {coins}, 시크릿 키 사용 시 시크릿 룸 24시간 개방</p>
+      <p className="account-empty">보유 코인 {coins} · 시크릿 키 {secretKeys}개, 키 1개 = 시크릿 룸 1회 입장</p>
 
       <div className="store-grid">
         <div className="store-card">
           <div className="store-card-swatch store-card-emoji">🔑</div>
           <div className="store-card-cat">SECRET · KEY</div>
           <div className="store-card-name">시크릿 키</div>
-          <div className="store-card-note">보유 {secretKeys}개 · 타격 시 1% 드롭</div>
+          <div className="store-card-note">코인으로 구매 · 타격 시 0.06% 드롭</div>
           <div className="store-card-foot">
             <span className="store-card-price">🪙 {secretKeyPrice}</span>
             <button type="button" className="store-buy-btn" onClick={handleBuy} disabled={!canBuy}>
               {justBought ? '구매 완료' : canBuy ? '구매하기' : '코인 부족'}
+            </button>
+          </div>
+        </div>
+
+        <div className="store-card">
+          <div className="store-card-swatch store-card-emoji">📺</div>
+          <div className="store-card-cat">SECRET · AD</div>
+          <div className="store-card-name">광고 보고 키 받기</div>
+          <div className="store-card-note">오늘 {dailyAdKeys} / {adKeyDailyMax}개 수령</div>
+          <div className="store-card-foot">
+            <span className="store-card-price">무료</span>
+            <button type="button" className="store-buy-btn" onClick={handleAd} disabled={adPlaying || adLeft <= 0}>
+              {adPlaying ? '광고 재생 중...' : adLeft > 0 ? '광고 보기 +1' : '오늘 소진'}
             </button>
           </div>
         </div>

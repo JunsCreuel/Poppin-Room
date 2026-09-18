@@ -1,8 +1,6 @@
 /* 앱 공통 스타일 — 색상 토큰, 헤더, 각 화면 컴포넌트, POPPIN ROOM 테마 */
 
 :root {
-  --mx: 0; /* 커서 위치 -1~1 (usePointerParallax가 갱신) */
-  --my: 0;
   /* 색상 토큰 — 랜딩과 같은 팔레트(흰 배경, 검정 테두리, 핑크·노랑·라벤더·회색) */
   --bg: #ffffff;
   --panel: #f2f2f2;
@@ -2096,43 +2094,7 @@ body {
 }
 
 
-/* ===== 배경 스티커 + 커서 파랄락스 ===== */
-.bg-fx {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.case-shell,
-.landing {
-  position: relative;
-  z-index: 1;
-}
-.bg-sticker {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: var(--size);
-  height: var(--size);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--line);
-  border-radius: 18px;
-  background: #fff;
-  font-size: calc(var(--size) * 0.55);
-  line-height: 1;
-  opacity: 0.9;
-  box-shadow: 0 3px 0 rgba(17, 17, 17, 0.12);
-  transform: translate(calc(var(--mx) * var(--d) * 14px), calc(var(--my) * var(--d) * 14px)) rotate(var(--r));
-  transition: transform 0.5s ease-out;
-  animation: stickerBob var(--dur) ease-in-out infinite alternate;
-}
-@keyframes stickerBob {
-  from { margin-top: 0; }
-  to { margin-top: -10px; }
-}
+/* ===== 시크릿 키 / 시크릿 룸 ===== */
 .reward-toast.is-key { background: var(--lavender); color: var(--text); }
 .v2-playroom-row.is-locked {
   opacity: 0.55;
@@ -2145,10 +2107,69 @@ body {
   justify-content: center;
   font-size: 56px;
 }
-@media (prefers-reduced-motion: reduce) {
-  .bg-sticker { animation: none; transition: none; }
+/* 시크릿 룸 무대 — 클릭 1번에 흔들흔들, 카드 등장 */
+.secret-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 30px 0 10px;
 }
-@media (max-width: 600px) {
-  .bg-sticker:nth-child(n+6) { display: none; }
-  .bg-sticker { opacity: 0.6; transform: scale(0.8) rotate(var(--r)); }
+.secret-toy {
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: min(240px, 60vw);
+  cursor: pointer;
 }
+.secret-toy img {
+  width: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.secret-toy.is-shaking { animation: secretWobble 1.2s ease-in-out; }
+.secret-toy:disabled { cursor: default; }
+@keyframes secretWobble {
+  0% { transform: rotate(0) scale(1); }
+  15% { transform: rotate(-10deg) scale(1.05); }
+  30% { transform: rotate(10deg) scale(1.08); }
+  45% { transform: rotate(-12deg) scale(1.1); }
+  60% { transform: rotate(12deg) scale(1.12); }
+  75% { transform: rotate(-6deg) scale(1.06); }
+  90% { transform: rotate(6deg) scale(1.02); }
+  100% { transform: rotate(0) scale(1); }
+}
+.secret-card {
+  width: min(320px, 90%);
+  padding: 26px 22px;
+  border: 2px solid var(--line);
+  border-radius: 24px;
+  background: var(--lavender);
+  text-align: center;
+  animation: resultPop 0.35s ease-out;
+}
+.secret-card.is-miss { background: var(--panel); }
+.secret-card.is-hidden { background: var(--pink); }
+.secret-card-emoji { font-size: 52px; line-height: 1; }
+.secret-card-title { margin-top: 10px; font-size: 26px; font-weight: 900; letter-spacing: -0.04em; }
+.secret-card-desc { margin-top: 6px; font-size: 14px; color: var(--muted); }
+.secret-card-code { margin-top: 8px; font-weight: 800; letter-spacing: 0.04em; }
+.secret-odds {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  background: var(--panel);
+  font-size: 13px;
+  color: var(--muted);
+}
+.secret-odds b { color: var(--text); }
+.secret-odds-row { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; }
+/* 시크릿 룸 목록은 버튼으로 렌더 — 링크 행과 같은 모양 유지 */
+button.v2-playroom-row {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+}
+button.v2-playroom-row:disabled { cursor: default; }

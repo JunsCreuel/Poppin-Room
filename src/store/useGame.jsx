@@ -8,11 +8,19 @@ const PULL_COST = 200; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
 const KEY_DAILY_GOAL = 500; // 키캡 룸 "오늘의 타건 게이지" 표시 목표치(코인 기준)
 const ROOM_SLOTS = 6; // 컬렉션"내 방"에 동시에 놓을 수 있는 오브제 수
-// 시크릿 키 — 상점에서 코인으로 구매하거나 팝볼·키캡 타격 시 낮은 확률로 드롭,
-// 키 1개 사용 시 시크릿 룸이 일정 시간 개방
+// 시크릿 키 — 상점에서 코인 구매 / 하루 3개까지 광고 시청 / 팝볼·키캡 타격 시 0.06% 드롭
+// 키 1개 = 히든 팝볼 룸 또는 히든 키캡 룸 중 하나에 1회 입장
 const SECRET_KEY_PRICE = 300;
-const SECRET_KEY_DROP = 0.01;
-const SECRET_OPEN_MS = 24 * 60 * 60 * 1000;
+const SECRET_KEY_DROP = 0.0006;
+const AD_KEY_DAILY_MAX = 3;
+// 시크릿 룸 카드 확률(%) — 위에서부터 순서대로 판정, 나머지는 꽝
+const SECRET_CARD_TABLE = [
+  { type: 'hidden', pct: 0.01 },
+  { type: 'keys', amount: 5, pct: 0.5 },
+  { type: 'coins', amount: 500, pct: 1 },
+  { type: 'coins', amount: 200, pct: 5 },
+  { type: 'coins', amount: 100, pct: 10 },
+];
 // 방에 새로 놓을 때의 기본 위치(방 기준 % 좌표), 비어 있는 자리부터 순서대로
 const ROOM_PRESET_SPOTS = [
   { x: 50, y: 50 }, { x: 22, y: 30 }, { x: 78, y: 32 },
@@ -23,14 +31,6 @@ const ROOM_PRESET_SPOTS = [
 // 히든카드는 히든 룸(HiddenWakpuball/HiddenKeycap) 전용.
 const PRESS_REWARD = { coin5: 0.05, coin1: 0.35 };
 
-// 히든 룸: 누를 때마다 0.6% 확률로 히든카드. 하루 40번까지 무료로 시도할
-// 수 있고, 광고 1편(30초)당 20번씩 최대 60번까지 늘릴 수 있다. 그 날의
-// 시도가 다 떨어지면 첫 시도로부터 24시간이 지나야 다시 40번으로 풀린다.
-const HIDDEN_CHANCE = 0.006;
-const HIDDEN_DAILY_BASE = 40;
-const HIDDEN_DAILY_MAX = 60;
-const HIDDEN_AD_BONUS = 20;
-const HIDDEN_CYCLE_MS = 24 * 60 * 60 * 1000;
 
 function freeOwnedIds() {
   const ids = [];
@@ -58,12 +58,10 @@ function defaultState() {
     totalBreaks: 0,
     dailyKeyCoins: 0, // 오늘 키캡 룸에서 적립한 코인 — 키캡 룸 상단 게이지 표시용
     lastVisit: todayStr(),
-    hiddenAttempts: { wakpuball: 0, keycap: 0 }, // 히든 룸에서 오늘 시도한 횟수
-    hiddenCap: { wakpuball: HIDDEN_DAILY_BASE, keycap: HIDDEN_DAILY_BASE }, // 광고로 최대 60까지 늘어남
-    hiddenCycleStart: { wakpuball: null, keycap: null }, // 이번 24시간 주기가 시작된 시각(ms)
     room: [], // 내 방에 놓인 오브제 — { id, x, y } (x/y는 방 기준 0~100 % 좌표, 드래그로 이동)
     secretKeys: 0, // 보유 시크릿 키
-    secretOpenUntil: null, // 시크릿 룸 개방 만료 시각(ms), null이면 잠김
+    secretEntry: null, // 키로 입장한 시크릿 룸 — 'wakpuball' | 'keycap' | null (카드 뽑으면 소모)
+    dailyAdKeys: 0, // 오늘 광고 보고 받은 시크릿 키 수 (하루 최대 3)
   };
 }
 
@@ -77,6 +75,7 @@ function loadState() {
     if (merged.lastVisit !== todayStr()) {
       merged.dailyBreaks = 0;
       merged.dailyKeyCoins = 0;
+      merged.dailyAdKeys = 0;
       merged.lastVisit = todayStr();
     }
     // 방 배치 정리 — 옛 형식(id 배열)은 좌표 형식으로 변환, 미보유·중복 제거, 최대 수 제한
@@ -133,9 +132,8 @@ export function GameProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
-  // 팝볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 코인 보상만 굴리고
-  // 그 결과를 그대로 반환한다(화면에서 토스트 연출용). 히든카드는 여기서
-  // 안 나온다 — 히든 룸(pressHidden) 전용.
+  // 팝볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 시크릿 키 드롭(0.06%)
+  // 또는 코인 보상을 굴리고 결과를 반환한다(화면에서 토스트 연출용)
   const pressReward = useCallback((category) => {
     // 낮은 확률로 코인 대신 시크릿 키 드롭
     if (Math.random() < SECRET_KEY_DROP) {
@@ -155,81 +153,6 @@ export function GameProvider({ children }) {
     }));
     payload = { type: 'coin', amount };
     return payload;
-  }, []);
-
-  // 히든 팝볼/키캡 룸 전용 — 코인은 전혀 안 나오고, 누를 때마다 0.6%
-  // 확률로만 히든카드가 나온다. 하루 시도 횟수가 정해져 있어서(기본 40,
-  // 광고로 최대 60) 다 쓰면 24시간이 지나야 다시 리셋된다.
-  const pressHidden = useCallback((category) => {
-    let payload = null;
-    setState((prev) => {
-      let attempts = prev.hiddenAttempts[category];
-      let cap = prev.hiddenCap[category];
-      let cycleStart = prev.hiddenCycleStart[category];
-
-      // 마지막 주기가 시작된 지 24시간이 지났으면 그 카테고리만 리셋.
-      if (cycleStart && Date.now() - cycleStart >= HIDDEN_CYCLE_MS) {
-        attempts = 0;
-        cap = HIDDEN_DAILY_BASE;
-        cycleStart = null;
-      }
-
-      if (attempts >= cap) {
-        // 오늘 시도 다 씀 — 롤오버 결과만 반영하고 시도 자체는 늘리지 않는다.
-        return {
-          ...prev,
-          hiddenAttempts: { ...prev.hiddenAttempts, [category]: attempts },
-          hiddenCap: { ...prev.hiddenCap, [category]: cap },
-          hiddenCycleStart: { ...prev.hiddenCycleStart, [category]: cycleStart },
-        };
-      }
-
-      const nextCycleStart = cycleStart ?? Date.now();
-      let nextHiddenCards = prev.hiddenCards;
-      if (Math.random() < HIDDEN_CHANCE) {
-        const code = makeHiddenCode(category);
-        const card = { code, category, wonAt: new Date().toISOString() };
-        payload = { type: 'hidden', card };
-        nextHiddenCards = [...prev.hiddenCards, card];
-      }
-
-      return {
-        ...prev,
-        hiddenAttempts: { ...prev.hiddenAttempts, [category]: attempts + 1 },
-        hiddenCap: { ...prev.hiddenCap, [category]: cap },
-        hiddenCycleStart: { ...prev.hiddenCycleStart, [category]: nextCycleStart },
-        hiddenCards: nextHiddenCards,
-      };
-    });
-    return payload;
-  }, []);
-
-  // 오늘 시도를 다 썼는지 판정 — 저장된 attempts/cap만 보면 24시간이 지나도
-  // 계속 "다 썼음"으로 보이는 문제가 있어서, 마지막 주기 시작 시각 기준으로
-  // 24시간이 지났으면(=다음 누름에서 실제로 리셋될 상태) 아직 안 막힌 걸로
-  // 본다. HiddenGauge와 히든 룸 페이지(HiddenWakpuball/HiddenKeycap)가 공유.
-  const isHiddenMaxed = useCallback(
-    (category) => {
-      const cap = state.hiddenCap[category];
-      const attempts = state.hiddenAttempts[category];
-      const cycleStart = state.hiddenCycleStart[category];
-      const expired = cycleStart && Date.now() - cycleStart >= HIDDEN_CYCLE_MS;
-      return !expired && attempts >= cap;
-    },
-    [state.hiddenAttempts, state.hiddenCap, state.hiddenCycleStart]
-  );
-
-  // 히든 룸에서 오늘 시도가 다 떨어졌을 때 광고 한 편(30초)을 보면 그
-  // 카테고리의 오늘 한도를 20 늘려준다 (최대 60). 실제 광고 SDK가 없어서
-  // UI 쪽(HiddenGauge.jsx)에서 재생되는 흉내만 낸 뒤 이 함수를 호출한다.
-  const claimHiddenAdBoost = useCallback((category) => {
-    let newCap = null;
-    setState((prev) => {
-      const cap = Math.min(HIDDEN_DAILY_MAX, prev.hiddenCap[category] + HIDDEN_AD_BONUS);
-      newCap = cap;
-      return { ...prev, hiddenCap: { ...prev.hiddenCap, [category]: cap } };
-    });
-    return newCap;
   }, []);
 
   // 광고 시청 보상 mock — 광고 SDK 연동 전까지 5코인 즉시 지급
@@ -259,16 +182,59 @@ export function GameProvider({ children }) {
     return ok;
   }, []);
 
-  // 시크릿 키 사용 — 키 1개 소모, 시크릿 룸 개방 시간 연장
-  const useSecretKey = useCallback(() => {
+  // 광고 보고 시크릿 키 받기 mock — 하루 최대 AD_KEY_DAILY_MAX개, 광고 SDK 연동 전까지 즉시 지급
+  const claimAdKey = useCallback(() => {
     let ok = false;
     setState((prev) => {
-      if (prev.secretKeys < 1) return prev;
+      if (prev.dailyAdKeys >= AD_KEY_DAILY_MAX) return prev;
       ok = true;
-      const base = prev.secretOpenUntil && prev.secretOpenUntil > Date.now() ? prev.secretOpenUntil : Date.now();
-      return { ...prev, secretKeys: prev.secretKeys - 1, secretOpenUntil: base + SECRET_OPEN_MS };
+      return { ...prev, dailyAdKeys: prev.dailyAdKeys + 1, secretKeys: prev.secretKeys + 1 };
     });
     return ok;
+  }, []);
+
+  // 시크릿 키 사용 — 키 1개 소모, 선택한 룸('wakpuball' | 'keycap') 1회 입장권 발급
+  const enterSecretRoom = useCallback((category) => {
+    let ok = false;
+    setState((prev) => {
+      if (prev.secretEntry) { ok = prev.secretEntry === category; return prev; }
+      if (prev.secretKeys < 1) return prev;
+      ok = true;
+      return { ...prev, secretKeys: prev.secretKeys - 1, secretEntry: category };
+    });
+    return ok;
+  }, []);
+
+  // 시크릿 룸 카드 뽑기 — 입장권 소모, 확률표대로 보상 지급, 결과 반환
+  // { type: 'coins' | 'keys' | 'hidden' | 'miss', amount?, card? }
+  const drawSecretCard = useCallback((category) => {
+    let result = null;
+    setState((prev) => {
+      if (prev.secretEntry !== category) return prev;
+      const r = Math.random() * 100;
+      let acc = 0;
+      let hit = null;
+      for (const row of SECRET_CARD_TABLE) {
+        acc += row.pct;
+        if (r < acc) { hit = row; break; }
+      }
+      const next = { ...prev, secretEntry: null };
+      if (!hit) {
+        result = { type: 'miss' };
+      } else if (hit.type === 'coins') {
+        next.coins = prev.coins + hit.amount;
+        result = { type: 'coins', amount: hit.amount };
+      } else if (hit.type === 'keys') {
+        next.secretKeys = prev.secretKeys + hit.amount;
+        result = { type: 'keys', amount: hit.amount };
+      } else {
+        const card = { code: makeHiddenCode(category), category, wonAt: new Date().toISOString() };
+        next.hiddenCards = [...prev.hiddenCards, card];
+        result = { type: 'hidden', card };
+      }
+      return next;
+    });
+    return result;
   }, []);
 
   const canPull = useCallback(
@@ -393,31 +359,26 @@ export function GameProvider({ children }) {
     dailyBreaks: state.dailyBreaks,
     totalBreaks: state.totalBreaks,
     dailyKeyCoins: state.dailyKeyCoins,
-    hiddenAttempts: state.hiddenAttempts,
-    hiddenCap: state.hiddenCap,
-    hiddenCycleStart: state.hiddenCycleStart,
     room: state.room,
     roomSlots: ROOM_SLOTS,
     secretKeys: state.secretKeys,
-    secretOpenUntil: state.secretOpenUntil,
-    secretOpen: !!state.secretOpenUntil && Date.now() < state.secretOpenUntil,
+    secretEntry: state.secretEntry,
+    dailyAdKeys: state.dailyAdKeys,
+    adKeyDailyMax: AD_KEY_DAILY_MAX,
     secretKeyPrice: SECRET_KEY_PRICE,
     secretKeyDrop: SECRET_KEY_DROP,
-    secretOpenMs: SECRET_OPEN_MS,
+    secretCardTable: SECRET_CARD_TABLE,
     toys: toysData,
     pullCost: PULL_COST,
     keyDailyGoal: KEY_DAILY_GOAL,
-    hiddenDailyMax: HIDDEN_DAILY_MAX,
-    hiddenCycleMs: HIDDEN_CYCLE_MS,
     pressReward,
-    pressHidden,
-    isHiddenMaxed,
-    claimHiddenAdBoost,
     claimAdCoins,
     addTestCoins,
     addTestKeys,
     buySecretKey,
-    useSecretKey,
+    claimAdKey,
+    enterSecretRoom,
+    drawSecretCard,
     canPull,
     pull,
     purchasePremium,
