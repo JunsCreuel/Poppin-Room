@@ -87,8 +87,11 @@ export default function Keycap() {
               style={{ filter: toy.filter }}
               draggable="false"
             />
-            {combo > 0 && <span className="v2-combo-badge">⌨️ 콤보 x{combo} 타건중!</span>}
           </button>
+        </div>
+
+        <div className="v2-combo-row">
+          {combo > 0 && <span className="v2-combo-badge">⌨️ 콤보 x{combo} 타건중!</span>}
         </div>
 
         <div className="v2-progress-row" style={{ width: '100%' }}>

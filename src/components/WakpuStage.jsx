@@ -78,7 +78,6 @@ export default function WakpuStage({
               style={filter ? { filter } : undefined}
             />
             {/* 금가는 오버레이(CrackOverlay)는 크랙 디자인 확정 전까지 표시하지 않음 */}
-            {hits > 0 && <span className="v2-combo-badge">💥 콤보 x{hits} 연타중!</span>}
           </>
         )}
 
@@ -90,6 +89,9 @@ export default function WakpuStage({
           </div>
         )}
       </button>
+      <div className="v2-combo-row">
+        {hits > 0 && <span className="v2-combo-badge">💥 콤보 x{hits} 연타중!</span>}
+      </div>
       <div className="v2-progress-row" style={{ width: '100%' }}>
         <span className="v2-progress-label">팝볼 파괴 균열도</span>
         <span className="v2-progress-pct">{Math.round(crackProgress * 100)}%</span>

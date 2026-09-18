@@ -1375,11 +1375,14 @@ button {
   border-radius: 50%;
   background: #1f8a45;
 }
+.v2-combo-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  margin: 6px 0;
+}
 .v2-combo-badge {
-  position: absolute;
-  bottom: 8%;
-  left: 50%;
-  transform: translateX(-50%);
   padding: 6px 14px;
   border-radius: 999px;
   background: #fde1e5;
