@@ -46,7 +46,7 @@ export default function Wakpuball() {
 
       <div className="v2-btn-row">
         <DesignPicker category="wakpuball" />
-        <Link to="/shop" className="v2-btn v2-btn-primary">게이지 수확하기</Link>
+        <Link to="/shop" className="v2-btn v2-btn-primary">상점으로 이동하기</Link>
       </div>
 
       <div className="lab-footer-note">오늘 {dailyBreaks}번 파괴 · <Link to="/shop">랭킹 보기</Link></div>

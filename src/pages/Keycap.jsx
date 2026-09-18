@@ -10,7 +10,7 @@ import DesignPicker from '../components/DesignPicker';
 const PRESS_HOLD_MS = 90; // 눌렸다가 자동으로 올라오는 시간
 const STRESS_LABEL = { common: 'LOW', rare: 'MEDIUM', limited: 'HIGH' };
 
-// 팝볼 룸과 같은 구성: 코인 pill → 카드(오브제 헤더 + 무대 + 게이지) → 오브제 변경/게이지 수확 → 히든 룸 CTA
+// 팝볼 룸과 같은 구성: 코인 pill → 카드(오브제 헤더 + 무대 + 게이지) → 오브제 변경/상점 이동 → 히든 룸 CTA
 export default function Keycap() {
   const { equipped, getToy, pressReward, coins, dailyKeyCoins, keyDailyGoal } = useGame();
   const toy = getToy('keycap', equipped.keycap);
@@ -105,7 +105,7 @@ export default function Keycap() {
 
       <div className="v2-btn-row">
         <DesignPicker category="keycap" />
-        <Link to="/shop" className="v2-btn v2-btn-primary">게이지 수확하기</Link>
+        <Link to="/shop" className="v2-btn v2-btn-primary">상점으로 이동하기</Link>
       </div>
 
       <div className="lab-footer-note">오늘 {dailyKeyCoins}코인 적립 · <Link to="/shop">랭킹 보기</Link></div>
