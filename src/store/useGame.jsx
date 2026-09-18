@@ -1,6 +1,7 @@
 // 게임 상태 저장소 — 코인, 보유/장착 오브제, 히든카드를 localStorage에 저장
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import toysData from '../data/toys.json';
+import { weightedPick, computeGradeOdds } from '../data/gradeOdds';
 
 const STORAGE_KEY = 'poppinroom-state'; // 진행 상황 저장 키(localStorage)
 const LEGACY_STORAGE_KEY = 'csl-gacha-state'; // 이름 변경 전 저장 키, 남아 있으면 읽어옴
@@ -228,6 +229,12 @@ export function GameProvider({ children }) {
     [state.coins]
   );
 
+  // 뽑기 확률 표시용 — pull()과 같은 가중치를 써서 화면 표시가 실제 확률과 항상 일치
+  const pullOdds = useCallback((category) => {
+    const pool = toysData[category].filter((t) => t.tier === 'paid');
+    return computeGradeOdds(pool);
+  }, []);
+
   // 뽑기: 코인 소비 -> 해당 카테고리의 '유료(paid)' 등급 중 랜덤 하나.
   // 이미 보유 중이면 코인 일부 환급.
   const pull = useCallback((category) => {
@@ -237,7 +244,7 @@ export function GameProvider({ children }) {
       if (prev.coins < PULL_COST) return prev;
 
       const pool = toysData[category].filter((t) => t.tier === 'paid');
-      const picked = pool[Math.floor(Math.random() * pool.length)];
+      const picked = weightedPick(pool);
       if (!picked) return prev;
 
       const isDuplicate = prev.owned.includes(picked.id);
@@ -332,6 +339,7 @@ export function GameProvider({ children }) {
     drawSecretCard,
     canPull,
     pull,
+    pullOdds,
     purchasePremium,
     equip,
     getToy,

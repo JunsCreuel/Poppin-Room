@@ -8,7 +8,7 @@ import { playGachaSuccess } from '../utils/sound';
 const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
 
 export default function Gacha() {
-  const { coins, pullCost, canPull, pull, equip, equipped, claimAdCoins, toys } = useGame();
+  const { coins, pullCost, canPull, pull, pullOdds, equip, equipped, claimAdCoins } = useGame();
   const [category, setCategory] = useState('wakpuball');
   const [stage, setStage] = useState('idle'); // idle | shaking | result
   const [result, setResult] = useState(null);
@@ -48,7 +48,7 @@ export default function Gacha() {
   };
 
   const ready = canPull(category) && stage === 'idle';
-  const pool = toys[category].filter((t) => t.tier === 'paid');
+  const odds = pullOdds(category);
 
   return (
     <div className="case-page">
@@ -97,8 +97,12 @@ export default function Gacha() {
       <div className="v2-draw-odds">
         <div className="v2-draw-odds-label">DRAW RATES</div>
         <div className="v2-draw-odds-line">
-          <span>유료 등급 오브제 {pool.length}종 중 균등 확률</span>
-          <span>1/{pool.length}</span>
+          <span>레어 등급 오브제 {odds.rareCount}종 합산 확률</span>
+          <span>{odds.rarePct.toFixed(2)}%</span>
+        </div>
+        <div className="v2-draw-odds-line">
+          <span>리미티드 등급 오브제 {odds.limitedCount}종 합산 확률</span>
+          <span>{odds.limitedPct.toFixed(2)}%</span>
         </div>
       </div>
 

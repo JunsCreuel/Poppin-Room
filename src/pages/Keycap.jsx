@@ -8,7 +8,7 @@ import RewardEffects from '../components/RewardEffects';
 import DesignPicker from '../components/DesignPicker';
 
 const PRESS_HOLD_MS = 90; // 눌렸다가 자동으로 올라오는 시간
-const STRESS_LABEL = { common: 'LOW', rare: 'MEDIUM', limited: 'HIGH' };
+const STRESS_LABEL = { common: 'LOW', rare: 'MEDIUM', premium: 'HIGH', limited: 'HIGH' };
 
 // 팝볼 룸과 같은 구성: 코인 pill → 카드(오브제 헤더 + 무대 + 게이지) → 오브제 변경/상점 이동 → 히든 룸 CTA
 export default function Keycap() {

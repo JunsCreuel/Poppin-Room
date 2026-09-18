@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 
 const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
-const GRADE_BADGE = { common: 'is-common', rare: 'is-rare', limited: 'is-limited' };
-const GRADE_LABEL = { common: 'COMMON', rare: 'RARE', limited: 'LIMITED' };
+const GRADE_BADGE = { common: 'is-common', rare: 'is-rare', premium: 'is-premium', limited: 'is-limited' };
+const GRADE_LABEL = { common: 'COMMON', rare: 'RARE', premium: 'PREMIUM', limited: 'LIMITED' };
 
 // 가방에서 오브제 선택 → 장착하기
 export default function Collection() {

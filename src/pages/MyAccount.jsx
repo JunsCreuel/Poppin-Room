@@ -91,7 +91,7 @@ export default function MyAccount() {
         ) : (
           <div className="collection-grid">
             {premiumOwned.map((toy) => (
-              <div key={toy.id} className="toy-card grade-limited">
+              <div key={toy.id} className="toy-card grade-premium">
                 <div className="toy-swatch">
                   <img src={toy.image} alt={toy.name} style={{ filter: toy.filter }} className={toy.isHolo ? 'is-holo' : ''} />
                 </div>

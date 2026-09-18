@@ -58,18 +58,18 @@
     {
       "id": "wb_06",
       "name": "스타 오브",
-      "grade": "rare",
+      "grade": "limited",
       "tier": "paid",
       "accent": "#e0357f",
       "image": "images/wakpuball_06.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 15
+      "hitsToBreak": 20
     },
     {
       "id": "wb_07",
       "name": "네온 블랙",
-      "grade": "limited",
+      "grade": "premium",
       "tier": "premium",
       "price": 2900,
       "accent": "#111111",
@@ -81,7 +81,7 @@
     {
       "id": "wb_08",
       "name": "홀로그램 젬",
-      "grade": "limited",
+      "grade": "premium",
       "tier": "premium",
       "price": 3900,
       "accent": "#c9a0ff",
@@ -92,7 +92,7 @@
       "hitsToBreak": 20
     },
     {
-      "id": "wb_09",
+      "id": "wb_banana",
       "name": "바나나",
       "grade": "rare",
       "tier": "paid",
@@ -103,7 +103,7 @@
       "hitsToBreak": 15
     },
     {
-      "id": "wb_10",
+      "id": "wb_watermelon",
       "name": "수박",
       "grade": "rare",
       "tier": "paid",
@@ -114,7 +114,7 @@
       "hitsToBreak": 15
     },
     {
-      "id": "wb_11",
+      "id": "wb_grape",
       "name": "포도",
       "grade": "rare",
       "tier": "paid",
@@ -125,7 +125,7 @@
       "hitsToBreak": 15
     },
     {
-      "id": "wb_12",
+      "id": "wb_mango",
       "name": "망고",
       "grade": "rare",
       "tier": "paid",
@@ -136,7 +136,7 @@
       "hitsToBreak": 15
     },
     {
-      "id": "wb_13",
+      "id": "wb_lemon",
       "name": "레몬",
       "grade": "rare",
       "tier": "paid",
@@ -147,7 +147,7 @@
       "hitsToBreak": 15
     },
     {
-      "id": "wb_14",
+      "id": "wb_peach",
       "name": "복숭아",
       "grade": "rare",
       "tier": "paid",
@@ -158,7 +158,7 @@
       "hitsToBreak": 15
     },
     {
-      "id": "wb_15",
+      "id": "wb_donut",
       "name": "민트 도넛",
       "grade": "rare",
       "tier": "paid",
@@ -169,7 +169,7 @@
       "hitsToBreak": 15
     },
     {
-      "id": "wb_16",
+      "id": "wb_popsicle",
       "name": "블루 소다바",
       "grade": "rare",
       "tier": "paid",
@@ -180,7 +180,7 @@
       "hitsToBreak": 15
     },
     {
-      "id": "wb_17",
+      "id": "wb_pudding",
       "name": "카라멜 푸딩",
       "grade": "rare",
       "tier": "paid",
@@ -191,15 +191,15 @@
       "hitsToBreak": 15
     },
     {
-      "id": "wb_18",
+      "id": "wb_shell",
       "name": "라벤더 조개",
-      "grade": "rare",
+      "grade": "limited",
       "tier": "paid",
       "accent": "#b39ddb",
       "image": "images/wakpuball_shell.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 15
+      "hitsToBreak": 20
     }
   ],
   "keycap": [
@@ -256,7 +256,7 @@
     {
       "id": "kc_06",
       "name": "블랙 오브",
-      "grade": "rare",
+      "grade": "limited",
       "tier": "paid",
       "accent": "#111111",
       "image": "images/keycap_06.png",
@@ -266,7 +266,7 @@
     {
       "id": "kc_07",
       "name": "선더 크리스탈",
-      "grade": "limited",
+      "grade": "premium",
       "tier": "premium",
       "price": 2900,
       "accent": "#e11d80",
@@ -278,7 +278,7 @@
     {
       "id": "kc_08",
       "name": "쥬얼 블룸",
-      "grade": "limited",
+      "grade": "premium",
       "tier": "premium",
       "price": 3900,
       "accent": "#c084fc",
@@ -287,7 +287,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_09",
+      "id": "kc_banana",
       "name": "바나나",
       "grade": "rare",
       "tier": "paid",
@@ -297,7 +297,7 @@
       "profile": "sa"
     },
     {
-      "id": "kc_10",
+      "id": "kc_watermelon",
       "name": "수박",
       "grade": "rare",
       "tier": "paid",
@@ -307,7 +307,7 @@
       "profile": "oem"
     },
     {
-      "id": "kc_11",
+      "id": "kc_grape",
       "name": "포도",
       "grade": "rare",
       "tier": "paid",
@@ -317,7 +317,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_12",
+      "id": "kc_mango",
       "name": "망고",
       "grade": "rare",
       "tier": "paid",
@@ -327,7 +327,7 @@
       "profile": "sa"
     },
     {
-      "id": "kc_13",
+      "id": "kc_lemon",
       "name": "레몬",
       "grade": "rare",
       "tier": "paid",
@@ -337,7 +337,7 @@
       "profile": "oem"
     },
     {
-      "id": "kc_14",
+      "id": "kc_peach",
       "name": "복숭아",
       "grade": "rare",
       "tier": "paid",
@@ -347,7 +347,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_15",
+      "id": "kc_donut",
       "name": "민트 도넛",
       "grade": "rare",
       "tier": "paid",
@@ -357,7 +357,7 @@
       "profile": "sa"
     },
     {
-      "id": "kc_16",
+      "id": "kc_popsicle",
       "name": "블루 소다바",
       "grade": "rare",
       "tier": "paid",
@@ -367,7 +367,7 @@
       "profile": "oem"
     },
     {
-      "id": "kc_17",
+      "id": "kc_pudding",
       "name": "카라멜 푸딩",
       "grade": "rare",
       "tier": "paid",
@@ -377,7 +377,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_18",
+      "id": "kc_shell",
       "name": "라벤더 조개",
       "grade": "rare",
       "tier": "paid",
@@ -387,7 +387,7 @@
       "profile": "sa"
     },
     {
-      "id": "kc_19",
+      "id": "kc_honey",
       "name": "허니 드립",
       "grade": "rare",
       "tier": "paid",
@@ -397,7 +397,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_20",
+      "id": "kc_marshmallow",
       "name": "마시멜로 스트라이프",
       "grade": "rare",
       "tier": "paid",
@@ -407,9 +407,9 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_21",
+      "id": "kc_holostar",
       "name": "홀로그램 스타더스트",
-      "grade": "limited",
+      "grade": "premium",
       "tier": "premium",
       "price": 3400,
       "accent": "#a9b8ff",
@@ -419,7 +419,7 @@
       "profile": "sa"
     },
     {
-      "id": "kc_22",
+      "id": "kc_silveresc",
       "name": "실버 이스케이프",
       "grade": "rare",
       "tier": "paid",
@@ -429,7 +429,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_23",
+      "id": "kc_hotpink_gloss",
       "name": "핫핑크 글로시",
       "grade": "rare",
       "tier": "paid",
@@ -439,7 +439,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_24",
+      "id": "kc_asterisk",
       "name": "화이트 아스크",
       "grade": "rare",
       "tier": "paid",
@@ -449,7 +449,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_25",
+      "id": "kc_caramel_drizzle",
       "name": "캐러멜 드리즐",
       "grade": "rare",
       "tier": "paid",
@@ -459,7 +459,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_26",
+      "id": "kc_glass",
       "name": "클리어 글래스",
       "grade": "rare",
       "tier": "paid",
@@ -469,7 +469,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_27",
+      "id": "kc_tangerine",
       "name": "탠저린 젤리",
       "grade": "rare",
       "tier": "paid",
@@ -479,7 +479,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_28",
+      "id": "kc_smoke_crimson",
       "name": "스모크 크림슨",
       "grade": "rare",
       "tier": "paid",
@@ -489,9 +489,9 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_29",
+      "id": "kc_pink_geode",
       "name": "핑크 지오드",
-      "grade": "rare",
+      "grade": "limited",
       "tier": "paid",
       "accent": "#ec3d7a",
       "image": "images/keycap_pink_geode.png",
@@ -499,7 +499,7 @@
       "profile": "sa"
     },
     {
-      "id": "kc_30",
+      "id": "kc_lavender_cushion",
       "name": "라벤더 쿠션",
       "grade": "rare",
       "tier": "paid",
@@ -509,7 +509,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_31",
+      "id": "kc_forest_fur",
       "name": "포레스트 퍼",
       "grade": "rare",
       "tier": "paid",
@@ -519,7 +519,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_32",
+      "id": "kc_hotpink_fur",
       "name": "핫핑크 퍼",
       "grade": "rare",
       "tier": "paid",
@@ -529,7 +529,7 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_33",
+      "id": "kc_puffer",
       "name": "퍼퍼 재킷",
       "grade": "rare",
       "tier": "paid",
@@ -539,9 +539,9 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_34",
+      "id": "kc_lightning",
       "name": "라이트닝 글로우",
-      "grade": "limited",
+      "grade": "premium",
       "tier": "premium",
       "price": 3400,
       "accent": "#ff2f8f",

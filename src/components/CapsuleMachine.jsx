@@ -1,5 +1,5 @@
 // 캡슐머신 컴포넌트 — 뽑기 대기/흔들림/결과 카드 표시
-const GRADE_BADGE = { common: 'is-common', rare: 'is-rare', limited: 'is-limited' };
+const GRADE_BADGE = { common: 'is-common', rare: 'is-rare', premium: 'is-premium', limited: 'is-limited' };
 
 export default function CapsuleMachine({ stage, result }) {
   if (stage === 'result' && result) {

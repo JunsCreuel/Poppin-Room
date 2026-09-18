@@ -433,6 +433,7 @@ button {
   color: var(--text);
 }
 .toy-card.grade-rare { border-color: #8b5cf6; }
+.toy-card.grade-premium { border-color: #14b8a6; }
 .toy-card.grade-limited { border-color: var(--pink);  }
 .toy-card.is-equipped { outline: 2px solid var(--lime-text); outline-offset: 2px; }
 .toy-card.is-locked { opacity: 0.7; cursor: default; }
@@ -1159,6 +1160,7 @@ button {
 }
 .v2-badge.is-active { background: #dcf5e3; color: #1f8a45; }
 .v2-badge.is-limited { background: #fde1e5; color: #d92d4e; }
+.v2-badge.is-premium { background: #d6f5ec; color: #0f8a72; }
 .v2-badge.is-rare { background: #ffe8cf; color: #c76a10; }
 .v2-badge.is-common { background: #dfeaff; color: #2860c9; }
 .v2-badge.is-locked { background: var(--panel-2); color: var(--dim); }
@@ -1912,6 +1914,7 @@ body {
 }
 .v2-badge.is-active { background: var(--pink); color: var(--text); }
 .v2-badge.is-limited { background: #111; color: #fff; }
+.v2-badge.is-premium { background: #c8f4e6; color: var(--text); }
 .v2-badge.is-rare { background: var(--yellow); color: var(--text); }
 .v2-badge.is-common { background: var(--lavender); color: var(--text); }
 .v2-badge.is-locked { background: var(--panel); color: var(--dim); border-color: var(--dim); }

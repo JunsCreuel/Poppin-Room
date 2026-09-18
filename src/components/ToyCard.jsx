@@ -1,5 +1,5 @@
 // 오브제 카드 컴포넌트 — 이미지, 등급 배지, 잠금 상태 표시
-const GRADE_LABEL = { common: 'COMMON', rare: 'RARE', limited: 'LIMITED' };
+const GRADE_LABEL = { common: 'COMMON', rare: 'RARE', premium: 'PREMIUM', limited: 'LIMITED' };
 const LOCK_HINT = { paid: '뽑기에서 획득', premium: '스토어에서 구매' };
 
 export default function ToyCard({ toy, owned, equipped, onClick }) {

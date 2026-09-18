@@ -115,13 +115,16 @@ Poppin-Room/
 ## 6. 게임 규칙
 
 ### 오브제 등급
-| tier | 배지 | 획득 방법 | 수량 | 팝볼 파괴 타격 수 |
-|---|---|---|---|---|
-| free | COMMON | 처음부터 보유 | 팝볼 3 · 키캡 3 | 10회 |
-| paid | RARE | 뽑기 (코인 200개) | 팝볼 13 · 키캡 27 | 15회 |
-| premium | LIMITED | 상점 구매 (₩2,900~3,900, mock) | 팝볼 2 · 키캡 4 | 20회 |
+등급(배지)과 tier(획득 방법)는 서로 다른 축. RARE·LIMITED는 둘 다 뽑기(tier=paid)에서 나오지만 확률이 다르고, PREMIUM만 상점(tier=premium) 전용.
 
-팝볼 파괴 타격 수는 등급 기준 통일(키캡 게이지는 오브제와 무관하게 동일 적용).
+| grade | tier | 획득 방법 | 수량 | 팝볼 파괴 타격 수 |
+|---|---|---|---|---|
+| COMMON | free | 처음부터 보유 | 팝볼 3 · 키캡 3 | 10회 |
+| RARE | paid | 뽑기 (코인 200개, 일반 확률) | 팝볼 11 · 키캡 25 | 15회 |
+| PREMIUM | premium | 상점 구매 (₩2,900~3,400, mock) | 팝볼 2 · 키캡 4 | 20회 |
+| LIMITED | paid | 뽑기 (코인 200개, 극악 확률 1% 미만) | 팝볼 2 · 키캡 2 | 20회 |
+
+팝볼 파괴 타격 수는 등급 기준 통일(키캡 게이지는 오브제와 무관하게 동일 적용). 뽑기 확률 계산은 `src/data/gradeOdds.js`, 화면 표시는 `/gacha`에서 실제 값 그대로 확인 가능.
 
 ### 코인
 - 팝볼 타격·키캡 타건 1회마다 굴림: 35% 확률 1코인, 5% 확률 5코인
@@ -148,7 +151,7 @@ Poppin-Room/
 |---|---|
 | `id` | `wb_01`, `kc_01` 형식 |
 | `name` | 표시 이름 |
-| `grade` | `common` / `rare` / `limited` (배지) |
+| `grade` | `common` / `rare` / `premium` / `limited` (배지, tier와 별도 축) |
 | `tier` | `free` / `paid` / `premium` (획득 방법) |
 | `image` | `images/…png` |
 | `accent`, `filter`, `isHolo` | 색·필터·홀로그램 연출 |
@@ -160,64 +163,64 @@ Poppin-Room/
 `coins`, `owned`, `equipped`, `hiddenCards`, `secretKeys`, `secretEntry`, `dailyAdKeys`, `dailyBreaks`, `totalBreaks`, `dailyKeyCoins`, `loggedIn`
 
 ### 팝볼 디자인 (18종)
-| No | 이름 | 등급 | 설명 |
+| id | 이름 | 등급 | 설명 |
 |---|---|---|---|
 | wb_01 | 베이직 핑크 | COMMON | 기본 핑크 왁스, 무광 표면 |
 | wb_02 | 스월 스파클 | COMMON | 소용돌이 무늬, 반짝임 입자 |
 | wb_03 | 마블 스트레스볼 | COMMON | 대리석 무늬 |
 | wb_04 | 버블 젤리 | RARE | 투명 젤리, 기포 무늬 |
 | wb_05 | 선더 크랙 | RARE | 그레이 톤, 번개 균열 무늬 |
-| wb_06 | 스타 오브 | RARE | 진한 핑크, 별 각인 |
-| wb_07 | 네온 블랙 | LIMITED | 블랙 바탕, 네온 라인 |
-| wb_08 | 홀로그램 젬 | LIMITED | 보라 홀로그램, 보석 컷 |
-| wb_09 | 바나나 | RARE | 바나나 모양·색 |
-| wb_10 | 수박 | RARE | 수박 모양·색 |
-| wb_11 | 포도 | RARE | 포도 모양·색 |
-| wb_12 | 망고 | RARE | 망고 모양·색 |
-| wb_13 | 레몬 | RARE | 레몬 모양·색 |
-| wb_14 | 복숭아 | RARE | 복숭아 모양·색 |
-| wb_15 | 민트 도넛 | RARE | 민트색 도넛 모양 |
-| wb_16 | 블루 소다바 | RARE | 파란 소다맛 아이스바 모양 |
-| wb_17 | 카라멜 푸딩 | RARE | 카라멜 푸딩 모양 |
-| wb_18 | 라벤더 조개 | RARE | 라벤더색 조개 모양 |
+| wb_06 | 스타 오브 | LIMITED | 진한 핑크, 별 각인 — 뽑기 극악 확률 |
+| wb_07 | 네온 블랙 | PREMIUM | 블랙 바탕, 네온 라인 — 상점 전용 |
+| wb_08 | 홀로그램 젬 | PREMIUM | 보라 홀로그램, 보석 컷 — 상점 전용 |
+| wb_banana | 바나나 | RARE | 바나나 모양·색 |
+| wb_watermelon | 수박 | RARE | 수박 모양·색 |
+| wb_grape | 포도 | RARE | 포도 모양·색 |
+| wb_mango | 망고 | RARE | 망고 모양·색 |
+| wb_lemon | 레몬 | RARE | 레몬 모양·색 |
+| wb_peach | 복숭아 | RARE | 복숭아 모양·색 |
+| wb_donut | 민트 도넛 | RARE | 민트색 도넛 모양 |
+| wb_popsicle | 블루 소다바 | RARE | 파란 소다맛 아이스바 모양 |
+| wb_pudding | 카라멜 푸딩 | RARE | 카라멜 푸딩 모양 |
+| wb_shell | 라벤더 조개 | LIMITED | 라벤더색 조개 모양 — 뽑기 극악 확률 |
 
 ### 키캡 디자인 (34종)
-| No | 이름 | 등급 | 설명 |
+| id | 이름 | 등급 | 설명 |
 |---|---|---|---|
 | kc_01 | 베이직 핑크 | COMMON | 기본 핑크 키캡 |
 | kc_02 | 펄 화이트 | COMMON | 진주빛 화이트 |
 | kc_03 | 스모크 클리어 | COMMON | 투명 스모크 톤 |
 | kc_04 | 라이트닝 실버 | RARE | 은색, 번개 무늬 |
 | kc_05 | 핑크 플라워 | RARE | 핑크 꽃무늬 |
-| kc_06 | 블랙 오브 | RARE | 블랙 구체형 캡 |
-| kc_07 | 선더 크리스탈 | LIMITED | 홀로그램 크리스탈, 번개 각인 |
-| kc_08 | 쥬얼 블룸 | LIMITED | 보석·꽃 장식 |
-| kc_09 | 바나나 | RARE | 바나나 모양·색 |
-| kc_10 | 수박 | RARE | 수박 모양·색 |
-| kc_11 | 포도 | RARE | 포도 모양·색 |
-| kc_12 | 망고 | RARE | 망고 모양·색 |
-| kc_13 | 레몬 | RARE | 레몬 모양·색 |
-| kc_14 | 복숭아 | RARE | 복숭아 모양·색 |
-| kc_15 | 민트 도넛 | RARE | 민트색 도넛 모양 |
-| kc_16 | 블루 소다바 | RARE | 파란 소다맛 아이스바 모양 |
-| kc_17 | 카라멜 푸딩 | RARE | 카라멜 푸딩 모양 |
-| kc_18 | 라벤더 조개 | RARE | 라벤더색 조개 모양 |
-| kc_19 | 허니 드립 | RARE | 꿀 흐르는 무늬 |
-| kc_20 | 마시멜로 스트라이프 | RARE | 마시멜로 줄무늬 |
-| kc_21 | 홀로그램 스타더스트 | LIMITED | 홀로그램 별가루 무늬 |
-| kc_22 | 실버 이스케이프 | RARE | 은색, ESC 키 각인 |
-| kc_23 | 핫핑크 글로시 | RARE | 핫핑크 광택 |
-| kc_24 | 화이트 아스크 | RARE | 화이트, 별표(*) 각인 |
-| kc_25 | 캐러멜 드리즐 | RARE | 캐러멜 드리즐 무늬 |
-| kc_26 | 클리어 글래스 | RARE | 투명 유리 질감 |
-| kc_27 | 탠저린 젤리 | RARE | 탠저린 젤리 색 |
-| kc_28 | 스모크 크림슨 | RARE | 진홍 스모크 톤 |
-| kc_29 | 핑크 지오드 | RARE | 핑크 지오드(광물) 무늬 |
-| kc_30 | 라벤더 쿠션 | RARE | 라벤더색 쿠션형 |
-| kc_31 | 포레스트 퍼 | RARE | 포레스트 톤, 퍼(털) 질감 |
-| kc_32 | 핫핑크 퍼 | RARE | 핫핑크 퍼(털) 질감 |
-| kc_33 | 퍼퍼 재킷 | RARE | 퍼퍼재킷 누빔 질감 |
-| kc_34 | 라이트닝 글로우 | LIMITED | 홀로그램, 번개 글로우 |
+| kc_06 | 블랙 오브 | LIMITED | 블랙 구체형 캡 — 뽑기 극악 확률 |
+| kc_07 | 선더 크리스탈 | PREMIUM | 홀로그램 크리스탈, 번개 각인 — 상점 전용 |
+| kc_08 | 쥬얼 블룸 | PREMIUM | 보석·꽃 장식 — 상점 전용 |
+| kc_banana | 바나나 | RARE | 바나나 모양·색 |
+| kc_watermelon | 수박 | RARE | 수박 모양·색 |
+| kc_grape | 포도 | RARE | 포도 모양·색 |
+| kc_mango | 망고 | RARE | 망고 모양·색 |
+| kc_lemon | 레몬 | RARE | 레몬 모양·색 |
+| kc_peach | 복숭아 | RARE | 복숭아 모양·색 |
+| kc_donut | 민트 도넛 | RARE | 민트색 도넛 모양 |
+| kc_popsicle | 블루 소다바 | RARE | 파란 소다맛 아이스바 모양 |
+| kc_pudding | 카라멜 푸딩 | RARE | 카라멜 푸딩 모양 |
+| kc_shell | 라벤더 조개 | RARE | 라벤더색 조개 모양 |
+| kc_honey | 허니 드립 | RARE | 꿀 흐르는 무늬 |
+| kc_marshmallow | 마시멜로 스트라이프 | RARE | 마시멜로 줄무늬 |
+| kc_holostar | 홀로그램 스타더스트 | PREMIUM | 홀로그램 별가루 무늬 — 상점 전용 |
+| kc_silveresc | 실버 이스케이프 | RARE | 은색, ESC 키 각인 |
+| kc_hotpink_gloss | 핫핑크 글로시 | RARE | 핫핑크 광택 |
+| kc_asterisk | 화이트 아스크 | RARE | 화이트, 별표(*) 각인 |
+| kc_caramel_drizzle | 캐러멜 드리즐 | RARE | 캐러멜 드리즐 무늬 |
+| kc_glass | 클리어 글래스 | RARE | 투명 유리 질감 |
+| kc_tangerine | 탠저린 젤리 | RARE | 탠저린 젤리 색 |
+| kc_smoke_crimson | 스모크 크림슨 | RARE | 진홍 스모크 톤 |
+| kc_pink_geode | 핑크 지오드 | LIMITED | 핑크 지오드(광물) 무늬 — 뽑기 극악 확률 |
+| kc_lavender_cushion | 라벤더 쿠션 | RARE | 라벤더색 쿠션형 |
+| kc_forest_fur | 포레스트 퍼 | RARE | 포레스트 톤, 퍼(털) 질감 |
+| kc_hotpink_fur | 핫핑크 퍼 | RARE | 핫핑크 퍼(털) 질감 |
+| kc_puffer | 퍼퍼 재킷 | RARE | 퍼퍼재킷 누빔 질감 |
+| kc_lightning | 라이트닝 글로우 | PREMIUM | 홀로그램, 번개 글로우 — 상점 전용 |
 
 ---
 

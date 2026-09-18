@@ -6,7 +6,7 @@ import RewardEffects from '../components/RewardEffects';
 import DesignPicker from '../components/DesignPicker';
 import WakpuStage from '../components/WakpuStage';
 
-const STRESS_LABEL = { common: 'LOW', rare: 'MEDIUM', limited: 'HIGH' };
+const STRESS_LABEL = { common: 'LOW', rare: 'MEDIUM', premium: 'HIGH', limited: 'HIGH' };
 
 export default function Wakpuball() {
   const { equipped, getToy, pressReward, coins, recordBreak, dailyBreaks } = useGame();
