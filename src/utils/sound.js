@@ -86,7 +86,7 @@ export function playKeyClick(soundFile = null) {
     audio.play().catch(() => {});
     return;
   }
-  noiseBurst({ duration: 0.035, filterFreq: 2600, gain: 0.22, q: 2.2 });
+  noiseBurst({ duration: 0.035, filterFreq: 2600, gain: 0.33, q: 2.2 });
 }
 
 // 뽑기 성공 — 실제 에셋이 아직 없어서 합성음으로 대체(등급이 높을수록 음이 높아짐).
