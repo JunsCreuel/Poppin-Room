@@ -27,7 +27,7 @@
 | 빌드 | Vite 8 | 개발 서버, 번들링 |
 | 상태 관리 | React Context + useState | 전역 게임 상태 (`src/store/useGame.jsx`) |
 | 스타일 | 순수 CSS (CSS 변수) | `index.css` 공통 테마, `landing.css` 랜딩 전용 |
-| 사운드 | Web Audio API + mp3 | 타격·타건·뽑기 효과음 |
+| 사운드 | Web Audio API + mp3 | 타격·타건·뽑기 효과음, 첫 탭에서 모바일 오디오 언락(iOS 무음 스위치 무시, 컨텍스트 resume 후 재생) |
 | 린트 | oxlint | 코드 검사 |
 | 배포 | GitHub Actions + GitHub Pages | `.github/workflows/deploy-pages.yml` |
 

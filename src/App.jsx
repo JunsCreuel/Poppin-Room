@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { HashRouter, Routes, Route, NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { GameProvider, useGame } from './store/useGame';
+import { installAudioUnlock } from './utils/sound';
 import Landing from './pages/Landing';
 import Wakpuball from './pages/Wakpuball';
 import Keycap from './pages/Keycap';
@@ -58,6 +59,9 @@ function AppLayout() {
 }
 
 function App() {
+  // 모바일: 첫 탭에서 오디오 세션을 깨워둠(iOS 무음 스위치 무시, 첫 소리 묵음 방지)
+  useEffect(() => installAudioUnlock(), []);
+
   return (
     <GameProvider>
       <HashRouter>

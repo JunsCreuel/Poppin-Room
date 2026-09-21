@@ -3,38 +3,132 @@
 import { getVolume } from './volume.js';
 
 let ctx;
+let master; // 모든 소리가 거치는 마스터 게인 → 컴프레서 → 출력 (폰 스피커에서 찌그러짐 방지)
+
 function getCtx() {
-  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+  if (!ctx) {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -18;
+    comp.knee.value = 12;
+    comp.ratio.value = 4;
+    comp.attack.value = 0.003;
+    comp.release.value = 0.15;
+    master = ctx.createGain();
+    master.gain.value = 1;
+    master.connect(comp).connect(ctx.destination);
+  }
   return ctx;
 }
 
-function noiseBurst({ duration = 0.08, filterFreq = 1400, gain = 0.5, q = 0.9 }) {
+// 모바일에서는 컨텍스트가 suspended(iOS는 interrupted)인 채로 소리를 예약하면
+// 재생이 시작될 때 이미 끝나 있어 묵음이 된다 — running 상태가 된 뒤에 예약한다
+function whenRunning(fn) {
   const audioCtx = getCtx();
-  const bufferSize = Math.max(1, Math.floor(audioCtx.sampleRate * duration));
-  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize) ** 1.6;
+  if (audioCtx.state === 'running') {
+    fn(audioCtx);
+    return;
   }
+  audioCtx.resume().then(() => fn(audioCtx)).catch(() => {});
+}
 
+// ---- 모바일 오디오 언락 ----
+// iOS: Web Audio는 측면 무음 스위치를 따르지만, <audio> 미디어를 재생 중이면 세션이
+// '재생' 모드로 바뀌어 무음 스위치를 무시한다(게임들이 쓰는 방식). 첫 탭에서 무음 WAV를
+// 반복 재생해 두고, 화면을 벗어나면 멈췄다가 돌아오면 다시 켠다.
+// Android/iOS 공통: 첫 사용자 제스처에서 AudioContext를 만들고 resume 해둔다.
+let silentEl = null;
+let unlockInstalled = false;
+
+function silentWavDataUri() {
+  const sampleRate = 8000;
+  const samples = sampleRate / 10; // 0.1초
+  const buf = new ArrayBuffer(44 + samples);
+  const v = new DataView(buf);
+  const str = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  str(0, 'RIFF'); v.setUint32(4, 36 + samples, true); str(8, 'WAVE');
+  str(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, sampleRate, true); v.setUint32(28, sampleRate, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true);
+  str(36, 'data'); v.setUint32(40, samples, true);
+  for (let i = 0; i < samples; i++) v.setUint8(44 + i, 128);
+  let bin = '';
+  new Uint8Array(buf).forEach((b) => { bin += String.fromCharCode(b); });
+  return `data:audio/wav;base64,${btoa(bin)}`;
+}
+
+function getSilentEl() {
+  if (!silentEl) {
+    silentEl = document.createElement('audio');
+    silentEl.src = silentWavDataUri();
+    silentEl.loop = true;
+    silentEl.setAttribute('playsinline', '');
+    silentEl.setAttribute('data-audio-unlock', '');
+    silentEl.style.display = 'none';
+    document.body.appendChild(silentEl);
+  }
+  return silentEl;
+}
+
+function unlock() {
+  const audioCtx = getCtx();
+  if (audioCtx.state !== 'running') audioCtx.resume().catch(() => {});
+  // iOS 구형 사파리는 제스처 안에서 소리를 한 번 실제로 내야 이후 재생이 풀린다
   const src = audioCtx.createBufferSource();
-  src.buffer = buffer;
+  src.buffer = audioCtx.createBuffer(1, 1, audioCtx.sampleRate);
+  src.connect(audioCtx.destination);
+  src.start(0);
+  const el = getSilentEl();
+  if (el.paused) el.play().catch(() => {});
+}
 
-  const filter = audioCtx.createBiquadFilter();
-  filter.type = 'bandpass';
-  filter.frequency.value = filterFreq;
-  filter.Q.value = q;
+export function installAudioUnlock() {
+  if (unlockInstalled || typeof document === 'undefined') return () => {};
+  unlockInstalled = true;
+  const events = ['pointerdown', 'touchend', 'keydown'];
+  events.forEach((e) => document.addEventListener(e, unlock, { capture: true, passive: true }));
+  const onVisibility = () => {
+    if (!silentEl) return;
+    if (document.hidden) silentEl.pause();
+    else {
+      silentEl.play().catch(() => {});
+      if (ctx && ctx.state !== 'running') ctx.resume().catch(() => {});
+    }
+  };
+  document.addEventListener('visibilitychange', onVisibility);
+  return () => {
+    events.forEach((e) => document.removeEventListener(e, unlock, { capture: true }));
+    document.removeEventListener('visibilitychange', onVisibility);
+    unlockInstalled = false;
+  };
+}
 
-  const g = audioCtx.createGain();
-  const now = audioCtx.currentTime;
-  const vol = gain * getVolume();
-  g.gain.setValueAtTime(vol, now);
-  g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+function noiseBurst({ duration = 0.08, filterFreq = 1400, gain = 0.5, q = 0.9 }) {
+  whenRunning((audioCtx) => {
+    const bufferSize = Math.max(1, Math.floor(audioCtx.sampleRate * duration));
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize) ** 1.6;
+    }
 
-  src.connect(filter).connect(g).connect(audioCtx.destination);
-  src.start(now);
-  src.stop(now + duration + 0.02);
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = filterFreq;
+    filter.Q.value = q;
+
+    const g = audioCtx.createGain();
+    const now = audioCtx.currentTime;
+    const vol = gain * getVolume();
+    g.gain.setValueAtTime(vol, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    src.connect(filter).connect(g).connect(master);
+    src.start(now);
+    src.stop(now + duration + 0.02);
+  });
 }
 
 // 팝볼 — 누를 때마다 나는 크런치. progress(0~1)가 올라갈수록 톤이 낮아지고
@@ -91,18 +185,19 @@ export function playKeyClick(soundFile = null) {
 
 // 뽑기 성공 — 실제 에셋이 아직 없어서 합성음으로 대체(등급이 높을수록 음이 높아짐).
 export function playGachaSuccess(grade) {
-  const audioCtx = getCtx();
-  const base = grade === 'limited' ? 700 : grade === 'rare' ? 550 : 440;
-  const osc = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  osc.type = 'triangle';
-  const now = audioCtx.currentTime;
-  osc.frequency.setValueAtTime(base, now);
-  osc.frequency.exponentialRampToValueAtTime(base * 1.6, now + 0.3);
-  const vol = 0.16 * getVolume();
-  g.gain.setValueAtTime(vol, now);
-  g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-  osc.connect(g).connect(audioCtx.destination);
-  osc.start(now);
-  osc.stop(now + 0.32);
+  whenRunning((audioCtx) => {
+    const base = grade === 'limited' ? 700 : grade === 'rare' ? 550 : 440;
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = 'triangle';
+    const now = audioCtx.currentTime;
+    osc.frequency.setValueAtTime(base, now);
+    osc.frequency.exponentialRampToValueAtTime(base * 1.6, now + 0.3);
+    const vol = 0.16 * getVolume();
+    g.gain.setValueAtTime(vol, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    osc.connect(g).connect(master);
+    osc.start(now);
+    osc.stop(now + 0.32);
+  });
 }
