@@ -46,7 +46,7 @@ function defaultState() {
   return {
     coins: 0,
     owned: freeOwnedIds(),
-    equipped: { wakpuball: 'wb_01', keycap: 'kc_01' },
+    equipped: { wakpuball: 'wb_02', keycap: 'kc_01' },
     hiddenCards: [], // { code, category, wonAt }
     loggedIn: false,
     loginProvider: null, // 'kakao' | 'google'

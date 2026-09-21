@@ -46,7 +46,7 @@ npm run lint      # 린트
 
 # 팝볼 크랙 프레임 등록 (PNG → WebP, 프레임 수 = 등급별 타격 수 10/15/20/20, 01부터 빠짐없이)
 pip install pillow
-python3 scripts/import_crack_frames.py <압축 푼 폴더> basic-pink=wb_01 swirl-spark=wb_02 marble=wb_03
+python3 scripts/import_crack_frames.py <압축 푼 폴더> swirl-spark=wb_02 marble=wb_03
 ```
 
 ---
@@ -90,7 +90,7 @@ Poppin-Room/
    ├─ store/
    │  └─ useGame.jsx          # 전역 게임 상태 (코인·보유·장착·히든카드)
    ├─ data/
-   │  ├─ toys.json            # 오브제 52종 데이터(팝볼 18 · 키캡 34)
+   │  ├─ toys.json            # 오브제 49종 데이터(팝볼 17 · 키캡 32)
    │  ├─ gradeOdds.js         # 뽑기 등급 가중치·확률 계산
    │  └─ crackFrames.js       # 크랙 프레임 경로 헬퍼
    └─ utils/
@@ -126,12 +126,12 @@ Poppin-Room/
 
 | grade | tier | 획득 방법 | 수량 | 팝볼 파괴 타격 수 |
 |---|---|---|---|---|
-| COMMON | free | 처음부터 보유 | 팝볼 3 · 키캡 6 | 10회 |
-| RARE | paid | 뽑기 (코인 200개, 일반 확률) | 팝볼 11 · 키캡 18 | 15회 |
+| COMMON | free | 처음부터 보유 | 팝볼 4 · 키캡 4 | 10회 (버블 젤리·선더 크랙은 15회) |
+| RARE | paid | 뽑기 (코인 200개, 일반 확률) | 팝볼 9 · 키캡 18 | 15회 |
 | PREMIUM | premium | 상점 구매 (₩2,900~3,400, mock) | 팝볼 2 · 키캡 4 | 20회 |
-| LIMITED | paid | 뽑기 (코인 200개, 극악 확률 — 합산 팝볼 0.9% · 키캡 1.6%) | 팝볼 2 · 키캡 6 | 20회 |
+| LIMITED | paid | 뽑기 (코인 200개, 극악 확률 — 합산 팝볼 1.1% · 키캡 1.6%) | 팝볼 2 · 키캡 6 | 20회 |
 
-팝볼 파괴 타격 수는 등급 기준 통일(키캡 게이지는 오브제와 무관하게 동일 적용). 뽑기 확률 계산은 `src/data/gradeOdds.js`, 화면 표시는 `/gacha`에서 실제 값 그대로 확인 가능.
+팝볼 파괴 타격 수는 등급 기준 통일(키캡 게이지는 오브제와 무관하게 동일 적용). 버블 젤리·선더 크랙은 RARE 시절 15장짜리 크랙 프레임으로 제작돼 COMMON으로 옮긴 뒤에도 15회 유지. 뽑기 확률 계산은 `src/data/gradeOdds.js`, 화면 표시는 `/gacha`에서 실제 값 그대로 확인 가능.
 
 ### 코인
 - 팝볼 타격·키캡 타건 1회마다 굴림: 35% 확률 1코인, 5% 확률 5코인
@@ -156,7 +156,7 @@ Poppin-Room/
 
 | 필드 | 설명 |
 |---|---|
-| `id` | `wb_01`, `kc_01` 형식 |
+| `id` | `wb_02`, `wb_banana`, `kc_01` 형식(이미지 파일명과 동일) |
 | `name` | 표시 이름 |
 | `grade` | `common` / `rare` / `premium` / `limited` (배지, tier와 별도 축) |
 | `tier` | `free` / `paid` / `premium` (획득 방법) |
@@ -171,14 +171,13 @@ Poppin-Room/
 ### localStorage (`poppinroom-state`)
 `coins`, `owned`, `equipped`, `hiddenCards`, `secretKeys`, `secretEntry`, `dailyAdKeys`, `dailyBreaks`, `totalBreaks`, `dailyKeyCoins`, `loggedIn`
 
-### 팝볼 디자인 (18종)
+### 팝볼 디자인 (17종)
 | id | 이름 | 등급 | 설명 |
 |---|---|---|---|
-| wb_01 | 베이직 핑크 | COMMON | 기본 핑크 왁스, 무광 표면 |
 | wb_02 | 스월 스파클 | COMMON | 소용돌이 무늬, 반짝임 입자 |
 | wb_03 | 마블 스트레스볼 | COMMON | 대리석 무늬 |
-| wb_04 | 버블 젤리 | RARE | 투명 젤리, 기포 무늬 |
-| wb_05 | 선더 크랙 | RARE | 그레이 톤, 번개 균열 무늬 |
+| wb_04 | 버블 젤리 | COMMON | 투명 젤리, 기포 무늬 — 타격 15회(프레임 15장) |
+| wb_05 | 선더 크랙 | COMMON | 그레이 톤, 번개 균열 무늬 — 타격 15회(프레임 15장) |
 | wb_06 | 스타 오브 | LIMITED | 진한 핑크, 별 각인 — 뽑기 극악 확률 |
 | wb_07 | 네온 블랙 | PREMIUM | 블랙 바탕, 네온 라인 — 상점 전용 |
 | wb_08 | 홀로그램 젬 | PREMIUM | 보라 홀로그램, 보석 컷 — 상점 전용 |
@@ -193,7 +192,7 @@ Poppin-Room/
 | wb_pudding | 카라멜 푸딩 | RARE | 카라멜 푸딩 모양 |
 | wb_shell | 라벤더 조개 | LIMITED | 라벤더색 조개 모양 — 뽑기 극악 확률 |
 
-### 키캡 디자인 (34종)
+### 키캡 디자인 (32종)
 | id | 이름 | 등급 | 설명 |
 |---|---|---|---|
 | kc_01 | 베이직 핑크 | COMMON | 기본 핑크 키캡 |
@@ -219,11 +218,9 @@ Poppin-Room/
 | kc_holostar | 홀로그램 스타더스트 | PREMIUM | 홀로그램 별가루 무늬 — 상점 전용 |
 | kc_silveresc | 실버 이스케이프 | COMMON | 은색, ESC 키 각인 |
 | kc_hotpink_gloss | 핫핑크 글로시 | RARE | 핫핑크 광택 |
-| kc_asterisk | 화이트 아스크 | COMMON | 화이트, 별표(*) 각인 |
 | kc_caramel_drizzle | 캐러멜 드리즐 | RARE | 캐러멜 드리즐 무늬 |
 | kc_glass | 클리어 글래스 | LIMITED | 투명 유리 질감 — 뽑기 극악 확률 |
 | kc_tangerine | 탠저린 젤리 | RARE | 탠저린 젤리 색 |
-| kc_smoke_crimson | 스모크 크림슨 | COMMON | 진홍 스모크 톤 |
 | kc_pink_geode | 핑크 지오드 | LIMITED | 핑크 지오드(광물) 무늬 — 뽑기 극악 확률 |
 | kc_lavender_cushion | 라벤더 쿠션 | RARE | 라벤더색 쿠션형 |
 | kc_forest_fur | 포레스트 퍼 | RARE | 포레스트 톤, 퍼(털) 질감 |
@@ -264,5 +261,5 @@ Poppin-Room/
 | 프리미엄 결제 | mock — 즉시 지급 |
 | 광고 SDK | mock — 코인·시크릿 키 즉시 보상 |
 | 랭킹 서버 | 없음 — 깬 횟수로 상위 % 시뮬레이션 (`calcRankPercentile`) |
-| 팝볼 단계별 파손 사진 | 완료 — 팝볼 18종 전부 크랙 프레임 적용(`public/images/crack/<id>/`), 새 디자인은 `scripts/import_crack_frames.py`로 추가 |
+| 팝볼 단계별 파손 사진 | 완료 — 팝볼 17종 전부 크랙 프레임 적용(`public/images/crack/<id>/`), 새 디자인은 `scripts/import_crack_frames.py`로 추가 |
 | 키캡 실제 녹음 사운드 | 프리미엄 4종은 `keycap-premium-click.wav` 적용. `public/sounds/keyboard-*.mp3` 6개(타이핑 녹음)는 아직 미연결 — 클릭 1회로 잘라 `toys.json`의 `sound`에 연결하면 됨 |

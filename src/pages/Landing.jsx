@@ -48,7 +48,7 @@ export default function Landing() {
 
           <div className="phone-card">
             <div className="room-box">
-              <div className="main-ball"><img src="images/wakpuball_01.png" alt="팝볼" /></div>
+              <div className="main-ball"><img src="images/wakpuball_02.png" alt="팝볼" /></div>
               <div className="mini-item item1"><img src="images/keycap_07.png" alt="키캡" /></div>
               <div className="mini-item item2"><img src="images/wakpuball_watermelon.png" alt="팝볼" /></div>
               <div className="mini-item item3"><img src="images/keycap_pudding.png" alt="키캡" /></div>

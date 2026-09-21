@@ -1,21 +1,6 @@
 {
   "wakpuball": [
     {
-      "id": "wb_01",
-      "name": "베이직 핑크",
-      "grade": "common",
-      "tier": "free",
-      "accent": "#ff4fa3",
-      "image": "images/wakpuball_01.png",
-      "filter": "none",
-      "crackPattern": "radial",
-      "hitsToBreak": 10,
-      "crackFrames": {
-        "dir": "images/crack/wb_01",
-        "count": 10
-      }
-    },
-    {
       "id": "wb_02",
       "name": "스월 스파클",
       "grade": "common",
@@ -48,8 +33,8 @@
     {
       "id": "wb_04",
       "name": "버블 젤리",
-      "grade": "rare",
-      "tier": "paid",
+      "grade": "common",
+      "tier": "free",
       "accent": "#ff2f8f",
       "image": "images/wakpuball_04.png",
       "filter": "none",
@@ -63,8 +48,8 @@
     {
       "id": "wb_05",
       "name": "선더 크랙",
-      "grade": "rare",
-      "tier": "paid",
+      "grade": "common",
+      "tier": "free",
       "accent": "#c9c9d4",
       "image": "images/wakpuball_05.png",
       "filter": "none",
@@ -516,16 +501,6 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_asterisk",
-      "name": "화이트 아스크",
-      "grade": "common",
-      "tier": "free",
-      "accent": "#f4f4f4",
-      "image": "images/keycap_asterisk.png",
-      "filter": "none",
-      "profile": "cherry"
-    },
-    {
       "id": "kc_caramel_drizzle",
       "name": "캐러멜 드리즐",
       "grade": "rare",
@@ -552,16 +527,6 @@
       "tier": "paid",
       "accent": "#ff7a1a",
       "image": "images/keycap_tangerine.png",
-      "filter": "none",
-      "profile": "cherry"
-    },
-    {
-      "id": "kc_smoke_crimson",
-      "name": "스모크 크림슨",
-      "grade": "common",
-      "tier": "free",
-      "accent": "#c2185b",
-      "image": "images/keycap_smoke_crimson.png",
       "filter": "none",
       "profile": "cherry"
     },

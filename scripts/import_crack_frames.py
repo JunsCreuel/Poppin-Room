@@ -3,7 +3,7 @@
 
 사용법:
   pip install pillow
-  python3 scripts/import_crack_frames.py <압축 푼 폴더> basic-pink=wb_01 swirl-spark=wb_02 marble=wb_03
+  python3 scripts/import_crack_frames.py <압축 푼 폴더> swirl-spark=wb_02 marble=wb_03
 
 프레임 수는 해당 오브제의 hitsToBreak(등급별 10/15/20/20)와 같아야 하고 01부터 빠짐없이 있어야 함
 """
