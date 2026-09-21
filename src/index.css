@@ -44,6 +44,7 @@ a {
 button {
   font-family: inherit;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #root {
@@ -183,6 +184,10 @@ button {
   border: none;
   background: transparent;
   padding: 0;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 .wakpu-ball-img {
   width: 100%;
@@ -266,6 +271,10 @@ button {
   padding: 0;
   width: min(220px, 55vw);
   transition: transform 0.06s ease;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 .keycap-single-img {
   width: 100%;
