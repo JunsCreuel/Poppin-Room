@@ -76,7 +76,11 @@
       "image": "images/wakpuball_06.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 20
+      "hitsToBreak": 20,
+      "crackFrames": {
+        "dir": "images/crack/wb_06",
+        "count": 20
+      }
     },
     {
       "id": "wb_07",
@@ -101,7 +105,11 @@
       "filter": "none",
       "isHolo": true,
       "crackPattern": "shatter",
-      "hitsToBreak": 20
+      "hitsToBreak": 20,
+      "crackFrames": {
+        "dir": "images/crack/wb_08",
+        "count": 20
+      }
     },
     {
       "id": "wb_banana",

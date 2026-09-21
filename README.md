@@ -263,5 +263,5 @@ Poppin-Room/
 | 프리미엄 결제 | mock — 즉시 지급 |
 | 광고 SDK | mock — 코인·시크릿 키 즉시 보상 |
 | 랭킹 서버 | 없음 — 깬 횟수로 상위 % 시뮬레이션 (`calcRankPercentile`) |
-| 팝볼 단계별 파손 사진 | common 3종(wb_01~03) 적용, rare·premium·limited는 프레임 수령 시 `scripts/import_crack_frames.py`로 추가 |
+| 팝볼 단계별 파손 사진 | common 3종(wb_01~03) + 스타 오브(wb_06)·홀로그램 젬(wb_08) 적용, 나머지는 프레임 수령 시 `scripts/import_crack_frames.py`로 추가 |
 | 키캡 실제 녹음 사운드 | 파일은 `public/sounds/`에 있음, 클릭 1회 길이로 트리밍 후 `toys.json`의 `sound`에 연결 |
