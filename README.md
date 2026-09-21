@@ -165,7 +165,7 @@ Poppin-Room/
 | `hitsToBreak`, `crackPattern` | 팝볼 파괴 횟수·금 패턴 |
 | `crackFrames` | `{ dir, count }` 팝볼 크랙 프레임 폴더·장수, 없으면 고정 이미지 + 조각 파편 연출 |
 | `hitSound` | 팝볼 타격 녹음 경로(`sounds/…wav`), 없으면 합성 크런치음 — 현재 프리미엄 2종(네온 블랙·홀로그램 젬) |
-| `sound` | 키캡 mp3 경로 (없으면 합성음) |
+| `sound` | 키캡 타건 녹음 경로(`sounds/…wav`), 없으면 합성 클릭음 — 현재 프리미엄 4종 |
 | `price` | premium 가격(원) |
 
 ### localStorage (`poppinroom-state`)
@@ -265,4 +265,4 @@ Poppin-Room/
 | 광고 SDK | mock — 코인·시크릿 키 즉시 보상 |
 | 랭킹 서버 | 없음 — 깬 횟수로 상위 % 시뮬레이션 (`calcRankPercentile`) |
 | 팝볼 단계별 파손 사진 | 완료 — 팝볼 18종 전부 크랙 프레임 적용(`public/images/crack/<id>/`), 새 디자인은 `scripts/import_crack_frames.py`로 추가 |
-| 키캡 실제 녹음 사운드 | 파일은 `public/sounds/`에 있음, 클릭 1회 길이로 트리밍 후 `toys.json`의 `sound`에 연결 |
+| 키캡 실제 녹음 사운드 | 프리미엄 4종은 `keycap-premium-click.wav` 적용. `public/sounds/keyboard-*.mp3` 6개(타이핑 녹음)는 아직 미연결 — 클릭 1회로 잘라 `toys.json`의 `sound`에 연결하면 됨 |

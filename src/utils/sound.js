@@ -144,19 +144,24 @@ export function preloadSample(url) {
   return sampleCache.get(url);
 }
 
-// 팝볼 타격 녹음 — 깨질수록 살짝 낮고 세게, 매번 미세하게 다른 피치
-export function playSampleHit(url, progress = 0) {
+// 녹음 샘플 1회 재생 — 로드 실패 시 onFail(합성음 폴백)
+function playSample(url, { rate = 1, gain = 1 } = {}, onFail) {
   const loading = preloadSample(url);
   if (!loading) return;
   loading.then((buffer) => whenRunning((audioCtx) => {
     const src = audioCtx.createBufferSource();
     src.buffer = buffer;
-    src.playbackRate.value = 0.94 + Math.random() * 0.12 - progress * 0.08;
+    src.playbackRate.value = rate;
     const g = audioCtx.createGain();
-    g.gain.value = (0.7 + progress * 0.3) * getVolume();
+    g.gain.value = gain * getVolume();
     src.connect(g).connect(master);
     src.start();
-  })).catch(() => playCrackHit(progress));
+  })).catch(() => onFail?.());
+}
+
+// 팝볼 타격 녹음 — 깨질수록 살짝 낮고 세게, 매번 미세하게 다른 피치
+export function playSampleHit(url, progress = 0) {
+  playSample(url, { rate: 0.94 + Math.random() * 0.12 - progress * 0.08, gain: 0.7 + progress * 0.3 }, () => playCrackHit(progress));
 }
 
 // 팝볼 — 누를 때마다 나는 크런치. progress(0~1)가 올라갈수록 톤이 낮아지고
@@ -187,25 +192,11 @@ export function playCrackBreak() {
   }
 }
 
-// 키캡 — toys.json에 sound 필드(실제 녹음 파일 경로)가 있는 키캡은 그
-// 파일을 재생하고, 없으면 합성음(저가 멤브레인 키보드 느낌)으로 대체한다.
-// 파일마다 Audio 객체를 하나씩만 만들어 재사용한다.
-const keySoundCache = new Map();
-function getKeySound(file) {
-  let audio = keySoundCache.get(file);
-  if (!audio) {
-    audio = new Audio(file);
-    keySoundCache.set(file, audio);
-  }
-  return audio;
-}
-
+// 키캡 — toys.json에 sound 필드(녹음 파일 경로)가 있는 키캡은 그 파일을 Web Audio로
+// 재생(연타 겹침 허용, 피치 미세 변주), 없으면 합성음(저가 멤브레인 키보드 느낌)
 export function playKeyClick(soundFile = null) {
   if (soundFile) {
-    const audio = getKeySound(soundFile);
-    audio.currentTime = 0;
-    audio.volume = getVolume();
-    audio.play().catch(() => {});
+    playSample(soundFile, { rate: 0.97 + Math.random() * 0.06, gain: 0.9 }, () => playKeyClick(null));
     return;
   }
   noiseBurst({ duration: 0.035, filterFreq: 2600, gain: 0.33, q: 2.2 });

@@ -347,7 +347,8 @@
       "image": "images/keycap_07.png",
       "filter": "none",
       "isHolo": true,
-      "profile": "sa"
+      "profile": "sa",
+      "sound": "sounds/keycap-premium-click.wav"
     },
     {
       "id": "kc_08",
@@ -358,7 +359,8 @@
       "accent": "#c084fc",
       "image": "images/keycap_08.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-premium-click.wav"
     },
     {
       "id": "kc_banana",
@@ -490,7 +492,8 @@
       "image": "images/keycap_holostar.png",
       "filter": "none",
       "isHolo": true,
-      "profile": "sa"
+      "profile": "sa",
+      "sound": "sounds/keycap-premium-click.wav"
     },
     {
       "id": "kc_silveresc",
@@ -622,7 +625,8 @@
       "image": "images/keycap_lightning.png",
       "filter": "none",
       "isHolo": true,
-      "profile": "sa"
+      "profile": "sa",
+      "sound": "sounds/keycap-premium-click.wav"
     }
   ]
 }

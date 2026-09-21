@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
-import { playKeyClick } from '../utils/sound';
+import { playKeyClick, preloadSample } from '../utils/sound';
 import { useRewardEffects } from '../utils/useRewardEffects';
 import RewardEffects from '../components/RewardEffects';
 import DesignPicker from '../components/DesignPicker';
@@ -35,6 +35,10 @@ export default function Keycap() {
     clearTimeout(comboTimeoutRef.current);
     comboTimeoutRef.current = setTimeout(() => setCombo(0), 1200);
   }, [toy, pressReward, trigger]);
+
+  useEffect(() => {
+    if (toy?.sound) preloadSample(toy.sound);
+  }, [toy]);
 
   useEffect(() => () => {
     clearTimeout(releaseTimeoutRef.current);
