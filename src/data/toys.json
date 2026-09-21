@@ -54,7 +54,11 @@
       "image": "images/wakpuball_04.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_04",
+        "count": 15
+      }
     },
     {
       "id": "wb_05",
@@ -65,7 +69,11 @@
       "image": "images/wakpuball_05.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_05",
+        "count": 15
+      }
     },
     {
       "id": "wb_06",
@@ -92,7 +100,11 @@
       "image": "images/wakpuball_07.png",
       "filter": "none",
       "crackPattern": "shatter",
-      "hitsToBreak": 20
+      "hitsToBreak": 20,
+      "crackFrames": {
+        "dir": "images/crack/wb_07",
+        "count": 20
+      }
     },
     {
       "id": "wb_08",
@@ -120,7 +132,11 @@
       "image": "images/wakpuball_banana.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_banana",
+        "count": 15
+      }
     },
     {
       "id": "wb_watermelon",
@@ -131,7 +147,11 @@
       "image": "images/wakpuball_watermelon.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_watermelon",
+        "count": 15
+      }
     },
     {
       "id": "wb_grape",
@@ -142,7 +162,11 @@
       "image": "images/wakpuball_grape.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_grape",
+        "count": 15
+      }
     },
     {
       "id": "wb_mango",
@@ -153,7 +177,11 @@
       "image": "images/wakpuball_mango.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_mango",
+        "count": 15
+      }
     },
     {
       "id": "wb_lemon",
@@ -164,7 +192,11 @@
       "image": "images/wakpuball_lemon.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_lemon",
+        "count": 15
+      }
     },
     {
       "id": "wb_peach",
@@ -175,7 +207,11 @@
       "image": "images/wakpuball_peach.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_peach",
+        "count": 15
+      }
     },
     {
       "id": "wb_donut",
@@ -186,7 +222,11 @@
       "image": "images/wakpuball_donut.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_donut",
+        "count": 15
+      }
     },
     {
       "id": "wb_popsicle",
@@ -197,7 +237,11 @@
       "image": "images/wakpuball_popsicle.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_popsicle",
+        "count": 15
+      }
     },
     {
       "id": "wb_pudding",
@@ -208,7 +252,11 @@
       "image": "images/wakpuball_pudding.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 15
+      "hitsToBreak": 15,
+      "crackFrames": {
+        "dir": "images/crack/wb_pudding",
+        "count": 15
+      }
     },
     {
       "id": "wb_shell",
@@ -219,7 +267,11 @@
       "image": "images/wakpuball_shell.png",
       "filter": "none",
       "crackPattern": "spiral",
-      "hitsToBreak": 20
+      "hitsToBreak": 20,
+      "crackFrames": {
+        "dir": "images/crack/wb_shell",
+        "count": 20
+      }
     }
   ],
   "keycap": [
