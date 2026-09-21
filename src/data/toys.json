@@ -310,7 +310,7 @@
     {
       "id": "kc_04",
       "name": "라이트닝 실버",
-      "grade": "rare",
+      "grade": "limited",
       "tier": "paid",
       "accent": "#ff4fa3",
       "image": "images/keycap_04.png",
@@ -320,7 +320,7 @@
     {
       "id": "kc_05",
       "name": "핑크 플라워",
-      "grade": "rare",
+      "grade": "limited",
       "tier": "paid",
       "accent": "#ff6fb8",
       "image": "images/keycap_05.png",
@@ -455,7 +455,7 @@
     {
       "id": "kc_shell",
       "name": "라벤더 조개",
-      "grade": "rare",
+      "grade": "limited",
       "tier": "paid",
       "accent": "#b39ddb",
       "image": "images/keycap_shell.png",
@@ -498,8 +498,8 @@
     {
       "id": "kc_silveresc",
       "name": "실버 이스케이프",
-      "grade": "rare",
-      "tier": "paid",
+      "grade": "common",
+      "tier": "free",
       "accent": "#c7c9cc",
       "image": "images/keycap_silveresc.png",
       "filter": "none",
@@ -518,8 +518,8 @@
     {
       "id": "kc_asterisk",
       "name": "화이트 아스크",
-      "grade": "rare",
-      "tier": "paid",
+      "grade": "common",
+      "tier": "free",
       "accent": "#f4f4f4",
       "image": "images/keycap_asterisk.png",
       "filter": "none",
@@ -538,7 +538,7 @@
     {
       "id": "kc_glass",
       "name": "클리어 글래스",
-      "grade": "rare",
+      "grade": "limited",
       "tier": "paid",
       "accent": "#bcd3ea",
       "image": "images/keycap_glass.png",
@@ -558,8 +558,8 @@
     {
       "id": "kc_smoke_crimson",
       "name": "스모크 크림슨",
-      "grade": "rare",
-      "tier": "paid",
+      "grade": "common",
+      "tier": "free",
       "accent": "#c2185b",
       "image": "images/keycap_smoke_crimson.png",
       "filter": "none",

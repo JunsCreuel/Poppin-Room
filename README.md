@@ -126,10 +126,10 @@ Poppin-Room/
 
 | grade | tier | 획득 방법 | 수량 | 팝볼 파괴 타격 수 |
 |---|---|---|---|---|
-| COMMON | free | 처음부터 보유 | 팝볼 3 · 키캡 3 | 10회 |
-| RARE | paid | 뽑기 (코인 200개, 일반 확률) | 팝볼 11 · 키캡 25 | 15회 |
+| COMMON | free | 처음부터 보유 | 팝볼 3 · 키캡 6 | 10회 |
+| RARE | paid | 뽑기 (코인 200개, 일반 확률) | 팝볼 11 · 키캡 18 | 15회 |
 | PREMIUM | premium | 상점 구매 (₩2,900~3,400, mock) | 팝볼 2 · 키캡 4 | 20회 |
-| LIMITED | paid | 뽑기 (코인 200개, 극악 확률 1% 미만) | 팝볼 2 · 키캡 2 | 20회 |
+| LIMITED | paid | 뽑기 (코인 200개, 극악 확률 — 합산 팝볼 0.9% · 키캡 1.6%) | 팝볼 2 · 키캡 6 | 20회 |
 
 팝볼 파괴 타격 수는 등급 기준 통일(키캡 게이지는 오브제와 무관하게 동일 적용). 뽑기 확률 계산은 `src/data/gradeOdds.js`, 화면 표시는 `/gacha`에서 실제 값 그대로 확인 가능.
 
@@ -199,8 +199,8 @@ Poppin-Room/
 | kc_01 | 베이직 핑크 | COMMON | 기본 핑크 키캡 |
 | kc_02 | 펄 화이트 | COMMON | 진주빛 화이트 |
 | kc_03 | 스모크 클리어 | COMMON | 투명 스모크 톤 |
-| kc_04 | 라이트닝 실버 | RARE | 은색, 번개 무늬 |
-| kc_05 | 핑크 플라워 | RARE | 핑크 꽃무늬 |
+| kc_04 | 라이트닝 실버 | LIMITED | 은색, 번개 무늬 — 뽑기 극악 확률 |
+| kc_05 | 핑크 플라워 | LIMITED | 핑크 꽃무늬 — 뽑기 극악 확률 |
 | kc_06 | 블랙 오브 | LIMITED | 블랙 구체형 캡 — 뽑기 극악 확률 |
 | kc_07 | 선더 크리스탈 | PREMIUM | 홀로그램 크리스탈, 번개 각인 — 상점 전용 |
 | kc_08 | 쥬얼 블룸 | PREMIUM | 보석·꽃 장식 — 상점 전용 |
@@ -213,17 +213,17 @@ Poppin-Room/
 | kc_donut | 민트 도넛 | RARE | 민트색 도넛 모양 |
 | kc_popsicle | 블루 소다바 | RARE | 파란 소다맛 아이스바 모양 |
 | kc_pudding | 카라멜 푸딩 | RARE | 카라멜 푸딩 모양 |
-| kc_shell | 라벤더 조개 | RARE | 라벤더색 조개 모양 |
+| kc_shell | 라벤더 조개 | LIMITED | 라벤더색 조개 모양 — 뽑기 극악 확률 |
 | kc_honey | 허니 드립 | RARE | 꿀 흐르는 무늬 |
 | kc_marshmallow | 마시멜로 스트라이프 | RARE | 마시멜로 줄무늬 |
 | kc_holostar | 홀로그램 스타더스트 | PREMIUM | 홀로그램 별가루 무늬 — 상점 전용 |
-| kc_silveresc | 실버 이스케이프 | RARE | 은색, ESC 키 각인 |
+| kc_silveresc | 실버 이스케이프 | COMMON | 은색, ESC 키 각인 |
 | kc_hotpink_gloss | 핫핑크 글로시 | RARE | 핫핑크 광택 |
-| kc_asterisk | 화이트 아스크 | RARE | 화이트, 별표(*) 각인 |
+| kc_asterisk | 화이트 아스크 | COMMON | 화이트, 별표(*) 각인 |
 | kc_caramel_drizzle | 캐러멜 드리즐 | RARE | 캐러멜 드리즐 무늬 |
-| kc_glass | 클리어 글래스 | RARE | 투명 유리 질감 |
+| kc_glass | 클리어 글래스 | LIMITED | 투명 유리 질감 — 뽑기 극악 확률 |
 | kc_tangerine | 탠저린 젤리 | RARE | 탠저린 젤리 색 |
-| kc_smoke_crimson | 스모크 크림슨 | RARE | 진홍 스모크 톤 |
+| kc_smoke_crimson | 스모크 크림슨 | COMMON | 진홍 스모크 톤 |
 | kc_pink_geode | 핑크 지오드 | LIMITED | 핑크 지오드(광물) 무늬 — 뽑기 극악 확률 |
 | kc_lavender_cushion | 라벤더 쿠션 | RARE | 라벤더색 쿠션형 |
 | kc_forest_fur | 포레스트 퍼 | RARE | 포레스트 톤, 퍼(털) 질감 |
