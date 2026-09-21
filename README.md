@@ -43,6 +43,10 @@ npm run dev       # 개발 서버 http://localhost:5173
 npm run build     # 프로덕션 빌드 → dist/
 npm run preview   # 빌드 결과 미리보기
 npm run lint      # 린트
+
+# 팝볼 크랙 프레임 등록 (PNG → WebP, 프레임 수 = 등급별 타격 수 10/15/20/20, 01부터 빠짐없이)
+pip install pillow
+python3 scripts/import_crack_frames.py <압축 푼 폴더> basic-pink=wb_01 swirl-spark=wb_02 marble=wb_03
 ```
 
 ---
@@ -54,8 +58,11 @@ Poppin-Room/
 ├─ .github/workflows/deploy-pages.yml   # GitHub Pages 자동 배포
 ├─ index.html                 # 앱 HTML 뼈대
 ├─ vite.config.js             # Vite 설정 (상대 경로 빌드)
+├─ scripts/
+│  └─ import_crack_frames.py  # 크랙 프레임 PNG → WebP 변환·toys.json 등록
 ├─ public/
 │  ├─ images/                 # 팝볼·키캡·히든·캡슐머신 이미지
+│  │  └─ crack/<id>/          # 팝볼 크랙 프레임 01~NN.webp (타격당 1장)
 │  └─ sounds/                 # 키캡 타건 mp3
 └─ src/
    ├─ main.jsx                # 진입점
@@ -75,7 +82,6 @@ Poppin-Room/
    │  └─ MyAccount.jsx        # 내 계정
    ├─ components/             # 재사용 컴포넌트
    │  ├─ WakpuStage.jsx       # 팝볼 타격·파괴 연출
-   │  ├─ CrackOverlay.jsx     # 금가는 오버레이
    │  ├─ CapsuleMachine.jsx   # 캡슐머신·뽑기 결과
    │  ├─ DesignPicker.jsx     # 룸 안 디자인 변경
    │  ├─ SecretDraw.jsx       # 시크릿 룸 카드 뽑기(흔들림 → 카드)
@@ -85,7 +91,8 @@ Poppin-Room/
    │  └─ useGame.jsx          # 전역 게임 상태 (코인·보유·장착·히든카드)
    ├─ data/
    │  ├─ toys.json            # 오브제 52종 데이터(팝볼 18 · 키캡 34)
-   │  └─ crackStages.js       # 금가는 단계 이미지 자리
+   │  ├─ gradeOdds.js         # 뽑기 등급 가중치·확률 계산
+   │  └─ crackFrames.js       # 크랙 프레임 경로 헬퍼
    └─ utils/
       ├─ sound.js             # 효과음
       ├─ volume.js            # 음량 설정
@@ -99,7 +106,7 @@ Poppin-Room/
 | 화면 | 경로 | 기능 | 주요 파일 |
 |---|---|---|---|
 | 랜딩 | `/` | 브랜드 소개, 시작하기 → 6개 플레이 모드 카드, 실시간 통계(깬 횟수·오브제·히든카드) | `Landing.jsx`, `landing.css` |
-| 팝볼 룸 | `/wakpuball` | 연타로 파괴, 진행도에 따라 금·왁스 연출, 칠 때마다 코인 굴림, 디자인 변경 | `Wakpuball.jsx`, `WakpuStage.jsx`, `CrackOverlay.jsx` |
+| 팝볼 룸 | `/wakpuball` | 연타로 파괴, 타격마다 크랙 프레임 전환(프레임 있는 오브제), 칠 때마다 코인 굴림, 디자인 변경 | `Wakpuball.jsx`, `WakpuStage.jsx`, `crackFrames.js` |
 | 키캡 룸 | `/keycap` | 보유 디자인별 키 1개씩, 누르면 장착 + 고유 사운드 + 코인, ESC 키 지원, ASMR 토글 | `Keycap.jsx`, `sound.js` |
 | 뽑기 | `/gacha` | 코인 200개로 유료 등급 랜덤 1개, 중복 시 30% 환급, 광고 보고 5코인(mock) | `Gacha.jsx`, `CapsuleMachine.jsx` |
 | 컬렉션 | `/collection` | 가방(보유 오브제 확인, 장착) + 미획득 목록 | `Collection.jsx` |
@@ -156,6 +163,7 @@ Poppin-Room/
 | `image` | `images/…png` |
 | `accent`, `filter`, `isHolo` | 색·필터·홀로그램 연출 |
 | `hitsToBreak`, `crackPattern` | 팝볼 파괴 횟수·금 패턴 |
+| `crackFrames` | `{ dir, count }` 팝볼 크랙 프레임 폴더·장수, 없으면 고정 이미지 + 조각 파편 연출 |
 | `sound` | 키캡 mp3 경로 (없으면 합성음) |
 | `price` | premium 가격(원) |
 
@@ -255,5 +263,5 @@ Poppin-Room/
 | 프리미엄 결제 | mock — 즉시 지급 |
 | 광고 SDK | mock — 코인·시크릿 키 즉시 보상 |
 | 랭킹 서버 | 없음 — 깬 횟수로 상위 % 시뮬레이션 (`calcRankPercentile`) |
-| 팝볼 단계별 파손 사진 | 자리만 있음 (`crackStages.js`), 사진 오면 경로만 채우기 |
+| 팝볼 단계별 파손 사진 | common 3종(wb_01~03) 적용, rare·premium·limited는 프레임 수령 시 `scripts/import_crack_frames.py`로 추가 |
 | 키캡 실제 녹음 사운드 | 파일은 `public/sounds/`에 있음, 클릭 1회 길이로 트리밍 후 `toys.json`의 `sound`에 연결 |

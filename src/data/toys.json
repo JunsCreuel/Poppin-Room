@@ -9,7 +9,11 @@
       "image": "images/wakpuball_01.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 10
+      "hitsToBreak": 10,
+      "crackFrames": {
+        "dir": "images/crack/wb_01",
+        "count": 10
+      }
     },
     {
       "id": "wb_02",
@@ -20,7 +24,11 @@
       "image": "images/wakpuball_02.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 10
+      "hitsToBreak": 10,
+      "crackFrames": {
+        "dir": "images/crack/wb_02",
+        "count": 10
+      }
     },
     {
       "id": "wb_03",
@@ -31,7 +39,11 @@
       "image": "images/wakpuball_03.png",
       "filter": "none",
       "crackPattern": "radial",
-      "hitsToBreak": 10
+      "hitsToBreak": 10,
+      "crackFrames": {
+        "dir": "images/crack/wb_03",
+        "count": 10
+      }
     },
     {
       "id": "wb_04",

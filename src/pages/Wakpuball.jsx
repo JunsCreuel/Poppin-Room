@@ -34,11 +34,13 @@ export default function Wakpuball() {
         </div>
 
         <WakpuStage
+          key={toy.id}
           image={toy.image}
           filter={toy.filter}
           isHolo={toy.isHolo}
           accent={toy.accent}
           hitsToBreak={toy.hitsToBreak}
+          crackFrames={toy.crackFrames}
           onPress={() => trigger(pressReward('wakpuball'))}
           onBreak={recordBreak}
         />
