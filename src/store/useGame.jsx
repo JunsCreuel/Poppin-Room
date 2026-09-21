@@ -312,6 +312,8 @@ export function GameProvider({ children }) {
 
   // 진행 상황 초기화 — 처음 상태(무료 등급만 보유, 코인 0)로 되돌림, 복구 불가
   const resetProgress = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(LEGACY_STORAGE_KEY);
     setState(defaultState());
   }, []);
 

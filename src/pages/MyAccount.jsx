@@ -1,19 +1,44 @@
 // 내 계정 페이지 — 로그인(mock), 코인·히든카드·프리미엄 보유 내역, 진행 상황 초기화
+import { useState } from 'react';
 import { useGame } from '../store/useGame';
 
 const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
 
+// 브라우저 confirm 창 대신 화면 안에서 2단계 확인 — 일부 모바일 브라우저에서 confirm 결과가 늦거나 무시되는 문제 회피
+// step 상태는 부모(MyAccount)가 들고 있음 — 초기화 직후 로그아웃 화면으로 바뀌어도 '초기화 완료' 표시가 유지되도록
+function ResetSection({ onReset, step, setStep }) {
+  const handleConfirm = () => {
+    onReset();
+    setStep('done');
+    setTimeout(() => setStep('idle'), 2000);
+  };
+
+  return (
+    <section className="account-section account-danger">
+      <h3 className="collection-section-title">데이터 초기화</h3>
+      <p className="account-empty">지금까지 쌓은 코인·보유 디자인·히든카드·랭킹 기록 삭제, 처음 상태로 초기화, 복구 불가</p>
+      {step === 'confirm' ? (
+        <div className="v2-btn-row" style={{ margin: 0 }}>
+          <button type="button" className="v2-btn v2-btn-secondary" onClick={() => setStep('idle')}>취소</button>
+          <button type="button" className="reset-btn" onClick={handleConfirm}>정말 초기화</button>
+        </div>
+      ) : (
+        <button type="button" className="reset-btn" onClick={() => setStep('confirm')} disabled={step === 'done'}>
+          {step === 'done' ? '초기화 완료' : '진행 상황 초기화'}
+        </button>
+      )}
+    </section>
+  );
+}
+
 export default function MyAccount() {
   const { loggedIn, loginProvider, login, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, addTestAllSkins, secretKeys } = useGame();
+
+  const [resetStep, setResetStep] = useState('idle'); // idle | confirm | done
 
   const premiumOwned = ['wakpuball', 'keycap'].flatMap((category) =>
     toys[category].filter((t) => t.tier === 'premium' && owned.includes(t.id)).map((t) => ({ ...t, category }))
   );
-
-  const handleReset = () => {
-    const ok = window.confirm('코인·보유 디자인·히든카드·랭킹 기록 전체 삭제, 처음 상태로 초기화, 복구 불가');
-    if (ok) resetProgress();
-  };
 
   if (!loggedIn) {
     return (
@@ -41,11 +66,7 @@ export default function MyAccount() {
         </div>
       </section>
 
-      <section className="account-section account-danger">
-          <h3 className="collection-section-title">데이터 초기화</h3>
-          <p className="account-empty">지금까지 쌓은 코인·보유 디자인 기록 삭제, 처음 상태로 초기화</p>
-          <button type="button" className="reset-btn" onClick={handleReset}>진행 상황 초기화</button>
-        </section>
+      <ResetSection onReset={resetProgress} step={resetStep} setStep={setResetStep} />
       </div>
     );
   }
@@ -113,11 +134,7 @@ export default function MyAccount() {
         </div>
       </section>
 
-      <section className="account-section account-danger">
-        <h3 className="collection-section-title">데이터 초기화</h3>
-        <p className="account-empty">지금까지 쌓은 코인·보유 디자인·히든카드·랭킹 기록 삭제, 처음 상태로 초기화</p>
-        <button type="button" className="reset-btn" onClick={handleReset}>진행 상황 초기화</button>
-      </section>
+      <ResetSection onReset={resetProgress} step={resetStep} setStep={setResetStep} />
     </div>
   );
 }
