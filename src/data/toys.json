@@ -13,7 +13,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_02",
         "count": 10
-      }
+      },
+      "hitSound": "sounds/wakpuball-common-hit.wav"
     },
     {
       "id": "wb_03",
@@ -28,7 +29,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_03",
         "count": 10
-      }
+      },
+      "hitSound": "sounds/wakpuball-common-hit.wav"
     },
     {
       "id": "wb_04",
@@ -43,7 +45,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_04",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-common-hit.wav"
     },
     {
       "id": "wb_05",
@@ -58,7 +61,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_05",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-common-hit.wav"
     },
     {
       "id": "wb_06",
@@ -300,7 +304,8 @@
       "accent": "#ff4fa3",
       "image": "images/keycap_04.png",
       "filter": "none",
-      "profile": "oem"
+      "profile": "oem",
+      "sound": "sounds/keycap-limited-click.wav"
     },
     {
       "id": "kc_05",
@@ -310,7 +315,8 @@
       "accent": "#ff6fb8",
       "image": "images/keycap_05.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-limited-click.wav"
     },
     {
       "id": "kc_06",
@@ -320,7 +326,8 @@
       "accent": "#111111",
       "image": "images/keycap_06.png",
       "filter": "none",
-      "profile": "oem"
+      "profile": "oem",
+      "sound": "sounds/keycap-limited-click.wav"
     },
     {
       "id": "kc_07",
@@ -355,7 +362,8 @@
       "accent": "#f6c445",
       "image": "images/keycap_banana.png",
       "filter": "none",
-      "profile": "sa"
+      "profile": "sa",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_watermelon",
@@ -365,7 +373,8 @@
       "accent": "#ef5b5b",
       "image": "images/keycap_watermelon.png",
       "filter": "none",
-      "profile": "oem"
+      "profile": "oem",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_grape",
@@ -375,7 +384,8 @@
       "accent": "#8b5fbf",
       "image": "images/keycap_grape.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_mango",
@@ -385,7 +395,8 @@
       "accent": "#ff9d3d",
       "image": "images/keycap_mango.png",
       "filter": "none",
-      "profile": "sa"
+      "profile": "sa",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_lemon",
@@ -395,7 +406,8 @@
       "accent": "#f4d93e",
       "image": "images/keycap_lemon.png",
       "filter": "none",
-      "profile": "oem"
+      "profile": "oem",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_peach",
@@ -405,7 +417,8 @@
       "accent": "#ffb3ab",
       "image": "images/keycap_peach.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_donut",
@@ -415,7 +428,8 @@
       "accent": "#8fe0c4",
       "image": "images/keycap_donut.png",
       "filter": "none",
-      "profile": "sa"
+      "profile": "sa",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_popsicle",
@@ -425,7 +439,8 @@
       "accent": "#4fc3e0",
       "image": "images/keycap_popsicle.png",
       "filter": "none",
-      "profile": "oem"
+      "profile": "oem",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_pudding",
@@ -435,7 +450,8 @@
       "accent": "#d98e3e",
       "image": "images/keycap_pudding.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_shell",
@@ -445,7 +461,8 @@
       "accent": "#b39ddb",
       "image": "images/keycap_shell.png",
       "filter": "none",
-      "profile": "sa"
+      "profile": "sa",
+      "sound": "sounds/keycap-limited-click.wav"
     },
     {
       "id": "kc_honey",
@@ -455,7 +472,8 @@
       "accent": "#f5a623",
       "image": "images/keycap_honey.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_marshmallow",
@@ -465,7 +483,8 @@
       "accent": "#ffb6d9",
       "image": "images/keycap_marshmallow.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_holostar",
@@ -493,8 +512,8 @@
     {
       "id": "kc_hotpink_gloss",
       "name": "핫핑크 글로시",
-      "grade": "rare",
-      "tier": "paid",
+      "grade": "common",
+      "tier": "free",
       "accent": "#ff1f8f",
       "image": "images/keycap_hotpink_gloss.png",
       "filter": "none",
@@ -508,7 +527,8 @@
       "accent": "#c97a2b",
       "image": "images/keycap_caramel_drizzle.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_glass",
@@ -518,7 +538,8 @@
       "accent": "#bcd3ea",
       "image": "images/keycap_glass.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-limited-click.wav"
     },
     {
       "id": "kc_tangerine",
@@ -528,7 +549,8 @@
       "accent": "#ff7a1a",
       "image": "images/keycap_tangerine.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_pink_geode",
@@ -538,7 +560,8 @@
       "accent": "#ec3d7a",
       "image": "images/keycap_pink_geode.png",
       "filter": "none",
-      "profile": "sa"
+      "profile": "sa",
+      "sound": "sounds/keycap-limited-click.wav"
     },
     {
       "id": "kc_lavender_cushion",
@@ -548,7 +571,8 @@
       "accent": "#c6a8f0",
       "image": "images/keycap_lavender_cushion.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_forest_fur",
@@ -558,7 +582,8 @@
       "accent": "#4f7de0",
       "image": "images/keycap_forest_fur.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_hotpink_fur",
@@ -568,7 +593,8 @@
       "accent": "#ff2f8f",
       "image": "images/keycap_hotpink_fur.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_puffer",
@@ -578,7 +604,8 @@
       "accent": "#9aa0a6",
       "image": "images/keycap_puffer.png",
       "filter": "none",
-      "profile": "cherry"
+      "profile": "cherry",
+      "sound": "sounds/keycap-rare-click.wav"
     },
     {
       "id": "kc_lightning",

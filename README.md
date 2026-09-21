@@ -47,6 +47,9 @@ npm run lint      # 린트
 # 팝볼 크랙 프레임 등록 (PNG → WebP, 프레임 수 = 등급별 타격 수 10/15/20/20, 01부터 빠짐없이)
 pip install pillow
 python3 scripts/import_crack_frames.py <압축 푼 폴더> swirl-spark=wb_02 marble=wb_03
+
+# 효과음 등록 (WAV → 48kHz 모노로 정리·정규화 → public/sounds/, 이후 toys.json의 hitSound/sound에 연결. mp3는 WAV로 변환해서)
+python3 scripts/import_sound.py <원본.wav> wakpuball-common-hit
 ```
 
 ---
@@ -59,11 +62,12 @@ Poppin-Room/
 ├─ index.html                 # 앱 HTML 뼈대
 ├─ vite.config.js             # Vite 설정 (상대 경로 빌드)
 ├─ scripts/
-│  └─ import_crack_frames.py  # 크랙 프레임 PNG → WebP 변환·toys.json 등록
+│  ├─ import_crack_frames.py  # 크랙 프레임 PNG → WebP 변환·toys.json 등록
+│  └─ import_sound.py         # 효과음 WAV 정리(48kHz 모노·정규화)
 ├─ public/
 │  ├─ images/                 # 팝볼·키캡·히든·캡슐머신 이미지
 │  │  └─ crack/<id>/          # 팝볼 크랙 프레임 01~NN.webp (타격당 1장)
-│  └─ sounds/                 # 키캡 타건 mp3
+│  └─ sounds/                 # 타격·타건 녹음(wav), 키캡 원본 mp3
 └─ src/
    ├─ main.jsx                # 진입점
    ├─ App.jsx                 # 라우팅, 공통 헤더
@@ -126,10 +130,10 @@ Poppin-Room/
 
 | grade | tier | 획득 방법 | 수량 | 팝볼 파괴 타격 수 |
 |---|---|---|---|---|
-| COMMON | free | 처음부터 보유 | 팝볼 4 · 키캡 4 | 10회 (버블 젤리·선더 크랙은 15회) |
-| RARE | paid | 뽑기 (코인 200개, 일반 확률) | 팝볼 9 · 키캡 18 | 15회 |
+| COMMON | free | 처음부터 보유 | 팝볼 4 · 키캡 5 | 10회 (버블 젤리·선더 크랙은 15회) |
+| RARE | paid | 뽑기 (코인 200개, 일반 확률) | 팝볼 9 · 키캡 17 | 15회 |
 | PREMIUM | premium | 상점 구매 (₩2,900~3,400, mock) | 팝볼 2 · 키캡 4 | 20회 |
-| LIMITED | paid | 뽑기 (코인 200개, 극악 확률 — 합산 팝볼 1.1% · 키캡 1.6%) | 팝볼 2 · 키캡 6 | 20회 |
+| LIMITED | paid | 뽑기 (코인 200개, 극악 확률 — 합산 팝볼 1.1% · 키캡 1.7%) | 팝볼 2 · 키캡 6 | 20회 |
 
 팝볼 파괴 타격 수는 등급 기준 통일(키캡 게이지는 오브제와 무관하게 동일 적용). 버블 젤리·선더 크랙은 RARE 시절 15장짜리 크랙 프레임으로 제작돼 COMMON으로 옮긴 뒤에도 15회 유지. 뽑기 확률 계산은 `src/data/gradeOdds.js`, 화면 표시는 `/gacha`에서 실제 값 그대로 확인 가능.
 
@@ -164,8 +168,8 @@ Poppin-Room/
 | `accent`, `filter`, `isHolo` | 색·필터·홀로그램 연출 |
 | `hitsToBreak`, `crackPattern` | 팝볼 파괴 횟수·금 패턴 |
 | `crackFrames` | `{ dir, count }` 팝볼 크랙 프레임 폴더·장수, 없으면 고정 이미지 + 조각 파편 연출 |
-| `hitSound` | 팝볼 타격 녹음 경로(`sounds/…wav`), 없으면 합성 크런치음 — 현재 프리미엄 2종(네온 블랙·홀로그램 젬) |
-| `sound` | 키캡 타건 녹음 경로(`sounds/…wav`), 없으면 합성 클릭음 — 현재 프리미엄 4종 |
+| `hitSound` | 팝볼 타격 녹음 경로(`sounds/…wav`), 없으면 합성 크런치음 — 현재 COMMON 4종·PREMIUM 2종 |
+| `sound` | 키캡 타건 녹음 경로(`sounds/…wav`), 없으면 합성 클릭음 — 현재 RARE 17종·LIMITED 6종·PREMIUM 4종 |
 | `price` | premium 가격(원) |
 
 ### localStorage (`poppinroom-state`)
@@ -217,7 +221,7 @@ Poppin-Room/
 | kc_marshmallow | 마시멜로 스트라이프 | RARE | 마시멜로 줄무늬 |
 | kc_holostar | 홀로그램 스타더스트 | PREMIUM | 홀로그램 별가루 무늬 — 상점 전용 |
 | kc_silveresc | 실버 이스케이프 | COMMON | 은색, ESC 키 각인 |
-| kc_hotpink_gloss | 핫핑크 글로시 | RARE | 핫핑크 광택 |
+| kc_hotpink_gloss | 핫핑크 글로시 | COMMON | 핫핑크 광택 |
 | kc_caramel_drizzle | 캐러멜 드리즐 | RARE | 캐러멜 드리즐 무늬 |
 | kc_glass | 클리어 글래스 | LIMITED | 투명 유리 질감 — 뽑기 극악 확률 |
 | kc_tangerine | 탠저린 젤리 | RARE | 탠저린 젤리 색 |
