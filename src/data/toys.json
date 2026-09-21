@@ -104,7 +104,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_07",
         "count": 20
-      }
+      },
+      "hitSound": "sounds/wakpuball-premium-hit.wav"
     },
     {
       "id": "wb_08",
@@ -121,7 +122,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_08",
         "count": 20
-      }
+      },
+      "hitSound": "sounds/wakpuball-premium-hit.wav"
     },
     {
       "id": "wb_banana",

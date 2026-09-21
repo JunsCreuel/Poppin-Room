@@ -131,6 +131,34 @@ function noiseBurst({ duration = 0.08, filterFreq = 1400, gain = 0.5, q = 0.9 })
   });
 }
 
+// ---- 녹음 샘플 재생 (toys.json hitSound 등) ----
+// 파일은 한 번만 받아 디코드해두고, 탭마다 새 소스로 재생(연타해도 겹쳐서 남)
+const sampleCache = new Map(); // url → Promise<AudioBuffer>
+export function preloadSample(url) {
+  if (!url) return null;
+  if (!sampleCache.has(url)) {
+    const p = fetch(url).then((r) => r.arrayBuffer()).then((buf) => getCtx().decodeAudioData(buf));
+    p.catch(() => sampleCache.delete(url));
+    sampleCache.set(url, p);
+  }
+  return sampleCache.get(url);
+}
+
+// 팝볼 타격 녹음 — 깨질수록 살짝 낮고 세게, 매번 미세하게 다른 피치
+export function playSampleHit(url, progress = 0) {
+  const loading = preloadSample(url);
+  if (!loading) return;
+  loading.then((buffer) => whenRunning((audioCtx) => {
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    src.playbackRate.value = 0.94 + Math.random() * 0.12 - progress * 0.08;
+    const g = audioCtx.createGain();
+    g.gain.value = (0.7 + progress * 0.3) * getVolume();
+    src.connect(g).connect(master);
+    src.start();
+  })).catch(() => playCrackHit(progress));
+}
+
 // 팝볼 — 누를 때마다 나는 크런치. progress(0~1)가 올라갈수록 톤이 낮아지고
 // 세져서 점점 더 크게 금이 가는 느낌을 준다. 프리미엄 등급은 아직 실제 녹음
 // 파일이 없어서(팝볼 크런치 녹음 자체가 팀에 아직 없음) 레이어를 한 겹 더

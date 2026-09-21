@@ -164,6 +164,7 @@ Poppin-Room/
 | `accent`, `filter`, `isHolo` | 색·필터·홀로그램 연출 |
 | `hitsToBreak`, `crackPattern` | 팝볼 파괴 횟수·금 패턴 |
 | `crackFrames` | `{ dir, count }` 팝볼 크랙 프레임 폴더·장수, 없으면 고정 이미지 + 조각 파편 연출 |
+| `hitSound` | 팝볼 타격 녹음 경로(`sounds/…wav`), 없으면 합성 크런치음 — 현재 프리미엄 2종(네온 블랙·홀로그램 젬) |
 | `sound` | 키캡 mp3 경로 (없으면 합성음) |
 | `price` | premium 가격(원) |
 
