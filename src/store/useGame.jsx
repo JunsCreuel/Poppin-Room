@@ -74,6 +74,14 @@ function loadState() {
       merged.lastVisit = todayStr();
     }
     delete merged.room;
+    // id 체계가 바뀐 뒤 남은 옛 저장값 정리 — 없는 id는 버리고, 장착은 기본 디자인으로 복구
+    const known = new Set(Object.keys(toysData).flatMap((c) => toysData[c].map((t) => t.id)));
+    merged.owned = [...new Set([...freeOwnedIds(), ...(merged.owned || []).filter((id) => known.has(id))])];
+    const defaults = defaultState().equipped;
+    merged.equipped = { ...defaults, ...merged.equipped };
+    for (const category of Object.keys(defaults)) {
+      if (!toysData[category].some((t) => t.id === merged.equipped[category])) merged.equipped[category] = defaults[category];
+    }
     return merged;
   } catch {
     return defaultState();
