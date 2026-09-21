@@ -94,7 +94,7 @@ Poppin-Room/
    ├─ store/
    │  └─ useGame.jsx          # 전역 게임 상태 (코인·보유·장착·히든카드)
    ├─ data/
-   │  ├─ toys.json            # 오브제 49종 데이터(팝볼 17 · 키캡 32)
+   │  ├─ toys.json            # 오브제 48종 데이터(팝볼 17 · 키캡 31)
    │  ├─ gradeOdds.js         # 뽑기 등급 가중치·확률 계산
    │  └─ crackFrames.js       # 크랙 프레임 경로 헬퍼
    └─ utils/
@@ -130,7 +130,7 @@ Poppin-Room/
 
 | grade | tier | 획득 방법 | 수량 | 팝볼 파괴 타격 수 |
 |---|---|---|---|---|
-| COMMON | free | 처음부터 보유 | 팝볼 4 · 키캡 5 | 10회 (버블 젤리·선더 크랙은 15회) |
+| COMMON | free | 처음부터 보유 | 팝볼 4 · 키캡 4 | 10회 (버블 젤리·선더 크랙은 15회) |
 | RARE | paid | 뽑기 (코인 200개, 일반 확률) | 팝볼 9 · 키캡 17 | 15회 |
 | PREMIUM | premium | 상점 구매 (₩2,900~3,400, mock) | 팝볼 2 · 키캡 4 | 20회 |
 | LIMITED | paid | 뽑기 (코인 200개, 극악 확률 — 합산 팝볼 1.1% · 키캡 1.7%) | 팝볼 2 · 키캡 6 | 20회 |
@@ -196,7 +196,7 @@ Poppin-Room/
 | wb_pudding | 카라멜 푸딩 | RARE | 카라멜 푸딩 모양 |
 | wb_shell | 라벤더 조개 | LIMITED | 라벤더색 조개 모양 — 뽑기 극악 확률 |
 
-### 키캡 디자인 (32종)
+### 키캡 디자인 (31종)
 | id | 이름 | 등급 | 설명 |
 |---|---|---|---|
 | kc_01 | 베이직 핑크 | COMMON | 기본 핑크 키캡 |
@@ -221,7 +221,6 @@ Poppin-Room/
 | kc_marshmallow | 마시멜로 스트라이프 | RARE | 마시멜로 줄무늬 |
 | kc_holostar | 홀로그램 스타더스트 | PREMIUM | 홀로그램 별가루 무늬 — 상점 전용 |
 | kc_silveresc | 실버 이스케이프 | COMMON | 은색, ESC 키 각인 |
-| kc_hotpink_gloss | 핫핑크 글로시 | COMMON | 핫핑크 광택 |
 | kc_caramel_drizzle | 캐러멜 드리즐 | RARE | 캐러멜 드리즐 무늬 |
 | kc_glass | 클리어 글래스 | LIMITED | 투명 유리 질감 — 뽑기 극악 확률 |
 | kc_tangerine | 탠저린 젤리 | RARE | 탠저린 젤리 색 |

@@ -510,16 +510,6 @@
       "profile": "cherry"
     },
     {
-      "id": "kc_hotpink_gloss",
-      "name": "핫핑크 글로시",
-      "grade": "common",
-      "tier": "free",
-      "accent": "#ff1f8f",
-      "image": "images/keycap_hotpink_gloss.png",
-      "filter": "none",
-      "profile": "cherry"
-    },
-    {
       "id": "kc_caramel_drizzle",
       "name": "캐러멜 드리즐",
       "grade": "rare",
