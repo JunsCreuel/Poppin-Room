@@ -112,7 +112,7 @@ Poppin-Room/
 | 랜딩 | `/` | 브랜드 소개, 시작하기 → 6개 플레이 모드 카드, 실시간 통계(깬 횟수·오브제·히든카드) | `Landing.jsx`, `landing.css` |
 | 팝볼 룸 | `/wakpuball` | 연타로 파괴, 타격마다 크랙 프레임 전환(프레임 있는 오브제), 칠 때마다 코인 굴림, 디자인 변경 | `Wakpuball.jsx`, `WakpuStage.jsx`, `crackFrames.js` |
 | 키캡 룸 | `/keycap` | 보유 디자인별 키 1개씩, 누르면 장착 + 고유 사운드 + 코인, ESC 키 지원, ASMR 토글 | `Keycap.jsx`, `sound.js` |
-| 뽑기 | `/gacha` | 코인 200개로 유료 등급 랜덤 1개, 중복 시 30% 환급, 광고 보고 5코인(mock) | `Gacha.jsx`, `CapsuleMachine.jsx` |
+| 뽑기 | `/gacha` | 코인 200개로 유료 등급 랜덤 1개(캡슐 흔들림 녹음 약 2초 재생), 중복 시 30% 환급, 광고 보고 5코인(mock) | `Gacha.jsx`, `CapsuleMachine.jsx` |
 | 컬렉션 | `/collection` | 팝볼/키캡 탭 → COMMON/RARE/PREMIUM/LIMITED 등급 탭별로 보유 오브제(장착) + 미획득 목록 | `Collection.jsx` |
 | 시크릿 룸 | `/secret` | 시크릿 키 1개 = 히든 팝볼 룸 또는 히든 키캡 룸 중 하나 1회 입장, 키 없으면 잠김 | `Secret.jsx` |
 | 히든 룸 | `/hidden/wakpuball`, `/hidden/keycap` | 입장 후 클릭 1번 → 흔들림 → 카드 1장 (100코인 10% / 200코인 5% / 500코인 1% / 키 5개 0.5% / 히든카드 0.01% / 나머지 50코인, 꽝 없음), 입장권 없이 접근 시 시크릿 입구로 | `HiddenWakpuball.jsx`, `HiddenKeycap.jsx`, `SecretDraw.jsx` |

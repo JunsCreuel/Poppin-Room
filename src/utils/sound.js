@@ -202,6 +202,12 @@ export function playKeyClick(soundFile = null) {
   noiseBurst({ duration: 0.035, filterFreq: 2600, gain: 0.33, q: 2.2 });
 }
 
+// 뽑기 — 캡슐이 흔들리는 동안 나는 녹음(약 2초), 로드 실패 시 무음
+export const GACHA_SHAKE_SOUND = 'sounds/gacha-shake.wav';
+export function playGachaShake() {
+  playSample(GACHA_SHAKE_SOUND, { gain: 0.9 });
+}
+
 // 뽑기 성공 — 실제 에셋이 아직 없어서 합성음으로 대체(등급이 높을수록 음이 높아짐).
 export function playGachaSuccess(grade) {
   whenRunning((audioCtx) => {

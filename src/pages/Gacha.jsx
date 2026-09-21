@@ -1,11 +1,12 @@
 // 뽑기 페이지 — 코인 200개로 유료 등급 오브제 랜덤 획득, 광고 보고 코인 받기
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import CapsuleMachine from '../components/CapsuleMachine';
-import { playGachaSuccess } from '../utils/sound';
+import { playGachaSuccess, playGachaShake, preloadSample, GACHA_SHAKE_SOUND } from '../utils/sound';
 
 const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
+const SHAKE_MS = 2000; // 캡슐 흔들림 녹음(약 2초) 길이에 맞춤
 
 export default function Gacha() {
   const { coins, pullCost, canPull, pull, pullOdds, equip, equipped, claimAdCoins } = useGame();
@@ -18,6 +19,7 @@ export default function Gacha() {
     if (!canPull(category) || stage === 'shaking') return;
     setStage('shaking');
     setResult(null);
+    playGachaShake();
 
     setTimeout(() => {
       const outcome = pull(category);
@@ -28,8 +30,12 @@ export default function Gacha() {
       } else {
         setStage('idle');
       }
-    }, 900);
+    }, SHAKE_MS);
   }, [category, stage, canPull, pull]);
+
+  useEffect(() => {
+    preloadSample(GACHA_SHAKE_SOUND);
+  }, []);
 
   const reset = () => {
     setStage('idle');

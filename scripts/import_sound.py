@@ -2,7 +2,7 @@
 """효과음 WAV 정리 — 48kHz 모노 16bit로 변환, 무음 꼬리 잘라내고 피크 정규화해 public/sounds/에 저장
 
 사용법:
-  python3 scripts/import_sound.py <원본.wav> <저장이름>      # → public/sounds/<저장이름>.wav
+  python3 scripts/import_sound.py <원본.wav> <저장이름> [최대초]   # → public/sounds/<저장이름>.wav (최대 길이 기본 0.6초)
 예:
   python3 scripts/import_sound.py ~/Downloads/common_hit.wav wakpuball-common-hit
 
@@ -20,7 +20,7 @@ TAIL_SEC = 0.08
 FADE_SEC = 0.02
 
 
-def main(src, name):
+def main(src, name, max_sec=MAX_SEC):
     with wave.open(src) as w:
         ch, sw, sr, n = w.getnchannels(), w.getsampwidth(), w.getframerate(), w.getnframes()
         raw = w.readframes(n)
@@ -60,7 +60,7 @@ def main(src, name):
         env.append((s / win) ** 0.5)
     peak_rms = max(env)
     last_active = max(i for i, e in enumerate(env) if e > peak_rms * 0.05)
-    keep = min(len(out), int((last_active + 1) * win + OUT_SR * TAIL_SEC), int(OUT_SR * MAX_SEC))
+    keep = min(len(out), int((last_active + 1) * win + OUT_SR * TAIL_SEC), int(OUT_SR * max_sec))
     out = out[:keep]
 
     peak = max(abs(x) for x in out)
@@ -84,7 +84,7 @@ def main(src, name):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
+    if len(sys.argv) not in (3, 4):
         print(__doc__)
         sys.exit(2)
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], float(sys.argv[3]) if len(sys.argv) == 4 else MAX_SEC)
