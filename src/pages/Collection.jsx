@@ -6,12 +6,14 @@ import { useGame } from '../store/useGame';
 const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
 const GRADE_BADGE = { common: 'is-common', rare: 'is-rare', premium: 'is-premium', limited: 'is-limited' };
 const GRADE_LABEL = { common: 'COMMON', rare: 'RARE', premium: 'PREMIUM', limited: 'LIMITED' };
+const GRADE_ORDER = ['common', 'rare', 'premium', 'limited'];
 
-// 가방에서 오브제 선택 → 장착하기
+// 카테고리 탭(팝볼/키캡) → 등급 탭(COMMON/RARE/PREMIUM/LIMITED) → 그 등급의 보유·미획득 목록
 export default function Collection() {
   const { toys, owned, equipped, equip } = useGame();
   const navigate = useNavigate();
   const [category, setCategory] = useState('wakpuball');
+  const [grade, setGrade] = useState('common');
   const [selectedId, setSelectedId] = useState(null);
 
   const allToys = ['wakpuball', 'keycap'].flatMap((c) => toys[c].map((t) => ({ ...t, category: c })));
@@ -20,8 +22,13 @@ export default function Collection() {
   const ownedCount = owned.length;
   const totalCount = allToys.length;
 
-  const bag = toys[category].filter((t) => owned.includes(t.id));
-  const locked = toys[category].filter((t) => !owned.includes(t.id));
+  const gradeToys = toys[category].filter((t) => t.grade === grade);
+  const bag = gradeToys.filter((t) => owned.includes(t.id));
+  const locked = gradeToys.filter((t) => !owned.includes(t.id));
+  const gradeCount = (g) => {
+    const list = toys[category].filter((t) => t.grade === g);
+    return `${list.filter((t) => owned.includes(t.id)).length}/${list.length}`;
+  };
   const selected = selectedId ? findToy(selectedId) : null;
   const isSelectedOwned = selected && owned.includes(selected.id);
   const isSelectedEquipped = selected && equipped[selected.category] === selected.id;
@@ -74,9 +81,26 @@ export default function Collection() {
         ))}
       </div>
 
-      <div className="v2-archive-grid">
-        {bag.map((toy) => renderCard(toy, true))}
+      <div className="v2-archive-tabs is-grade">
+        {GRADE_ORDER.map((g) => (
+          <button
+            key={g}
+            type="button"
+            className={`grade-${g} ${g === grade ? 'is-active' : ''}`}
+            onClick={() => { setGrade(g); setSelectedId(null); }}
+          >
+            {GRADE_LABEL[g]} <small>{gradeCount(g)}</small>
+          </button>
+        ))}
       </div>
+
+      {bag.length > 0 ? (
+        <div className="v2-archive-grid">
+          {bag.map((toy) => renderCard(toy, true))}
+        </div>
+      ) : (
+        <p className="account-empty">{GRADE_LABEL[grade]} 등급 보유 오브제 없음</p>
+      )}
 
       {selected && (
         <div className="v2-card">

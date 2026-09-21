@@ -1597,6 +1597,26 @@ button {
   background: var(--text);
   color: #fff;
 }
+/* 등급 탭 — 카테고리 탭 아래 두 번째 줄, 활성 탭은 등급 배지 색 */
+.v2-archive-tabs.is-grade {
+  gap: 6px;
+  margin-top: -8px;
+}
+.v2-archive-tabs.is-grade button {
+  padding: 9px 4px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+.v2-archive-tabs.is-grade button small {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.75;
+}
+.v2-archive-tabs.is-grade button.is-active.grade-common { background: #dfeaff; }
+.v2-archive-tabs.is-grade button.is-active.grade-rare { background: #ffe8cf; }
+.v2-archive-tabs.is-grade button.is-active.grade-premium { background: #d6f5ec; }
+.v2-archive-tabs.is-grade button.is-active.grade-limited { background: #fde1e5; }
 .v2-archive-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
