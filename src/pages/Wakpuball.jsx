@@ -1,4 +1,4 @@
-// 팝볼 룸 페이지 — 팝볼 연타로 파괴, 칠 때마다 코인 보상, 디자인 변경
+// 왁뿌볼 룸 페이지 — 왁뿌볼 연타로 파괴, 칠 때마다 코인 보상, 디자인 변경
 import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import { useRewardEffects } from '../utils/useRewardEffects';
@@ -19,7 +19,7 @@ export default function Wakpuball() {
 
   return (
     <div className="case-page">
-      <div className="case-eyebrow">PLAY MODE · 팝볼 누르기</div>
+      <div className="case-eyebrow">PLAY MODE · 왁뿌볼 누르기</div>
       <h1 className="case-title">{toy.name}</h1>
 
       <div className="v2-live-pill">

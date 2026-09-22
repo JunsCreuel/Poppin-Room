@@ -24,7 +24,7 @@ function NavBar() {
         POPPIN ROOM
       </NavLink>
       <nav>
-        <NavLink to="/wakpuball" className={linkClass}>팝볼</NavLink>
+        <NavLink to="/wakpuball" className={linkClass}>왁뿌볼</NavLink>
         <NavLink to="/keycap" className={linkClass}>키캡</NavLink>
         <NavLink to="/gacha" className={linkClass}>뽑기</NavLink>
         <NavLink to="/collection" className={linkClass}>컬렉션</NavLink>

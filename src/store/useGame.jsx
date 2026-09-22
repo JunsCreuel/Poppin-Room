@@ -8,8 +8,8 @@ const LEGACY_STORAGE_KEY = 'csl-gacha-state'; // 이름 변경 전 저장 키, �
 const PULL_COST = 200; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
 const KEY_DAILY_GOAL = 500; // 키캡 룸 "오늘의 타건 게이지" 표시 목표치(코인 기준)
-// 시크릿 키 — 상점에서 코인 구매 / 하루 3개까지 광고 시청 / 팝볼·키캡 타격 시 0.06% 드롭
-// 키 1개 = 히든 팝볼 룸 또는 히든 키캡 룸 중 하나에 1회 입장
+// 시크릿 키 — 상점에서 코인 구매 / 하루 3개까지 광고 시청 / 왁뿌볼·키캡 타격 시 0.06% 드롭
+// 키 1개 = 히든 왁뿌볼 룸 또는 히든 키캡 룸 중 하나에 1회 입장
 const SECRET_KEY_PRICE = 300;
 const SECRET_KEY_DROP = 0.0006;
 const AD_KEY_DAILY_MAX = 3;
@@ -23,7 +23,7 @@ const SECRET_CARD_TABLE = [
 ];
 const SECRET_CARD_BASE = { type: 'coins', amount: 50 };
 
-// 일반 팝볼/키캡 룸에서 누를 때마다 굴리는 보상 확률 — 코인만 나온다.
+// 일반 왁뿌볼/키캡 룸에서 누를 때마다 굴리는 보상 확률 — 코인만 나온다.
 // 히든카드는 히든 룸(HiddenWakpuball/HiddenKeycap) 전용.
 const PRESS_REWARD = { coin5: 0.05, coin1: 0.35 };
 
@@ -50,7 +50,7 @@ function defaultState() {
     hiddenCards: [], // { code, category, wonAt }
     loggedIn: false,
     loginProvider: null, // 'kakao' | 'google'
-    dailyBreaks: 0, // 오늘 팝볼을 완전히 깬 횟수 — 랭킹 계산에 사용
+    dailyBreaks: 0, // 오늘 왁뿌볼을 완전히 깬 횟수 — 랭킹 계산에 사용
     totalBreaks: 0,
     dailyKeyCoins: 0, // 오늘 키캡 룸에서 적립한 코인 — 키캡 룸 상단 게이지 표시용
     lastVisit: todayStr(),
@@ -119,7 +119,7 @@ export function GameProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
-  // 팝볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 시크릿 키 드롭(0.06%)
+  // 왁뿌볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 시크릿 키 드롭(0.06%)
   // 또는 코인 보상을 굴리고 결과를 반환한다(화면에서 토스트 연출용)
   const pressReward = useCallback((category) => {
     // 낮은 확률로 코인 대신 시크릿 키 드롭
@@ -281,7 +281,7 @@ export function GameProvider({ children }) {
     return ok;
   }, []);
 
-  // 팝볼이 완전히 깨질 때마다 호출 — 오늘 깬 횟수를 쌓는다(랭킹 계산용).
+  // 왁뿌볼이 완전히 깨질 때마다 호출 — 오늘 깬 횟수를 쌓는다(랭킹 계산용).
   const recordBreak = useCallback(() => {
     setState((prev) => ({
       ...prev,

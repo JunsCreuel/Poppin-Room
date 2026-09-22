@@ -1,4 +1,4 @@
-// 팝볼 무대 컴포넌트 — 타격 쿨다운, 타격마다 크랙 프레임 전환, 파괴 연출, 리셋
+// 왁뿌볼 무대 컴포넌트 — 타격 쿨다운, 타격마다 크랙 프레임 전환, 파괴 연출, 리셋
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { playCrackHit, playCrackBreak, playSampleHit, playShellCrack, preloadSample } from '../utils/sound';
 import { crackFrameList } from '../data/crackFrames';
@@ -101,7 +101,7 @@ export default function WakpuStage({
         style={phase === 'idle' ? { '--hit-squash': squashAmount } : undefined}
         onClick={handlePress}
         disabled={disabled}
-        aria-label="팝볼 터뜨리기"
+        aria-label="왁뿌볼 터뜨리기"
       >
         {phase === 'idle' && (
           <img src={idleSrc} alt="" className={imgClassName} style={imgStyle} />
@@ -121,7 +121,7 @@ export default function WakpuStage({
         {hits > 0 && <span className="v2-combo-badge">💥 콤보 x{hits} 연타중!</span>}
       </div>
       <div className="v2-progress-row" style={{ width: '100%' }}>
-        <span className="v2-progress-label">팝볼 파괴 균열도</span>
+        <span className="v2-progress-label">왁뿌볼 파괴 균열도</span>
         <span className="v2-progress-pct">{Math.round(crackProgress * 100)}%</span>
       </div>
       <div className="v2-progress-track" style={{ width: '100%' }}>

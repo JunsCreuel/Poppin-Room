@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""팝볼 크랙 프레임 가져오기 — 디자인팀 PNG(01.png…NN.png)를 WebP로 변환해 public/images/crack/<id>/에 넣고 toys.json에 연결
+"""왁뿌볼 크랙 프레임 가져오기 — 디자인팀 PNG(01.png…NN.png)를 WebP로 변환해 public/images/crack/<id>/에 넣고 toys.json에 연결
 
 사용법:
   pip install pillow

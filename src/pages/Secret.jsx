@@ -1,9 +1,9 @@
-// 시크릿 룸 입구 페이지 — 시크릿 키 1개로 히든 팝볼 룸 또는 히든 키캡 룸 중 하나 1회 입장
+// 시크릿 룸 입구 페이지 — 시크릿 키 1개로 히든 왁뿌볼 룸 또는 히든 키캡 룸 중 하나 1회 입장
 import { Link, useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 
 const ROOMS = [
-  { category: 'wakpuball', to: '/hidden/wakpuball', img: 'images/hidden_wakpuball.png', title: '히든 팝볼 룸' },
+  { category: 'wakpuball', to: '/hidden/wakpuball', img: 'images/hidden_wakpuball.png', title: '히든 왁뿌볼 룸' },
   { category: 'keycap', to: '/hidden/keycap', img: 'images/hidden_keycap.png', title: '히든 키캡 룸' },
 ];
 
@@ -23,11 +23,11 @@ export default function Secret() {
       <p className="case-sub">시크릿 키 1개 = 룸 1곳 1회 입장, 카드 1장 획득</p>
 
       {secretEntry ? (
-        <div className="v2-keydeck-banner">🎟️ 입장권 있음 — {secretEntry === 'wakpuball' ? '히든 팝볼 룸' : '히든 키캡 룸'} 입장 가능</div>
+        <div className="v2-keydeck-banner">🎟️ 입장권 있음 — {secretEntry === 'wakpuball' ? '히든 왁뿌볼 룸' : '히든 키캡 룸'} 입장 가능</div>
       ) : hasKey ? (
         <div className="v2-keydeck-banner">🔑 보유 시크릿 키 {secretKeys}개 — 들어갈 룸 선택</div>
       ) : (
-        <div className="v2-keydeck-banner">🔒 시크릿 키 필요 — 상점 {secretKeyPrice}코인 구매, 광고 보고 받기(하루 3개), 팝볼·키캡 타격 시 0.06% 드롭</div>
+        <div className="v2-keydeck-banner">🔒 시크릿 키 필요 — 상점 {secretKeyPrice}코인 구매, 광고 보고 받기(하루 3개), 왁뿌볼·키캡 타격 시 0.06% 드롭</div>
       )}
 
       <div className="v2-section-label">Secret Rooms</div>

@@ -5,7 +5,7 @@ import { useGame } from '../store/useGame';
 import CapsuleMachine from '../components/CapsuleMachine';
 import { playGachaSuccess, playGachaShake, preloadSample, GACHA_SHAKE_SOUND } from '../utils/sound';
 
-const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
+const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 const SHAKE_MS = 2000; // 캡슐 흔들림 녹음(약 2초) 길이에 맞춤
 
 export default function Gacha() {

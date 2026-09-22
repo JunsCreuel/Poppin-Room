@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useGame } from '../store/useGame';
 
-const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
+const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 
 // 브라우저 confirm 창 대신 화면 안에서 2단계 확인 — 일부 모바일 브라우저에서 confirm 결과가 늦거나 무시되는 문제 회피
 // step 상태는 부모(MyAccount)가 들고 있음 — 초기화 직후 로그아웃 화면으로 바뀌어도 '초기화 완료' 표시가 유지되도록
@@ -88,7 +88,7 @@ export default function MyAccount() {
       <section className="account-section">
         <h3 className="collection-section-title">히든카드 ({hiddenCards.length})</h3>
         {hiddenCards.length === 0 ? (
-          <p className="account-empty">아직 없음 — 팝볼·키캡을 계속 누르면 아주 가끔(0.6%) 획득 가능</p>
+          <p className="account-empty">아직 없음 — 왁뿌볼·키캡을 계속 누르면 아주 가끔(0.6%) 획득 가능</p>
         ) : (
           <div className="hidden-card-list">
             {hiddenCards.map((card) => (

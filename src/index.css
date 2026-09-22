@@ -913,7 +913,7 @@ button {
   color: var(--dim);
 }
 
-/* ===== design picker (팝볼/키캡 룸 즉시 장착) ===== */
+/* ===== design picker (왁뿌볼/키캡 룸 즉시 장착) ===== */
 .design-picker {
   margin: 0 auto 4px;
   max-width: 460px;
@@ -935,7 +935,7 @@ button {
   margin-top: 10px;
 }
 
-/* ===== ranking cta (팝볼 룸) ===== */
+/* ===== ranking cta (왁뿌볼 룸) ===== */
 .ranking-cta {
   display: block;
   text-align: center;
@@ -1019,7 +1019,7 @@ button {
   font-size: 13px;
 }
 
-/* ===== 히든 룸 진입 CTA (팝볼/키캡 룸) ===== */
+/* ===== 히든 룸 진입 CTA (왁뿌볼/키캡 룸) ===== */
 .hidden-room-cta {
   display: block;
   text-align: center;
@@ -1335,7 +1335,7 @@ button {
   width: 100%;
 }
 
-/* ===== 팝볼 상세 — NO./STRESS 헤더 + 콤보 배지 ===== */
+/* ===== 왁뿌볼 상세 — NO./STRESS 헤더 + 콤보 배지 ===== */
 .v2-object-head {
   display: flex;
   justify-content: space-between;
@@ -1691,7 +1691,7 @@ button {
   margin: 12px 0 18px;
 }
 
-/* 키캡 무대 — 팝볼 무대와 같은 카드 안에서 콤보 배지 위치 기준 */
+/* 키캡 무대 — 왁뿌볼 무대와 같은 카드 안에서 콤보 배지 위치 기준 */
 .keycap-stage {
   position: relative;
 }
@@ -1719,7 +1719,7 @@ body {
   letter-spacing: -0.02em;
 }
 .case-header .brand .dot {
-  /* 로고 마크 — 핑크 팝볼 */
+  /* 로고 마크 — 핑크 왁뿌볼 */
   width: 22px;
   height: 22px;
   border-radius: 50%;

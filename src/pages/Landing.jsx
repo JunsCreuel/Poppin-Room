@@ -36,7 +36,7 @@ export default function Landing() {
               나만의 오브제 룸.
             </h1>
             <p className="desc">
-              포핀룸은 팝볼을 누르고, 키캡을 두드리고,
+              포핀룸은 왁뿌볼을 누르고, 키캡을 두드리고,
               랜덤 오브제를 뽑아 나만의 장난감 방을 채우는 앱입니다.
             </p>
 
@@ -48,16 +48,16 @@ export default function Landing() {
 
           <div className="phone-card">
             <div className="room-box">
-              <div className="main-ball"><img src="images/wakpuball_02.png" alt="팝볼" /></div>
+              <div className="main-ball"><img src="images/wakpuball_02.png" alt="왁뿌볼" /></div>
               <div className="mini-item item1"><img src="images/keycap_07.png" alt="키캡" /></div>
-              <div className="mini-item item2"><img src="images/wakpuball_watermelon.png" alt="팝볼" /></div>
+              <div className="mini-item item2"><img src="images/wakpuball_watermelon.png" alt="왁뿌볼" /></div>
               <div className="mini-item item3"><img src="images/keycap_pudding.png" alt="키캡" /></div>
             </div>
 
             <div className="stats">
               <div>
                 <strong>{totalBreaks}</strong>
-                <span>팝볼</span>
+                <span>왁뿌볼</span>
               </div>
               <div>
                 <strong>{owned.length}</strong>
@@ -79,8 +79,8 @@ export default function Landing() {
         <div className="cards">
           <Link to="/wakpuball" className="card">
             <div className="emoji"><img src="images/wakpuball_02.png" alt="" /></div>
-            <h3>팝볼 누르기</h3>
-            <p>팝볼을 톡톡 누르고 코인을 모아요.</p>
+            <h3>왁뿌볼 누르기</h3>
+            <p>왁뿌볼을 톡톡 누르고 코인을 모아요.</p>
           </Link>
 
           <Link to="/keycap" className="card">
@@ -129,11 +129,11 @@ export default function Landing() {
         </div>
 
         <div className="objects">
-          <div><img src="images/wakpuball_grape.png" alt="팝볼" /></div>
+          <div><img src="images/wakpuball_grape.png" alt="왁뿌볼" /></div>
           <div><img src="images/keycap_lemon.png" alt="키캡" /></div>
-          <div><img src="images/wakpuball_mango.png" alt="팝볼" /></div>
+          <div><img src="images/wakpuball_mango.png" alt="왁뿌볼" /></div>
           <div><img src="images/keycap_watermelon.png" alt="키캡" /></div>
-          <div><img src="images/wakpuball_08.png" alt="팝볼" /></div>
+          <div><img src="images/wakpuball_08.png" alt="왁뿌볼" /></div>
           <div><img src="images/keycap_banana.png" alt="키캡" /></div>
         </div>
       </section>
@@ -143,7 +143,7 @@ export default function Landing() {
           <p className="tag">SHOP</p>
           <h2>오늘의 상점</h2>
           <p className="desc">
-            팝볼, 키캡, 룸 데코, 시크릿 박스를 코인으로 구매하세요.
+            왁뿌볼, 키캡, 룸 데코, 시크릿 박스를 코인으로 구매하세요.
           </p>
         </div>
         <Link to="/shop" className="btn pink">상점 보기</Link>

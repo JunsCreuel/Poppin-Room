@@ -6,7 +6,7 @@
 예:
   python3 scripts/import_sound.py ~/Downloads/common_hit.wav wakpuball-common-hit
 
-이후 toys.json의 해당 오브제에 hitSound(팝볼) 또는 sound(키캡)로 "sounds/<저장이름>.wav" 연결
+이후 toys.json의 해당 오브제에 hitSound(왁뿌볼) 또는 sound(키캡)로 "sounds/<저장이름>.wav" 연결
 """
 import array
 import os

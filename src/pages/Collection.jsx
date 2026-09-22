@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 
-const CATEGORY_LABEL = { wakpuball: '팝볼', keycap: '키캡' };
+const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 const GRADE_BADGE = { common: 'is-common', rare: 'is-rare', premium: 'is-premium', limited: 'is-limited' };
 const GRADE_LABEL = { common: 'COMMON', rare: 'RARE', premium: 'PREMIUM', limited: 'LIMITED' };
 const GRADE_ORDER = ['common', 'rare', 'premium', 'limited'];
 
-// 카테고리 탭(팝볼/키캡) → 등급 탭(COMMON/RARE/PREMIUM/LIMITED) → 그 등급의 보유·미획득 목록
+// 카테고리 탭(왁뿌볼/키캡) → 등급 탭(COMMON/RARE/PREMIUM/LIMITED) → 그 등급의 보유·미획득 목록
 export default function Collection() {
   const { toys, owned, equipped, equip } = useGame();
   const navigate = useNavigate();
