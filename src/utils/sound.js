@@ -164,6 +164,73 @@ export function playSampleHit(url, progress = 0) {
   playSample(url, { rate: 0.94 + Math.random() * 0.12 - progress * 0.08, gain: 0.7 + progress * 0.3 }, () => playCrackHit(progress));
 }
 
+// ---- 재질별 합성 타격음 (녹음 없는 LIMITED용) ----
+// 오디오 시간 기준으로 예약해서 setTimeout보다 타이밍이 정확함
+function grain(audioCtx, { at, duration, type = 'bandpass', freq, q = 1.2, gain }) {
+  const n = Math.max(1, Math.floor(audioCtx.sampleRate * duration));
+  const buffer = audioCtx.createBuffer(1, n, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < n; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / n) ** 1.4;
+  const src = audioCtx.createBufferSource();
+  src.buffer = buffer;
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = type;
+  filter.frequency.value = freq;
+  filter.Q.value = q;
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(gain * getVolume(), at);
+  g.gain.exponentialRampToValueAtTime(0.001, at + duration);
+  src.connect(filter).connect(g).connect(master);
+  src.start(at);
+  src.stop(at + duration + 0.02);
+}
+
+function tone(audioCtx, { at, duration, freq, freqEnd, gain, type = 'sine', detune = 0 }) {
+  const osc = audioCtx.createOscillator();
+  osc.type = type;
+  osc.detune.value = detune;
+  osc.frequency.setValueAtTime(freq, at);
+  if (freqEnd) osc.frequency.exponentialRampToValueAtTime(freqEnd, at + duration);
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(gain * getVolume(), at);
+  g.gain.exponentialRampToValueAtTime(0.001, at + duration);
+  osc.connect(g).connect(master);
+  osc.start(at);
+  osc.stop(at + duration + 0.02);
+}
+
+// 껍질 깨지는 소리 — 순간 클릭 + 번지는 균열 조각 + 낮은 몸통 울림 + 재질 잔향.
+// 깨질수록(progress↑) 조각이 늘고 몸통 음이 낮아지며 전체가 세짐, 매번 ±6% 랜덤
+// material: 'crystal'(유리·크리스탈, 맑고 높은 배음) | 'shell'(도자기·조개껍질, 둔하고 바삭)
+export function playShellCrack(material = 'crystal', progress = 0) {
+  whenRunning((audioCtx) => {
+    const t0 = audioCtx.currentTime;
+    const vary = () => 0.94 + Math.random() * 0.12;
+    const level = (0.5 + progress * 0.3) * vary();
+
+    grain(audioCtx, { at: t0, duration: 0.006, type: 'highpass', freq: 4500 + Math.random() * 1500, q: 0.7, gain: 0.9 * level });
+
+    const count = 3 + Math.round(progress * 3);
+    let t = t0 + 0.004;
+    for (let i = 0; i < count; i++) {
+      const freq = (1200 + Math.random() * 2800) * (1 - i * 0.06);
+      grain(audioCtx, { at: t, duration: 0.012 + Math.random() * 0.018, freq, q: 2.5, gain: (0.45 - i * 0.05) * level });
+      t += 0.008 + Math.random() * 0.017;
+    }
+
+    tone(audioCtx, { at: t0, duration: 0.08 + progress * 0.04, freq: (220 - progress * 60) * vary(), freqEnd: 120, gain: 0.5 * level });
+
+    if (material === 'crystal') {
+      [[2600, 0.18, 0.12], [4200, 0.15, 0.08], [6400, 0.12, 0.05]].forEach(([freq, duration, gain], i) => {
+        tone(audioCtx, { at: t0 + 0.003 + i * 0.002, duration, freq: freq * vary(), gain: gain * level, detune: (Math.random() - 0.5) * 30 });
+      });
+    } else {
+      grain(audioCtx, { at: t0 + 0.01, duration: 0.06, freq: 900 + Math.random() * 700, q: 1.0, gain: 0.35 * level });
+      tone(audioCtx, { at: t0 + 0.005, duration: 0.05, freq: 1900 * vary(), gain: 0.06 * level, type: 'triangle' });
+    }
+  });
+}
+
 // 팝볼 — 누를 때마다 나는 크런치. progress(0~1)가 올라갈수록 톤이 낮아지고
 // 세져서 점점 더 크게 금이 가는 느낌을 준다. 프리미엄 등급은 아직 실제 녹음
 // 파일이 없어서(팝볼 크런치 녹음 자체가 팀에 아직 없음) 레이어를 한 겹 더

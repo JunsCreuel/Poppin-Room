@@ -77,7 +77,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_06",
         "count": 20
-      }
+      },
+      "hitSynth": "crystal"
     },
     {
       "id": "wb_07",
@@ -127,7 +128,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_banana",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-rare-hit.wav"
     },
     {
       "id": "wb_watermelon",
@@ -142,7 +144,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_watermelon",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-rare-hit.wav"
     },
     {
       "id": "wb_grape",
@@ -157,7 +160,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_grape",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-rare-hit.wav"
     },
     {
       "id": "wb_mango",
@@ -172,7 +176,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_mango",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-rare-hit.wav"
     },
     {
       "id": "wb_lemon",
@@ -187,7 +192,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_lemon",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-rare-hit.wav"
     },
     {
       "id": "wb_peach",
@@ -202,7 +208,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_peach",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-rare-hit.wav"
     },
     {
       "id": "wb_donut",
@@ -217,7 +224,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_donut",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-rare-hit.wav"
     },
     {
       "id": "wb_popsicle",
@@ -232,7 +240,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_popsicle",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-rare-hit.wav"
     },
     {
       "id": "wb_pudding",
@@ -247,7 +256,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_pudding",
         "count": 15
-      }
+      },
+      "hitSound": "sounds/wakpuball-rare-hit.wav"
     },
     {
       "id": "wb_shell",
@@ -262,7 +272,8 @@
       "crackFrames": {
         "dir": "images/crack/wb_shell",
         "count": 20
-      }
+      },
+      "hitSynth": "shell"
     }
   ],
   "keycap": [

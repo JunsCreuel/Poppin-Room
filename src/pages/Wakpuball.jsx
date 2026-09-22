@@ -42,6 +42,7 @@ export default function Wakpuball() {
           hitsToBreak={toy.hitsToBreak}
           crackFrames={toy.crackFrames}
           hitSound={toy.hitSound}
+          hitSynth={toy.hitSynth}
           onPress={() => trigger(pressReward('wakpuball'))}
           onBreak={recordBreak}
         />

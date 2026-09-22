@@ -168,7 +168,8 @@ Poppin-Room/
 | `accent`, `filter`, `isHolo` | 색·필터·홀로그램 연출 |
 | `hitsToBreak`, `crackPattern` | 팝볼 파괴 횟수·금 패턴 |
 | `crackFrames` | `{ dir, count }` 팝볼 크랙 프레임 폴더·장수, 없으면 고정 이미지 + 조각 파편 연출 |
-| `hitSound` | 팝볼 타격 녹음 경로(`sounds/…wav`), 없으면 합성 크런치음 — 현재 COMMON 4종·PREMIUM 2종 |
+| `hitSound` | 팝볼 타격 녹음 경로(`sounds/…wav`), 없으면 합성 크런치음 — 현재 COMMON 4종·RARE 9종·PREMIUM 2종 (LIMITED 2종은 hitSynth) |
+| `hitSynth` | 녹음 없을 때 재질별 합성 타격음 — `crystal`(스타 오브, 유리 잔향) / `shell`(라벤더 조개, 도자기·조개껍질) |
 | `sound` | 키캡 타건 녹음 경로(`sounds/…wav`), 없으면 합성 클릭음 — 현재 RARE 17종·LIMITED 6종·PREMIUM 4종 |
 | `price` | premium 가격(원) |
 

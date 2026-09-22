@@ -1,6 +1,6 @@
 // 팝볼 무대 컴포넌트 — 타격 쿨다운, 타격마다 크랙 프레임 전환, 파괴 연출, 리셋
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
-import { playCrackHit, playCrackBreak, playSampleHit, preloadSample } from '../utils/sound';
+import { playCrackHit, playCrackBreak, playSampleHit, playShellCrack, preloadSample } from '../utils/sound';
 import { crackFrameList } from '../data/crackFrames';
 
 const BREAK_SHATTER_MS = 480; // 조각 파편 폴백 연출 시간(크랙 프레임 없는 오브제)
@@ -9,7 +9,7 @@ const HIT_COOLDOWN_MS = 260; // 이보다 빨리 연속으로 눌러도 무시 �
 
 // 프레임 있는 오브제: 타격 0회 = 01(멀쩡), k회 = k+1, 마지막 타격은 N 위에서 파괴 연출
 export default function WakpuStage({
-  image, filter, isHolo, holoClassName = 'is-holo', accent, hitsToBreak, crackFrames, hitSound,
+  image, filter, isHolo, holoClassName = 'is-holo', accent, hitsToBreak, crackFrames, hitSound, hitSynth,
   disabled, onPress, onBreak, extraClassName = '',
 }) {
   const [hits, setHits] = useState(0);
@@ -72,11 +72,13 @@ export default function WakpuStage({
         setHits(0);
       }, frames ? BREAK_FRAME_MS : BREAK_SHATTER_MS);
     } else {
+      // 타격음 우선순위: 녹음 파일 → 재질별 합성(껍질 깨짐) → 기본 합성
       if (hitSound) playSampleHit(hitSound, progress);
+      else if (hitSynth) playShellCrack(hitSynth, progress);
       else playCrackHit(progress);
       setHits(next);
     }
-  }, [disabled, phase, hits, hitsToBreak, frames, hitSound, onPress, onBreak]);
+  }, [disabled, phase, hits, hitsToBreak, frames, hitSound, hitSynth, onPress, onBreak]);
 
   const crackProgress = hits / hitsToBreak;
   const squashAmount = 0.02 + crackProgress * 0.05;
