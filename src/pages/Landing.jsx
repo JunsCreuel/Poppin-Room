@@ -1,12 +1,22 @@
 // 랜딩 페이지 — 첫 화면, 6개 플레이 모드 카드로 각 기능 진입
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import '../landing.css';
 
+// 사용자가 로그인 창을 닫은 경우 — 실패 문구 안 띄움
+const LOGIN_CANCEL_CODES = ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'];
+
 // 시작하기·PLAY → 6개 카드 섹션으로 스크롤, 카드 → 각 기능 화면
+// 카드는 로그인돼 있으면 바로 이동, 아니면 구글 로그인 후 이동
 // 하단 숫자 3칸 = 누적 깬 횟수 / 보유 오브제 수 / 히든카드 수
 export default function Landing() {
-  const { totalBreaks, owned, hiddenCards } = useGame();
+  const { totalBreaks, owned, hiddenCards, requireLogin, authError } = useGame();
+  const navigate = useNavigate();
+
+  const enter = (to) => async (e) => {
+    e.preventDefault();
+    if (await requireLogin()) navigate(to);
+  };
 
   // 페이지 내 섹션 이동 — HashRouter가 #앵커를 경로로 해석하므로 직접 스크롤
   const scrollTo = (id) => (e) => {
@@ -75,39 +85,42 @@ export default function Landing() {
       <section className="play" id="play">
         <p className="tag center">PLAY MODES</p>
         <h2>그냥 눌러. 모이면 끝.</h2>
+        {authError && !LOGIN_CANCEL_CODES.includes(authError) && (
+          <p className="account-note" style={{ color: 'var(--red)', textAlign: 'center' }}>로그인 실패: {authError}</p>
+        )}
 
         <div className="cards">
-          <Link to="/wakpuball" className="card">
+          <Link to="/wakpuball" className="card" onClick={enter('/wakpuball')}>
             <div className="emoji"><img src="images/wakpuball_02.png" alt="" /></div>
             <h3>왁뿌볼 누르기</h3>
             <p>왁뿌볼을 톡톡 누르고 코인을 모아요.</p>
           </Link>
 
-          <Link to="/keycap" className="card">
+          <Link to="/keycap" className="card" onClick={enter('/keycap')}>
             <div className="emoji"><img src="images/keycap_01.png" alt="" /></div>
             <h3>탭키 타건</h3>
             <p>키캡을 두드리면서 사운드와 이펙트를 즐겨요.</p>
           </Link>
 
-          <Link to="/gacha" className="card">
+          <Link to="/gacha" className="card" onClick={enter('/gacha')}>
             <div className="emoji"><img src="images/gacha_machine.png" alt="" /></div>
             <h3>랜덤 뽑기</h3>
             <p>랜덤 박스에서 새로운 오브제를 뽑아요.</p>
           </Link>
 
-          <Link to="/collection" className="card">
+          <Link to="/collection" className="card" onClick={enter('/collection')}>
             <div className="emoji"><img src="images/wakpuball_peach.png" alt="" /></div>
             <h3>컬렉션</h3>
             <p>모은 오브제 확인, 장착 가능</p>
           </Link>
 
-          <Link to="/secret" className="card">
+          <Link to="/secret" className="card" onClick={enter('/secret')}>
             <div className="emoji"><img src="images/hidden_keycap.png" alt="" /></div>
             <h3>시크릿 룸</h3>
             <p>조건을 달성하면 숨겨진 방이 열려요.</p>
           </Link>
 
-          <Link to="/shop" className="card">
+          <Link to="/shop" className="card" onClick={enter('/shop')}>
             <div className="emoji">🏆</div>
             <h3>상점 & 랭킹</h3>
             <p>아이템을 사고 친구들과 점수를 비교해요.</p>

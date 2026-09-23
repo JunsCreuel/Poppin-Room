@@ -401,15 +401,26 @@ export function GameProvider({ children }) {
 
   // Google 로그인 — 팝업 방식. 사이트 주소와 로그인 처리 주소(authDomain)가 같은
   // Firebase Hosting(firebaseapp.com)에서는 팝업이 막히지 않음
+  // 성공하면 true, 실패·취소하면 false
   const login = useCallback(async () => {
     setAuthError(null);
     try {
       await signInWithPopup(auth, googleProvider);
+      return true;
     } catch (err) {
       console.error('로그인 실패', err);
       setAuthError(err.code || err.message);
+      return false;
     }
   }, []);
+
+  // 로그인돼 있으면 바로 true, 아니면 구글 로그인 창을 띄우고 결과 반환
+  // 첫 화면 로딩 직후엔 저장된 로그인 복원이 끝나기 전일 수 있어 복원부터 기다림
+  const requireLogin = useCallback(async () => {
+    await auth.authStateReady();
+    if (auth.currentUser) return true;
+    return login();
+  }, [login]);
 
   // 로그아웃 전에 대기 중인 저장분을 보내고, 서버로 가는 중인 저장까지 끝나길 기다림
   // 로그아웃 후에는 보안 규칙상 본인 문서에 쓸 수 없음 — 연결이 끊긴 경우를 대비해 최대 5초만 기다림
@@ -471,6 +482,7 @@ export function GameProvider({ children }) {
     equip,
     getToy,
     login,
+    requireLogin,
     logout,
     recordBreak,
     resetProgress,
