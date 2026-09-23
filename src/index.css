@@ -2136,3 +2136,13 @@ button.v2-playroom-row:disabled { cursor: default; }
   font-size: 15px;
 }
 .about-list a { color: var(--text); font-weight: 700; }
+
+/* 비회원 테스트 모드 안내 띠 */
+.guest-mode-bar {
+  padding: 8px 20px;
+  background: var(--yellow);
+  border-bottom: 2px solid var(--line);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}

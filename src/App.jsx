@@ -52,22 +52,24 @@ function ScrollToTop() {
 
 // 공통 헤더 레이아웃 — 랜딩(/)을 제외한 모든 화면에 적용
 function AppLayout() {
+  const { guestMode, loggedIn } = useGame();
   return (
     <div className="case-shell">
       <NavBar />
+      {guestMode && !loggedIn && (
+        <div className="guest-mode-bar">비회원 테스트 모드, 사이트를 나가면 모든 기록 삭제</div>
+      )}
       <Outlet />
     </div>
   );
 }
 
-// 게임 화면은 로그인해야 이용 가능 — 비로그인이면 내 프로필(로그인 화면)로 보내고,
-// 로그인하면 원래 가려던 화면으로 돌아오도록 경로를 넘겨줌
-function RequireLogin() {
-  const { authReady, loggedIn } = useGame();
-  const location = useLocation();
-  // 새로고침 직후엔 저장된 로그인 복원 전이라, 확인 끝날 때까지 기다림(로그인된 사람이 튕기지 않게)
+// 게임 화면 입장 조건 — 회원 로그인 또는 비회원 테스트 모드, 둘 다 아니면 랜딩(입구 선택)으로
+function RequireEntry() {
+  const { authReady, loggedIn, guestMode } = useGame();
+  // 새로고침 직후엔 저장된 로그인 복원 전이라, 확인 끝날 때까지 기다림(회원이 튕기지 않게)
   if (!authReady) return <div className="account-loading-overlay">로그인 확인 중</div>;
-  if (!loggedIn) return <Navigate to="/account" replace state={{ from: location.pathname }} />;
+  if (!loggedIn && !guestMode) return <Navigate to="/" replace />;
   return <Outlet />;
 }
 
@@ -82,7 +84,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route element={<AppLayout />}>
-            <Route element={<RequireLogin />}>
+            <Route element={<RequireEntry />}>
               <Route path="/wakpuball" element={<Wakpuball />} />
               <Route path="/keycap" element={<Keycap />} />
               <Route path="/hidden/wakpuball" element={<HiddenWakpuball />} />

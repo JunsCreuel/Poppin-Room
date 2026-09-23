@@ -1,6 +1,6 @@
 // 내 계정 페이지 — Google 로그인, 코인·히든카드·프리미엄 보유 내역, 진행 상황 초기화
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import AuthButton from '../components/AuthButton';
 
@@ -37,13 +37,6 @@ export default function MyAccount() {
 
   const [resetStep, setResetStep] = useState('idle'); // idle | confirm | done
   const navigate = useNavigate();
-  // 로그인 안 한 채 게임 화면에 들어왔다가 이리로 보내진 경우, 원래 가려던 경로
-  const from = useLocation().state?.from;
-
-  // 로그인이 끝나면 원래 가려던 화면으로 돌려보냄
-  useEffect(() => {
-    if (loggedIn && from) navigate(from, { replace: true });
-  }, [loggedIn, from, navigate]);
 
   // 로그아웃하면 랜딩으로 이동
   const handleLogout = async () => {
@@ -63,9 +56,7 @@ export default function MyAccount() {
       <div className="case-page">
         <div className="case-eyebrow">MY ACCOUNT</div>
         <h1 className="case-title">계정 연결</h1>
-        <p className="case-sub">
-          {from ? '로그인 후 이용 가능, ' : ''}히든카드 보관, 실물 경품 수령 안내는 계정 연결 후 확인 가능, Google에서 로그인
-        </p>
+        <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정 연결 후 확인 가능, Google에서 로그인</p>
 
         <AuthButton />
       </div>

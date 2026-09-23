@@ -113,6 +113,25 @@
   background: #fff;
 }
 
+/* 회원·비회원 입구 버튼 — <button>이라 기본 글꼴·색 상속 */
+.landing button.btn {
+  font: inherit;
+  font-weight: 800;
+  color: #111;
+  cursor: pointer;
+}
+
+.landing .entry-note {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #555;
+}
+
+.landing .entry-note.is-error {
+  color: #e0392f;
+  font-weight: 700;
+}
+
 .landing .phone-card {
   border: 2px solid #111;
   border-radius: 28px;

@@ -1,5 +1,6 @@
 // 게임 상태 저장소 — 코인, 보유/장착 오브제, 히든카드
-// 로그아웃 상태는 localStorage, 로그인 상태는 Firestore users/{uid} 문서에 계정별로 저장
+// 회원(구글 로그인)은 Firestore users/{uid} 문서에 계정별로 저장
+// 비회원 테스트 모드는 sessionStorage — 탭을 닫으면 모든 기록 삭제
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore/lite';
@@ -7,8 +8,10 @@ import { auth, db, googleProvider } from '../lib/firebase';
 import toysData from '../data/toys.json';
 import { weightedPick, computeGradeOdds } from '../data/gradeOdds';
 
-const STORAGE_KEY = 'poppinroom-state'; // 진행 상황 저장 키(localStorage)
-const LEGACY_STORAGE_KEY = 'csl-gacha-state'; // 이름 변경 전 저장 키, 남아 있으면 읽어옴
+const STORAGE_KEY = 'poppinroom-state'; // 비회원 진행 상황 저장 키(sessionStorage)
+const GUEST_KEY = 'poppinroom-guest'; // 비회원 모드로 들어왔는지(sessionStorage)
+// 예전 버전이 localStorage에 남긴 진행 상황 — 이제 안 씀, 정리 대상
+const OLD_LOCAL_KEYS = ['poppinroom-state', 'csl-gacha-state'];
 const PULL_COST = 200; // 뽑기 1회당 코인 비용
 const DUPLICATE_REFUND_RATIO = 0.3;
 const KEY_DAILY_GOAL = 500; // 키캡 룸 "오늘의 타건 게이지" 표시 목표치(코인 기준)
@@ -64,7 +67,7 @@ function defaultState() {
 
 function loadState() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
+    const raw = sessionStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultState();
     return normalizeState(JSON.parse(raw));
   } catch {
@@ -72,7 +75,7 @@ function loadState() {
   }
 }
 
-// 저장된 값(localStorage·Firestore 공통)을 현재 규칙에 맞게 정리
+// 저장된 값(sessionStorage·Firestore 공통)을 현재 규칙에 맞게 정리
 function normalizeState(parsed) {
   try {
     const merged = { ...defaultState(), ...parsed };
@@ -126,12 +129,18 @@ export function GameProvider({ children }) {
   const [state, setState] = useState(loadState);
   const [user, setUser] = useState(() => auth.currentUser);
   const [authReady, setAuthReady] = useState(false); // 저장된 로그인 복원 확인 끝났는지
+  // 비회원 테스트 모드 — 새로고침엔 유지, 탭을 닫으면 풀림
+  const [guestMode, setGuestMode] = useState(() => sessionStorage.getItem(GUEST_KEY) === '1');
+
+  useEffect(() => {
+    for (const key of OLD_LOCAL_KEYS) localStorage.removeItem(key);
+  }, []);
   const [authError, setAuthError] = useState(null); // 로그인 버튼 실패
   const [syncError, setSyncError] = useState(null); // 로그인은 됐지만 계정 데이터 불러오기 실패 — 이 상태에선 저장 안 됨
   // 로그인 직후 계정 데이터 불러오는 중 — 이 사이 변경은 곧 도착할 계정 데이터에 덮여 사라지므로 화면을 가림
   const [accountLoading, setAccountLoading] = useState(false);
 
-  // 지금 state가 누구 데이터인지 — null: 비로그인(localStorage), uid: 그 계정, undefined: 계정 데이터 불러오는 중(저장 금지)
+  // 지금 state가 누구 데이터인지 — null: 비회원(sessionStorage), uid: 그 계정, undefined: 계정 데이터 불러오는 중(저장 금지)
   // 로그인/로그아웃 전환 순간에 한 사람의 데이터가 다른 사람 저장소에 덮어써지지 않게 막는 장치
   const ownerRef = useRef(null);
   const pendingRef = useRef(null); // Firestore에 아직 안 보낸 마지막 상태 { uid, data }
@@ -163,6 +172,12 @@ export function GameProvider({ children }) {
       flush();
       setUser(nextUser);
       setAuthReady(true);
+      // 회원으로 로그인하면 비회원 모드와 그 기록은 정리
+      if (nextUser) {
+        setGuestMode(false);
+        sessionStorage.removeItem(GUEST_KEY);
+        sessionStorage.removeItem(STORAGE_KEY);
+      }
       setSyncError(null);
       setAccountLoading(!!nextUser);
       if (!nextUser) {
@@ -212,12 +227,12 @@ export function GameProvider({ children }) {
     return () => { active = false; unsubscribe(); };
   }, [flush]);
 
-  // 상태 저장 — 비로그인은 즉시 localStorage, 로그인은 0.8초 모아서 Firestore(연타 때 쓰기 횟수 절약)
+  // 상태 저장 — 비회원은 즉시 sessionStorage, 회원은 0.8초 모아서 Firestore(연타 때 쓰기 횟수 절약)
   useEffect(() => {
     const owner = ownerRef.current;
     if (owner === undefined) return;
     if (owner === null) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       return;
     }
     pendingRef.current = { uid: owner, data: state };
@@ -444,12 +459,18 @@ export function GameProvider({ children }) {
     await signOut(auth);
   }, [flush]);
 
+  // 비회원 테스트 모드 시작 — 회원으로 로그인돼 있으면 먼저 로그아웃
+  const startGuest = useCallback(async () => {
+    if (auth.currentUser) await logout();
+    sessionStorage.setItem(GUEST_KEY, '1');
+    setGuestMode(true);
+  }, [logout]);
+
   // 진행 상황 초기화 — 처음 상태(무료 등급만 보유, 코인 0)로 되돌림, 복구 불가
   // 로그인 상태면 저장 effect가 그 계정 문서를 기본값으로 덮어씀
   const resetProgress = useCallback(() => {
     if (ownerRef.current === null) {
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(LEGACY_STORAGE_KEY);
+      sessionStorage.removeItem(STORAGE_KEY);
     }
     setState(defaultState());
   }, []);
@@ -460,6 +481,8 @@ export function GameProvider({ children }) {
     equipped: state.equipped,
     hiddenCards: state.hiddenCards,
     authReady,
+    guestMode,
+    startGuest,
     loggedIn: !!user,
     loginProvider: user ? 'google' : null,
     displayName: user?.displayName ?? null,
