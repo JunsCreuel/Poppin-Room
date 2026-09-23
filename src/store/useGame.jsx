@@ -166,12 +166,18 @@ export function GameProvider({ children }) {
       ownerRef.current = undefined;
       const ref = doc(db, 'users', nextUser.uid);
 
+      // 응답도 오류도 없이 멈추는 연결이 있어 15초 넘으면 실패 처리 — 불러오는 중 화면에 갇히지 않게
+      const withTimeout = (promise) => Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(Object.assign(new Error('계정 데이터 응답 없음'), { code: 'timeout' })), 15000)),
+      ]);
+
       // 연결이 잠깐 끊겨 'unavailable'이 나는 경우가 있어 1·2·4초 간격으로 다시 시도
       const load = async (attempt = 0) => {
         try {
-          const snap = await getDoc(ref);
+          const snap = await withTimeout(getDoc(ref));
           const next = snap.exists() ? normalizeState(snap.data()) : defaultState();
-          if (!snap.exists()) await setDoc(ref, { ...next, email: nextUser.email ?? null });
+          if (!snap.exists()) await withTimeout(setDoc(ref, { ...next, email: nextUser.email ?? null }));
           return next;
         } catch (err) {
           if (err.code !== 'unavailable' || attempt >= 3 || stale()) throw err;
