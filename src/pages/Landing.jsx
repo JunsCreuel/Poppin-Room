@@ -69,7 +69,6 @@ export default function Landing() {
               <button type="button" className="btn pink" onClick={startMember}>회원 로그인</button>
               <button type="button" className="btn white" onClick={startAsGuest}>비회원 로그인</button>
             </div>
-            <p className="entry-note">회원은 계정별로 기록 저장, 비회원은 테스트 모드로 사이트를 나가면 기록 삭제</p>
             {authError && !LOGIN_CANCEL_CODES.includes(authError) && (
               <p className="entry-note is-error">로그인 실패: {authError}</p>
             )}
