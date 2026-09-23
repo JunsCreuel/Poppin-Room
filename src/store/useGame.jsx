@@ -137,7 +137,8 @@ export function GameProvider({ children }) {
     clearTimeout(timerRef.current);
     const pending = pendingRef.current;
     pendingRef.current = null;
-    if (pending) setDoc(doc(db, 'users', pending.uid), pending.data, { merge: true }).catch((err) => console.error('저장 실패', err));
+    if (!pending) return Promise.resolve();
+    return setDoc(doc(db, 'users', pending.uid), pending.data, { merge: true }).catch((err) => console.error('저장 실패', err));
   }, []);
 
   // 로그인 상태 구독 — 계정이 바뀔 때마다 그 계정의 데이터로 교체
@@ -389,9 +390,11 @@ export function GameProvider({ children }) {
     }
   }, []);
 
+  // 로그아웃 전에 대기 중인 저장분부터 보냄 — 로그아웃 후에는 보안 규칙상 본인 문서에 쓸 수 없음
   const logout = useCallback(async () => {
+    await flush();
     await signOut(auth);
-  }, []);
+  }, [flush]);
 
   // 진행 상황 초기화 — 처음 상태(무료 등급만 보유, 코인 0)로 되돌림, 복구 불가
   // 로그인 상태면 저장 effect가 그 계정 문서를 기본값으로 덮어씀
