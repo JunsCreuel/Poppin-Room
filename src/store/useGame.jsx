@@ -2,7 +2,7 @@
 // 로그아웃 상태는 localStorage, 로그인 상태는 Firestore users/{uid} 문서에 계정별로 저장
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, waitForPendingWrites } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore/lite';
 import { auth, db, googleProvider } from '../lib/firebase';
 import toysData from '../data/toys.json';
 import { weightedPick, computeGradeOdds } from '../data/gradeOdds';
@@ -135,13 +135,20 @@ export function GameProvider({ children }) {
   const ownerRef = useRef(null);
   const pendingRef = useRef(null); // Firestore에 아직 안 보낸 마지막 상태 { uid, data }
   const timerRef = useRef(null);
+  // 저장 요청을 한 줄로 세움 — 먼저 보낸 저장이 나중에 도착해 최신 값을 덮는 일 방지
+  const saveChainRef = useRef(Promise.resolve());
 
+  // 대기 중인 저장분을 보내고, 앞서 보낸 것까지 모두 끝나면 완료되는 Promise 반환
   const flush = useCallback(() => {
     clearTimeout(timerRef.current);
     const pending = pendingRef.current;
     pendingRef.current = null;
-    if (!pending) return Promise.resolve();
-    return setDoc(doc(db, 'users', pending.uid), pending.data, { merge: true }).catch((err) => console.error('저장 실패', err));
+    if (pending) {
+      saveChainRef.current = saveChainRef.current
+        .then(() => setDoc(doc(db, 'users', pending.uid), pending.data, { merge: true }))
+        .catch((err) => console.error('저장 실패', err));
+    }
+    return saveChainRef.current;
   }, []);
 
   // 로그인 상태 구독 — 계정이 바뀔 때마다 그 계정의 데이터로 교체
@@ -431,8 +438,7 @@ export function GameProvider({ children }) {
   // 로그아웃 전에 대기 중인 저장분을 보내고, 서버로 가는 중인 저장까지 끝나길 기다림
   // 로그아웃 후에는 보안 규칙상 본인 문서에 쓸 수 없음 — 연결이 끊긴 경우를 대비해 최대 5초만 기다림
   const logout = useCallback(async () => {
-    await flush();
-    await Promise.race([waitForPendingWrites(db), new Promise((r) => setTimeout(r, 5000))]);
+    await Promise.race([flush(), new Promise((r) => setTimeout(r, 5000))]);
     await signOut(auth);
   }, [flush]);
 
