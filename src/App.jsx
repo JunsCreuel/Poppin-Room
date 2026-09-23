@@ -13,6 +13,7 @@ import Collection from './pages/Collection';
 import Secret from './pages/Secret';
 import Shop from './pages/Shop';
 import MyAccount from './pages/MyAccount';
+import About from './pages/About';
 
 function NavBar() {
   const linkClass = ({ isActive }) => (isActive ? 'is-active' : '');
@@ -30,6 +31,7 @@ function NavBar() {
         <NavLink to="/collection" className={linkClass}>컬렉션</NavLink>
         <NavLink to="/secret" className={linkClass}>시크릿</NavLink>
         <NavLink to="/shop" className={linkClass}>상점 & 랭킹</NavLink>
+        <NavLink to="/about" className={linkClass}>About</NavLink>
         <span className="nav-coin-badge">🪙 {coins}</span>
         <NavLink to="/account" className={`nav-account-link ${linkClass({ isActive: false })}`}>
           {loggedIn ? '내 계정' : '로그인'}
@@ -78,6 +80,7 @@ function App() {
             <Route path="/secret" element={<Secret />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/account" element={<MyAccount />} />
+            <Route path="/about" element={<About />} />
             {/* 옛 주소 리다이렉트 */}
             <Route path="/store" element={<Navigate to="/shop" replace />} />
             <Route path="/ranking" element={<Navigate to="/shop" replace />} />
