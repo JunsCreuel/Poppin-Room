@@ -48,7 +48,7 @@
   font-weight: 700;
 }
 
-/* 좁은 화면에서 "MY PROFILE" 같은 두 단어 메뉴가 두 줄로 꺾이지 않게 */
+/* 좁은 화면에서 "내 프로필" 같은 두 단어 메뉴가 두 줄로 꺾이지 않게 */
 .landing .nav-menu a {
   white-space: nowrap;
 }
