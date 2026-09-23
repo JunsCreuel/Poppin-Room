@@ -7,7 +7,7 @@ import '../landing.css';
 const LOGIN_CANCEL_CODES = ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'];
 
 // 시작하기·PLAY → 6개 카드 섹션으로 스크롤, 카드 → 각 기능 화면
-// 카드는 로그인돼 있으면 바로 이동, 아니면 구글 로그인 후 이동
+// 카드·컬렉션 보기·상점 보기는 로그인돼 있으면 바로 이동, 아니면 구글 로그인 후 이동
 // 하단 숫자 3칸 = 누적 깬 횟수 / 보유 오브제 수 / 히든카드 수
 export default function Landing() {
   const { totalBreaks, owned, hiddenCards, requireLogin, authError } = useGame();
@@ -52,7 +52,7 @@ export default function Landing() {
 
             <div className="buttons">
               <a href="#play" className="btn pink" onClick={scrollTo('play')}>시작하기</a>
-              <Link to="/collection" className="btn white">컬렉션 보기</Link>
+              <Link to="/collection" className="btn white" onClick={enter('/collection')}>컬렉션 보기</Link>
             </div>
           </div>
 
@@ -159,7 +159,7 @@ export default function Landing() {
             왁뿌볼, 키캡, 룸 데코, 시크릿 박스를 코인으로 구매하세요.
           </p>
         </div>
-        <Link to="/shop" className="btn pink">상점 보기</Link>
+        <Link to="/shop" className="btn pink" onClick={enter('/shop')}>상점 보기</Link>
       </section>
     </main>
   );
