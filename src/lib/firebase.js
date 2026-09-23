@@ -16,5 +16,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+// 로그인할 때마다 구글 계정 선택 창 표시 — 없으면 마지막 계정으로 자동 로그인돼 계정 전환 불가
+googleProvider.setCustomParameters({ prompt: 'select_account' });
 export const db = getFirestore(app);
 export const functions = getFunctions(app);
