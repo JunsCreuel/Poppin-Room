@@ -1,6 +1,6 @@
 // 게임 상태 저장소 — 코인, 보유/장착 오브제, 히든카드를 localStorage에 저장
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase';
 import toysData from '../data/toys.json';
 import { weightedPick, computeGradeOdds } from '../data/gradeOdds';
@@ -115,6 +115,7 @@ const GameContext = createContext(null);
 export function GameProvider({ children }) {
   const [state, setState] = useState(loadState);
   const [user, setUser] = useState(() => auth.currentUser);
+  const [authError, setAuthError] = useState(null);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -122,6 +123,15 @@ export function GameProvider({ children }) {
 
   // Firebase Auth 로그인 상태 구독 — loggedIn/표시 정보는 이제 여기서 파생됨(localStorage에 저장 안 함)
   useEffect(() => onAuthStateChanged(auth, setUser), []);
+
+  // signInWithRedirect로 나갔다가 돌아온 뒤 결과 처리 — 팝업 방식은 제3자 쿠키 차단·COOP 헤더에
+  // 막혀 "창은 뜨는데 로그인이 안 끝나는" 문제가 흔해서 리디렉션 방식을 씀
+  useEffect(() => {
+    getRedirectResult(auth).catch((err) => {
+      console.error('로그인 실패', err);
+      setAuthError(err.code || err.message);
+    });
+  }, []);
 
   // 왁뿌볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 시크릿 키 드롭(0.06%)
   // 또는 코인 보상을 굴리고 결과를 반환한다(화면에서 토스트 연출용)
@@ -305,12 +315,15 @@ export function GameProvider({ children }) {
     return toysData[category].find((t) => t.id === id) || null;
   }, []);
 
-  // Google 로그인 — 팝업 방식, 성공하면 onAuthStateChanged가 자동으로 user를 갱신함
+  // Google 로그인 — 리디렉션 방식, 구글 로그인 페이지로 이동했다가 돌아오면
+  // 위 getRedirectResult가 결과를 처리하고 onAuthStateChanged가 user를 갱신함
   const login = useCallback(async () => {
+    setAuthError(null);
     try {
-      await signInWithPopup(auth, googleProvider);
+      await signInWithRedirect(auth, googleProvider);
     } catch (err) {
       console.error('로그인 실패', err);
+      setAuthError(err.code || err.message);
     }
   }, []);
 
@@ -335,6 +348,7 @@ export function GameProvider({ children }) {
     displayName: user?.displayName ?? null,
     email: user?.email ?? null,
     photoURL: user?.photoURL ?? null,
+    authError,
     dailyBreaks: state.dailyBreaks,
     totalBreaks: state.totalBreaks,
     dailyKeyCoins: state.dailyKeyCoins,
