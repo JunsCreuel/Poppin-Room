@@ -1,5 +1,7 @@
 // 게임 상태 저장소 — 코인, 보유/장착 오브제, 히든카드를 localStorage에 저장
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { auth, googleProvider } from '../lib/firebase';
 import toysData from '../data/toys.json';
 import { weightedPick, computeGradeOdds } from '../data/gradeOdds';
 
@@ -48,8 +50,6 @@ function defaultState() {
     owned: freeOwnedIds(),
     equipped: { wakpuball: 'wb_02', keycap: 'kc_01' },
     hiddenCards: [], // { code, category, wonAt }
-    loggedIn: false,
-    loginProvider: null, // 'kakao' | 'google'
     dailyBreaks: 0, // 오늘 왁뿌볼을 완전히 깬 횟수 — 랭킹 계산에 사용
     totalBreaks: 0,
     dailyKeyCoins: 0, // 오늘 키캡 룸에서 적립한 코인 — 키캡 룸 상단 게이지 표시용
@@ -114,10 +114,14 @@ const GameContext = createContext(null);
 
 export function GameProvider({ children }) {
   const [state, setState] = useState(loadState);
+  const [user, setUser] = useState(() => auth.currentUser);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
+
+  // Firebase Auth 로그인 상태 구독 — loggedIn/표시 정보는 이제 여기서 파생됨(localStorage에 저장 안 함)
+  useEffect(() => onAuthStateChanged(auth, setUser), []);
 
   // 왁뿌볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 시크릿 키 드롭(0.06%)
   // 또는 코인 보상을 굴리고 결과를 반환한다(화면에서 토스트 연출용)
@@ -301,13 +305,17 @@ export function GameProvider({ children }) {
     return toysData[category].find((t) => t.id === id) || null;
   }, []);
 
-  // 로그인 mock — 실제 OAuth 연동 전까지 버튼만 동작
-  const login = useCallback((provider) => {
-    setState((prev) => ({ ...prev, loggedIn: true, loginProvider: provider }));
+  // Google 로그인 — 팝업 방식, 성공하면 onAuthStateChanged가 자동으로 user를 갱신함
+  const login = useCallback(async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (err) {
+      console.error('로그인 실패', err);
+    }
   }, []);
 
-  const logout = useCallback(() => {
-    setState((prev) => ({ ...prev, loggedIn: false, loginProvider: null }));
+  const logout = useCallback(async () => {
+    await signOut(auth);
   }, []);
 
   // 진행 상황 초기화 — 처음 상태(무료 등급만 보유, 코인 0)로 되돌림, 복구 불가
@@ -322,8 +330,11 @@ export function GameProvider({ children }) {
     owned: state.owned,
     equipped: state.equipped,
     hiddenCards: state.hiddenCards,
-    loggedIn: state.loggedIn,
-    loginProvider: state.loginProvider,
+    loggedIn: !!user,
+    loginProvider: user ? 'google' : null,
+    displayName: user?.displayName ?? null,
+    email: user?.email ?? null,
+    photoURL: user?.photoURL ?? null,
     dailyBreaks: state.dailyBreaks,
     totalBreaks: state.totalBreaks,
     dailyKeyCoins: state.dailyKeyCoins,

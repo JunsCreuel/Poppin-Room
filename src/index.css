@@ -847,10 +847,6 @@ button {
   font-weight: 700;
   font-size: 15px;
 }
-.login-btn.is-kakao {
-  background: #fee500;
-  color: #191600;
-}
 .login-btn.is-google {
   background: #fff;
   border: 2px solid var(--line);
@@ -1908,7 +1904,6 @@ body {
   border-color: var(--dim);
   cursor: not-allowed;
 }
-.login-btn.is-kakao { background: #fee500; color: #191600; }
 .login-btn.is-google { background: #fff; }
 .reset-btn { border-color: var(--red); color: var(--red); background: #fff; }
 .v2-btn-row .v2-btn { flex: 1; }

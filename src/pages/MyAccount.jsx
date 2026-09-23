@@ -32,7 +32,7 @@ function ResetSection({ onReset, step, setStep }) {
 }
 
 export default function MyAccount() {
-  const { loggedIn, loginProvider, login, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, addTestAllSkins, secretKeys } = useGame();
+  const { loggedIn, displayName, email, login, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, addTestAllSkins, secretKeys } = useGame();
 
   const [resetStep, setResetStep] = useState('idle'); // idle | confirm | done
 
@@ -45,13 +45,10 @@ export default function MyAccount() {
       <div className="case-page">
         <div className="case-eyebrow">MY ACCOUNT</div>
         <h1 className="case-title">계정 연결</h1>
-        <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정 연결 후 확인 가능, 카카오 또는 Google에서 로그인</p>
+        <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정 연결 후 확인 가능, Google에서 로그인</p>
 
         <div className="login-box">
-          <button type="button" className="login-btn is-kakao" onClick={() => login('kakao')}>
-            카카오 계정 로그인
-          </button>
-          <button type="button" className="login-btn is-google" onClick={() => login('google')}>
+          <button type="button" className="login-btn is-google" onClick={login}>
             Google 계정 로그인
           </button>
         </div>
@@ -78,7 +75,7 @@ export default function MyAccount() {
         <h1 className="case-title">내 계정</h1>
         <button type="button" className="logout-btn" onClick={logout}>로그아웃</button>
       </div>
-      <p className="case-sub">{loginProvider === 'kakao' ? '카카오' : 'Google'} 계정으로 로그인됨</p>
+      <p className="case-sub">{displayName || email} 계정으로 로그인됨</p>
 
       <section className="account-section">
         <h3 className="collection-section-title">보유 코인</h3>
