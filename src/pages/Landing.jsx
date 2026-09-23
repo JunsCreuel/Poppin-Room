@@ -34,6 +34,7 @@ export default function Landing() {
             <a href="#collection" onClick={scrollTo('collection')}>COLLECTION</a>
             <a href="#shop" onClick={scrollTo('shop')}>SHOP</a>
             <Link to="/about">ABOUT</Link>
+            <Link to="/account">MY PROFILE</Link>
           </div>
         </nav>
 
