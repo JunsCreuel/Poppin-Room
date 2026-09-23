@@ -125,6 +125,7 @@ const GameContext = createContext(null);
 export function GameProvider({ children }) {
   const [state, setState] = useState(loadState);
   const [user, setUser] = useState(() => auth.currentUser);
+  const [authReady, setAuthReady] = useState(false); // 저장된 로그인 복원 확인 끝났는지
   const [authError, setAuthError] = useState(null); // 로그인 버튼 실패
   const [syncError, setSyncError] = useState(null); // 로그인은 됐지만 계정 데이터 불러오기 실패 — 이 상태에선 저장 안 됨
   // 로그인 직후 계정 데이터 불러오는 중 — 이 사이 변경은 곧 도착할 계정 데이터에 덮여 사라지므로 화면을 가림
@@ -161,6 +162,7 @@ export function GameProvider({ children }) {
       const stale = () => !active || mySeq !== seq;
       flush();
       setUser(nextUser);
+      setAuthReady(true);
       setSyncError(null);
       setAccountLoading(!!nextUser);
       if (!nextUser) {
@@ -457,6 +459,7 @@ export function GameProvider({ children }) {
     owned: state.owned,
     equipped: state.equipped,
     hiddenCards: state.hiddenCards,
+    authReady,
     loggedIn: !!user,
     loginProvider: user ? 'google' : null,
     displayName: user?.displayName ?? null,

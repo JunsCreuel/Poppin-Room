@@ -1,13 +1,12 @@
 // 내 계정 페이지 — Google 로그인, 코인·히든카드·프리미엄 보유 내역, 진행 상황 초기화
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import AuthButton from '../components/AuthButton';
 
 const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 
 // 브라우저 confirm 창 대신 화면 안에서 2단계 확인 — 일부 모바일 브라우저에서 confirm 결과가 늦거나 무시되는 문제 회피
-// step 상태는 부모(MyAccount)가 들고 있음 — 초기화 직후 로그아웃 화면으로 바뀌어도 '초기화 완료' 표시가 유지되도록
 function ResetSection({ onReset, step, setStep }) {
   const handleConfirm = () => {
     onReset();
@@ -34,10 +33,17 @@ function ResetSection({ onReset, step, setStep }) {
 }
 
 export default function MyAccount() {
-  const { loggedIn, displayName, email, syncError, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, addTestAllSkins, secretKeys } = useGame();
+  const { authReady, loggedIn, displayName, email, syncError, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, addTestAllSkins, secretKeys } = useGame();
 
   const [resetStep, setResetStep] = useState('idle'); // idle | confirm | done
   const navigate = useNavigate();
+  // 로그인 안 한 채 게임 화면에 들어왔다가 이리로 보내진 경우, 원래 가려던 경로
+  const from = useLocation().state?.from;
+
+  // 로그인이 끝나면 원래 가려던 화면으로 돌려보냄
+  useEffect(() => {
+    if (loggedIn && from) navigate(from, { replace: true });
+  }, [loggedIn, from, navigate]);
 
   // 로그아웃하면 랜딩으로 이동
   const handleLogout = async () => {
@@ -49,26 +55,19 @@ export default function MyAccount() {
     toys[category].filter((t) => t.tier === 'premium' && owned.includes(t.id)).map((t) => ({ ...t, category }))
   );
 
+  // 새로고침 직후 저장된 로그인 복원 전엔 로그인 버튼이 잠깐 비치지 않게 비워둠
+  if (!authReady) return null;
+
   if (!loggedIn) {
     return (
       <div className="case-page">
         <div className="case-eyebrow">MY ACCOUNT</div>
         <h1 className="case-title">계정 연결</h1>
-        <p className="case-sub">히든카드 보관, 실물 경품 수령 안내는 계정 연결 후 확인 가능, Google에서 로그인</p>
+        <p className="case-sub">
+          {from ? '로그인 후 이용 가능, ' : ''}히든카드 보관, 실물 경품 수령 안내는 계정 연결 후 확인 가능, Google에서 로그인
+        </p>
 
         <AuthButton />
-
-        <section className="account-section">
-        <h3 className="collection-section-title">테스트 (임시)</h3>
-        <p className="account-empty">시연·개발용, 보유 코인 {coins} · 시크릿 키 {secretKeys}</p>
-        <div className="v2-btn-row" style={{ margin: 0 }}>
-          <button type="button" className="v2-btn v2-btn-secondary" onClick={() => addTestCoins(200)}>테스트 코인 +200</button>
-          <button type="button" className="v2-btn v2-btn-secondary" onClick={() => addTestKeys(1)}>테스트 시크릿 키 +1</button>
-          <button type="button" className="v2-btn v2-btn-secondary" onClick={addTestAllSkins}>테스트 모든 스킨 추가</button>
-        </div>
-      </section>
-
-      <ResetSection onReset={resetProgress} step={resetStep} setStep={setResetStep} />
       </div>
     );
   }

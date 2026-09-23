@@ -60,6 +60,17 @@ function AppLayout() {
   );
 }
 
+// 게임 화면은 로그인해야 이용 가능 — 비로그인이면 내 프로필(로그인 화면)로 보내고,
+// 로그인하면 원래 가려던 화면으로 돌아오도록 경로를 넘겨줌
+function RequireLogin() {
+  const { authReady, loggedIn } = useGame();
+  const location = useLocation();
+  // 새로고침 직후엔 저장된 로그인 복원 전이라, 확인 끝날 때까지 기다림(로그인된 사람이 튕기지 않게)
+  if (!authReady) return <div className="account-loading-overlay">로그인 확인 중</div>;
+  if (!loggedIn) return <Navigate to="/account" replace state={{ from: location.pathname }} />;
+  return <Outlet />;
+}
+
 function App() {
   // 모바일: 첫 탭에서 오디오 세션을 깨워둠(iOS 무음 스위치 무시, 첫 소리 묵음 방지)
   useEffect(() => installAudioUnlock(), []);
@@ -71,14 +82,16 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route element={<AppLayout />}>
-            <Route path="/wakpuball" element={<Wakpuball />} />
-            <Route path="/keycap" element={<Keycap />} />
-            <Route path="/hidden/wakpuball" element={<HiddenWakpuball />} />
-            <Route path="/hidden/keycap" element={<HiddenKeycap />} />
-            <Route path="/gacha" element={<Gacha />} />
-            <Route path="/collection" element={<Collection />} />
-            <Route path="/secret" element={<Secret />} />
-            <Route path="/shop" element={<Shop />} />
+            <Route element={<RequireLogin />}>
+              <Route path="/wakpuball" element={<Wakpuball />} />
+              <Route path="/keycap" element={<Keycap />} />
+              <Route path="/hidden/wakpuball" element={<HiddenWakpuball />} />
+              <Route path="/hidden/keycap" element={<HiddenKeycap />} />
+              <Route path="/gacha" element={<Gacha />} />
+              <Route path="/collection" element={<Collection />} />
+              <Route path="/secret" element={<Secret />} />
+              <Route path="/shop" element={<Shop />} />
+            </Route>
             <Route path="/account" element={<MyAccount />} />
             <Route path="/about" element={<About />} />
             {/* 옛 주소 리다이렉트 */}
