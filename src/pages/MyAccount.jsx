@@ -33,7 +33,7 @@ function ResetSection({ onReset, step, setStep }) {
 }
 
 export default function MyAccount() {
-  const { loggedIn, displayName, email, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, addTestAllSkins, secretKeys } = useGame();
+  const { loggedIn, displayName, email, syncError, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, addTestAllSkins, secretKeys } = useGame();
 
   const [resetStep, setResetStep] = useState('idle'); // idle | confirm | done
 
@@ -73,6 +73,11 @@ export default function MyAccount() {
         <button type="button" className="logout-btn" onClick={logout}>로그아웃</button>
       </div>
       <p className="case-sub">{displayName || email} 계정으로 로그인됨</p>
+      {syncError && (
+        <p className="account-note" style={{ color: 'var(--red)' }}>
+          계정 데이터 연결 실패, 지금 진행 상황 저장 안 됨, 새로고침 후 재시도 ({syncError})
+        </p>
+      )}
 
       <section className="account-section">
         <h3 className="collection-section-title">보유 코인</h3>

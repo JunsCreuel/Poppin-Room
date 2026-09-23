@@ -125,7 +125,8 @@ const GameContext = createContext(null);
 export function GameProvider({ children }) {
   const [state, setState] = useState(loadState);
   const [user, setUser] = useState(() => auth.currentUser);
-  const [authError, setAuthError] = useState(null);
+  const [authError, setAuthError] = useState(null); // 로그인 버튼 실패
+  const [syncError, setSyncError] = useState(null); // 로그인은 됐지만 계정 데이터 불러오기 실패 — 이 상태에선 저장 안 됨
 
   // 지금 state가 누구 데이터인지 — null: 비로그인(localStorage), uid: 그 계정, undefined: 계정 데이터 불러오는 중(저장 금지)
   // 로그인/로그아웃 전환 순간에 한 사람의 데이터가 다른 사람 저장소에 덮어써지지 않게 막는 장치
@@ -148,8 +149,10 @@ export function GameProvider({ children }) {
     let seq = 0; // 빠르게 로그인/로그아웃이 겹칠 때 늦게 도착한 옛 결과 무시용
     const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
       const mySeq = ++seq;
+      const stale = () => !active || mySeq !== seq;
       flush();
       setUser(nextUser);
+      setSyncError(null);
       if (!nextUser) {
         if (ownerRef.current !== null) {
           ownerRef.current = null;
@@ -159,18 +162,31 @@ export function GameProvider({ children }) {
       }
       ownerRef.current = undefined;
       const ref = doc(db, 'users', nextUser.uid);
-      getDoc(ref)
-        .then(async (snap) => {
-          if (!active || mySeq !== seq) return;
+
+      // 연결이 잠깐 끊겨 'unavailable'이 나는 경우가 있어 1·2·4초 간격으로 다시 시도
+      const load = async (attempt = 0) => {
+        try {
+          const snap = await getDoc(ref);
           const next = snap.exists() ? normalizeState(snap.data()) : defaultState();
           if (!snap.exists()) await setDoc(ref, { ...next, email: nextUser.email ?? null });
-          if (!active || mySeq !== seq) return;
+          return next;
+        } catch (err) {
+          if (err.code !== 'unavailable' || attempt >= 3 || stale()) throw err;
+          await new Promise((r) => setTimeout(r, 1000 * 2 ** attempt));
+          return load(attempt + 1);
+        }
+      };
+
+      load()
+        .then((next) => {
+          if (stale()) return;
           ownerRef.current = nextUser.uid;
           setState(next);
         })
         .catch((err) => {
+          if (stale()) return;
           console.error('계정 데이터 불러오기 실패', err);
-          setAuthError(err.code || err.message);
+          setSyncError(err.code || err.message);
         });
     });
     return () => { active = false; unsubscribe(); };
@@ -417,6 +433,7 @@ export function GameProvider({ children }) {
     email: user?.email ?? null,
     photoURL: user?.photoURL ?? null,
     authError,
+    syncError,
     dailyBreaks: state.dailyBreaks,
     totalBreaks: state.totalBreaks,
     dailyKeyCoins: state.dailyKeyCoins,
