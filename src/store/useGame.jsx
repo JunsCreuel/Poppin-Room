@@ -2,7 +2,7 @@
 // 로그아웃 상태는 localStorage, 로그인 상태는 Firestore users/{uid} 문서에 계정별로 저장
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, waitForPendingWrites } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../lib/firebase';
 import toysData from '../data/toys.json';
 import { weightedPick, computeGradeOdds } from '../data/gradeOdds';
@@ -127,6 +127,8 @@ export function GameProvider({ children }) {
   const [user, setUser] = useState(() => auth.currentUser);
   const [authError, setAuthError] = useState(null); // 로그인 버튼 실패
   const [syncError, setSyncError] = useState(null); // 로그인은 됐지만 계정 데이터 불러오기 실패 — 이 상태에선 저장 안 됨
+  // 로그인 직후 계정 데이터 불러오는 중 — 이 사이 변경은 곧 도착할 계정 데이터에 덮여 사라지므로 화면을 가림
+  const [accountLoading, setAccountLoading] = useState(false);
 
   // 지금 state가 누구 데이터인지 — null: 비로그인(localStorage), uid: 그 계정, undefined: 계정 데이터 불러오는 중(저장 금지)
   // 로그인/로그아웃 전환 순간에 한 사람의 데이터가 다른 사람 저장소에 덮어써지지 않게 막는 장치
@@ -153,6 +155,7 @@ export function GameProvider({ children }) {
       flush();
       setUser(nextUser);
       setSyncError(null);
+      setAccountLoading(!!nextUser);
       if (!nextUser) {
         if (ownerRef.current !== null) {
           ownerRef.current = null;
@@ -182,11 +185,13 @@ export function GameProvider({ children }) {
           if (stale()) return;
           ownerRef.current = nextUser.uid;
           setState(next);
+          setAccountLoading(false);
         })
         .catch((err) => {
           if (stale()) return;
           console.error('계정 데이터 불러오기 실패', err);
           setSyncError(err.code || err.message);
+          setAccountLoading(false);
         });
     });
     return () => { active = false; unsubscribe(); };
@@ -406,9 +411,11 @@ export function GameProvider({ children }) {
     }
   }, []);
 
-  // 로그아웃 전에 대기 중인 저장분부터 보냄 — 로그아웃 후에는 보안 규칙상 본인 문서에 쓸 수 없음
+  // 로그아웃 전에 대기 중인 저장분을 보내고, 서버로 가는 중인 저장까지 끝나길 기다림
+  // 로그아웃 후에는 보안 규칙상 본인 문서에 쓸 수 없음 — 연결이 끊긴 경우를 대비해 최대 5초만 기다림
   const logout = useCallback(async () => {
     await flush();
+    await Promise.race([waitForPendingWrites(db), new Promise((r) => setTimeout(r, 5000))]);
     await signOut(auth);
   }, [flush]);
 
@@ -469,7 +476,12 @@ export function GameProvider({ children }) {
     resetProgress,
   };
 
-  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
+  return (
+    <GameContext.Provider value={value}>
+      {children}
+      {accountLoading && <div className="account-loading-overlay">계정 데이터 불러오는 중</div>}
+    </GameContext.Provider>
+  );
 }
 
 export function useGame() {

@@ -2112,3 +2112,18 @@ button.v2-playroom-row {
   color: var(--text);
 }
 button.v2-playroom-row:disabled { cursor: default; }
+
+/* 로그인 직후 계정 데이터 불러오는 동안 화면 가림 — 이 사이 누른 건 저장 안 되므로 조작 차단 */
+.account-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.85);
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--text);
+}
