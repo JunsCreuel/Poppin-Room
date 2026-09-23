@@ -54,11 +54,10 @@ export default function Landing() {
           <div className="hero-text">
             <p className="tag">DIGITAL TOY COLLECTION</p>
             <h1>
-              눌러라!<br />
-              뽑아라!<br />
-              받아라!<br />
-              손끝으로 푸는<br />
-              스트레스 공간
+              오늘의<br />
+              스트레스,<br />
+              여기서<br />
+              터뜨리기!
             </h1>
             <p className="desc">
               포핀룸에서 왁뿌볼을 누르고, 키캡을 두드리고,
