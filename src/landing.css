@@ -69,6 +69,11 @@
   letter-spacing: 0.08em;
 }
 
+.landing h1,
+.landing h2 {
+  word-break: keep-all; /* 한글 제목이 단어 중간에서 줄바꿈되지 않게 */
+}
+
 .landing h1 {
   font-size: 82px;
   line-height: 0.95;
@@ -339,6 +344,10 @@
 
   .landing .room-box {
     height: 320px;
+  }
+
+  .landing h1 {
+    font-size: 48px;
   }
 
   .landing .shop {
