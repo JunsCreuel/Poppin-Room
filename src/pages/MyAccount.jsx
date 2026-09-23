@@ -1,5 +1,6 @@
 // 내 계정 페이지 — Google 로그인, 코인·히든카드·프리미엄 보유 내역, 진행 상황 초기화
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import AuthButton from '../components/AuthButton';
 
@@ -36,6 +37,13 @@ export default function MyAccount() {
   const { loggedIn, displayName, email, syncError, logout, coins, hiddenCards, owned, toys, resetProgress, addTestCoins, addTestKeys, addTestAllSkins, secretKeys } = useGame();
 
   const [resetStep, setResetStep] = useState('idle'); // idle | confirm | done
+  const navigate = useNavigate();
+
+  // 로그아웃하면 랜딩으로 이동
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   const premiumOwned = ['wakpuball', 'keycap'].flatMap((category) =>
     toys[category].filter((t) => t.tier === 'premium' && owned.includes(t.id)).map((t) => ({ ...t, category }))
@@ -70,7 +78,7 @@ export default function MyAccount() {
       <div className="case-eyebrow">MY ACCOUNT</div>
       <div className="account-head">
         <h1 className="case-title">내 계정</h1>
-        <button type="button" className="logout-btn" onClick={logout}>로그아웃</button>
+        <button type="button" className="logout-btn" onClick={handleLogout}>로그아웃</button>
       </div>
       <p className="case-sub">{displayName || email} 계정으로 로그인됨</p>
       {syncError && (
