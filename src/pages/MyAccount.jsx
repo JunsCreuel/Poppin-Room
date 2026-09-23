@@ -1,4 +1,4 @@
-// 내 계정 페이지 — 로그인(mock), 코인·히든카드·프리미엄 보유 내역, 진행 상황 초기화
+// 내 계정 페이지 — Google 로그인, 코인·히든카드·프리미엄 보유 내역, 진행 상황 초기화
 import { useState } from 'react';
 import { useGame } from '../store/useGame';
 import AuthButton from '../components/AuthButton';

@@ -1,7 +1,9 @@
-// 게임 상태 저장소 — 코인, 보유/장착 오브제, 히든카드를 localStorage에 저장
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { onAuthStateChanged, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
-import { auth, googleProvider } from '../lib/firebase';
+// 게임 상태 저장소 — 코인, 보유/장착 오브제, 히든카드
+// 로그아웃 상태는 localStorage, 로그인 상태는 Firestore users/{uid} 문서에 계정별로 저장
+import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
+import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth, db, googleProvider } from '../lib/firebase';
 import toysData from '../data/toys.json';
 import { weightedPick, computeGradeOdds } from '../data/gradeOdds';
 
@@ -64,7 +66,15 @@ function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
     if (!raw) return defaultState();
-    const parsed = JSON.parse(raw);
+    return normalizeState(JSON.parse(raw));
+  } catch {
+    return defaultState();
+  }
+}
+
+// 저장된 값(localStorage·Firestore 공통)을 현재 규칙에 맞게 정리
+function normalizeState(parsed) {
+  try {
     const merged = { ...defaultState(), ...parsed };
     // 날짜가 바뀌었으면 오늘 깬 횟수만 리셋(누적 총합은 유지).
     if (merged.lastVisit !== todayStr()) {
@@ -117,21 +127,73 @@ export function GameProvider({ children }) {
   const [user, setUser] = useState(() => auth.currentUser);
   const [authError, setAuthError] = useState(null);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }, [state]);
+  // 지금 state가 누구 데이터인지 — null: 비로그인(localStorage), uid: 그 계정, undefined: 계정 데이터 불러오는 중(저장 금지)
+  // 로그인/로그아웃 전환 순간에 한 사람의 데이터가 다른 사람 저장소에 덮어써지지 않게 막는 장치
+  const ownerRef = useRef(null);
+  const pendingRef = useRef(null); // Firestore에 아직 안 보낸 마지막 상태 { uid, data }
+  const timerRef = useRef(null);
 
-  // Firebase Auth 로그인 상태 구독 — loggedIn/표시 정보는 이제 여기서 파생됨(localStorage에 저장 안 함)
-  useEffect(() => onAuthStateChanged(auth, setUser), []);
-
-  // signInWithRedirect로 나갔다가 돌아온 뒤 결과 처리 — 팝업 방식은 Vercel 등 일부 배포 환경에서
-  // 팝업-메인창 통신(COOP)이 막혀 "로딩만 되고 로그인이 안 끝나는" 문제가 생겨 리디렉션으로 전환
-  useEffect(() => {
-    getRedirectResult(auth).catch((err) => {
-      console.error('로그인 실패', err);
-      setAuthError(err.code || err.message);
-    });
+  const flush = useCallback(() => {
+    clearTimeout(timerRef.current);
+    const pending = pendingRef.current;
+    pendingRef.current = null;
+    if (pending) setDoc(doc(db, 'users', pending.uid), pending.data, { merge: true }).catch((err) => console.error('저장 실패', err));
   }, []);
+
+  // 로그인 상태 구독 — 계정이 바뀔 때마다 그 계정의 데이터로 교체
+  // 처음 로그인한 계정은 기본 상태(코인 0)로 새 문서 생성
+  useEffect(() => {
+    let active = true;
+    let seq = 0; // 빠르게 로그인/로그아웃이 겹칠 때 늦게 도착한 옛 결과 무시용
+    const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
+      const mySeq = ++seq;
+      flush();
+      setUser(nextUser);
+      if (!nextUser) {
+        if (ownerRef.current !== null) {
+          ownerRef.current = null;
+          setState(loadState());
+        }
+        return;
+      }
+      ownerRef.current = undefined;
+      const ref = doc(db, 'users', nextUser.uid);
+      getDoc(ref)
+        .then(async (snap) => {
+          if (!active || mySeq !== seq) return;
+          const next = snap.exists() ? normalizeState(snap.data()) : defaultState();
+          if (!snap.exists()) await setDoc(ref, { ...next, email: nextUser.email ?? null });
+          if (!active || mySeq !== seq) return;
+          ownerRef.current = nextUser.uid;
+          setState(next);
+        })
+        .catch((err) => {
+          console.error('계정 데이터 불러오기 실패', err);
+          setAuthError(err.code || err.message);
+        });
+    });
+    return () => { active = false; unsubscribe(); };
+  }, [flush]);
+
+  // 상태 저장 — 비로그인은 즉시 localStorage, 로그인은 0.8초 모아서 Firestore(연타 때 쓰기 횟수 절약)
+  useEffect(() => {
+    const owner = ownerRef.current;
+    if (owner === undefined) return;
+    if (owner === null) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      return;
+    }
+    pendingRef.current = { uid: owner, data: state };
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(flush, 800);
+  }, [state, flush]);
+
+  // 탭을 닫거나 다른 앱으로 넘어갈 때 대기 중인 저장분을 바로 보냄
+  useEffect(() => {
+    const onHide = () => { if (document.visibilityState === 'hidden') flush(); };
+    document.addEventListener('visibilitychange', onHide);
+    return () => document.removeEventListener('visibilitychange', onHide);
+  }, [flush]);
 
   // 왁뿌볼을 한 대 칠 때, 키캡을 한 번 누를 때마다 호출 — 시크릿 키 드롭(0.06%)
   // 또는 코인 보상을 굴리고 결과를 반환한다(화면에서 토스트 연출용)
@@ -315,12 +377,12 @@ export function GameProvider({ children }) {
     return toysData[category].find((t) => t.id === id) || null;
   }, []);
 
-  // Google 로그인 — 리디렉션 방식, 구글 로그인 페이지로 이동했다가 돌아오면
-  // 위 getRedirectResult가 결과를 처리하고 onAuthStateChanged가 user를 갱신함
+  // Google 로그인 — 팝업 방식. 사이트 주소와 로그인 처리 주소(authDomain)가 같은
+  // Firebase Hosting(firebaseapp.com)에서는 팝업이 막히지 않음
   const login = useCallback(async () => {
     setAuthError(null);
     try {
-      await signInWithRedirect(auth, googleProvider);
+      await signInWithPopup(auth, googleProvider);
     } catch (err) {
       console.error('로그인 실패', err);
       setAuthError(err.code || err.message);
@@ -332,9 +394,12 @@ export function GameProvider({ children }) {
   }, []);
 
   // 진행 상황 초기화 — 처음 상태(무료 등급만 보유, 코인 0)로 되돌림, 복구 불가
+  // 로그인 상태면 저장 effect가 그 계정 문서를 기본값으로 덮어씀
   const resetProgress = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(LEGACY_STORAGE_KEY);
+    if (ownerRef.current === null) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+    }
     setState(defaultState());
   }, []);
 
