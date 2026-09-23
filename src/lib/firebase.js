@@ -1,7 +1,7 @@
 // Firebase 초기화 — 값은 .env.local(커밋 안 됨)의 VITE_FIREBASE_* 에서 읽음
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeFirestore } from 'firebase/firestore';
 import { getFunctions } from 'firebase/functions';
 
 const firebaseConfig = {
@@ -18,5 +18,7 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 // 로그인할 때마다 구글 계정 선택 창 표시 — 없으면 마지막 계정으로 자동 로그인돼 계정 전환 불가
 googleProvider.setCustomParameters({ prompt: 'select_account' });
-export const db = getFirestore(app);
+// 롱 폴링 강제 — 기본 스트리밍 연결은 광고 차단·보안 프로그램·일부 네트워크에서 끊겨
+// "client is offline(unavailable)"로 실패하는 경우가 있어 더 단순한 연결 방식을 씀
+export const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 export const functions = getFunctions(app);
