@@ -117,7 +117,12 @@ export default function Gacha() {
           <button type="button" className="v2-btn v2-btn-primary" style={{ width: '100%', marginBottom: 10 }} onClick={reset}>
             한 번 더 뽑기 ({pullCost}코인)
           </button>
-          <Link to="/collection" className="v2-btn v2-btn-secondary" style={{ width: '100%', marginBottom: 10 }}>
+          <Link
+            to="/collection"
+            state={{ category: result.category, grade: result.toy.grade, id: result.toy.id }}
+            className="v2-btn v2-btn-secondary"
+            style={{ width: '100%', marginBottom: 10 }}
+          >
             내 컬렉션 확인하기
           </Link>
         </>

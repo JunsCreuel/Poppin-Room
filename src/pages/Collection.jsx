@@ -1,6 +1,6 @@
 // 컬렉션 페이지 — 가방(보유 오브제) + 미획득 목록
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 
 const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
@@ -12,9 +12,12 @@ const GRADE_ORDER = ['common', 'rare', 'premium', 'limited'];
 export default function Collection() {
   const { toys, owned, equipped, equip } = useGame();
   const navigate = useNavigate();
-  const [category, setCategory] = useState('wakpuball');
-  const [grade, setGrade] = useState('common');
-  const [selectedId, setSelectedId] = useState(null);
+  // 뽑기 결과에서 넘어오면 뽑은 오브제의 카테고리·등급 탭을 열고 그 오브제를 선택해 둠
+  // (뽑기는 RARE·LIMITED만 나와서 기본 COMMON 탭이면 안 들어온 것처럼 보임)
+  const focus = useLocation().state;
+  const [category, setCategory] = useState(focus?.category ?? 'wakpuball');
+  const [grade, setGrade] = useState(focus?.grade ?? 'common');
+  const [selectedId, setSelectedId] = useState(focus?.id ?? null);
 
   const allToys = ['wakpuball', 'keycap'].flatMap((c) => toys[c].map((t) => ({ ...t, category: c })));
   const findToy = (id) => allToys.find((t) => t.id === id) || null;
