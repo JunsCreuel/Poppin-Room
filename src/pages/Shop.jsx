@@ -1,6 +1,7 @@
 // 상점 & 랭킹 페이지 — 프리미엄 오브제 구매(mock) + 오늘 깬 횟수 기준 랭킹
 import { useState } from 'react';
 import { useGame, calcRankPercentile } from '../store/useGame';
+import AdBannerModal from '../components/AdBannerModal';
 
 const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
 
@@ -32,14 +33,14 @@ function KeyShopSection() {
     setTimeout(() => setJustBought(false), 2000);
   };
 
-  // 광고 mock — 광고 SDK 연동 전까지 1.8초 재생 흉내 후 키 지급
   const handleAd = () => {
     if (adPlaying || adLeft <= 0) return;
     setAdPlaying(true);
-    setTimeout(() => {
-      claimAdKey();
-      setAdPlaying(false);
-    }, 1800);
+  };
+
+  const handleAdFinish = () => {
+    setAdPlaying(false);
+    claimAdKey();
   };
 
   return (
@@ -74,6 +75,8 @@ function KeyShopSection() {
           </div>
         </div>
       </div>
+
+      {adPlaying && <AdBannerModal onFinish={handleAdFinish} />}
     </section>
   );
 }
