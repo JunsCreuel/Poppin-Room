@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useGame } from '../store/useGame';
 import CapsuleMachine from '../components/CapsuleMachine';
+import AdBannerModal from '../components/AdBannerModal';
 import { playGachaSuccess, playGachaShake, preloadSample, GACHA_SHAKE_SOUND } from '../utils/sound';
 
 const CATEGORY_LABEL = { wakpuball: '왁뿌볼', keycap: '키캡' };
@@ -14,6 +15,7 @@ export default function Gacha() {
   const [stage, setStage] = useState('idle'); // idle | shaking | result
   const [result, setResult] = useState(null);
   const [adState, setAdState] = useState('idle'); // idle | playing | done
+  const [showAdBanner, setShowAdBanner] = useState(false);
 
   const handlePull = useCallback(() => {
     if (!canPull(category) || stage === 'shaking') return;
@@ -45,12 +47,14 @@ export default function Gacha() {
   const handleWatchAd = () => {
     if (adState !== 'idle') return;
     setAdState('playing');
-    // 실제 광고 SDK가 없어서 재생되는 흉내만 낸 뒤 코인을 지급하는 mock.
-    setTimeout(() => {
-      claimAdCoins();
-      setAdState('done');
-      setTimeout(() => setAdState('idle'), 1200);
-    }, 1800);
+    setShowAdBanner(true);
+  };
+
+  const handleAdFinish = () => {
+    setShowAdBanner(false);
+    claimAdCoins();
+    setAdState('done');
+    setTimeout(() => setAdState('idle'), 1200);
   };
 
   const ready = canPull(category) && stage === 'idle';
@@ -137,6 +141,8 @@ export default function Gacha() {
           {stage === 'shaking' ? '뽑는 중...' : ready ? `뽑기 (${pullCost}코인)` : '코인 부족'}
         </button>
       )}
+
+      {showAdBanner && <AdBannerModal onFinish={handleAdFinish} />}
     </div>
   );
 }
