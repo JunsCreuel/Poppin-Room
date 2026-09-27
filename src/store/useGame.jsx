@@ -270,12 +270,6 @@ export function GameProvider({ children }) {
     return payload;
   }, []);
 
-  // 광고 시청 보상 mock — 광고 SDK 연동 전까지 5코인 즉시 지급
-  const claimAdCoins = useCallback(() => {
-    setState((prev) => ({ ...prev, coins: prev.coins + 5 }));
-    return 5;
-  }, []);
-
   // 테스트용 코인 지급 — 시연·개발용 임시 기능, 출시 전 제거
   const addTestCoins = useCallback((amount) => {
     setState((prev) => ({ ...prev, coins: prev.coins + amount }));
@@ -505,7 +499,6 @@ export function GameProvider({ children }) {
     pullCost: PULL_COST,
     keyDailyGoal: KEY_DAILY_GOAL,
     pressReward,
-    claimAdCoins,
     addTestCoins,
     addTestKeys,
     addTestAllSkins,
